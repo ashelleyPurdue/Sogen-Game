@@ -87,22 +87,12 @@ public class PlatformCharacterMotor : MonoBehaviour
             Vector2 relativeVelocity = rigidbody2D.velocity - lastGroundTouchedVelocity;
 
             //Accellerate if the player hasn't exceeded the maximum speed
-            float maxSpeed = maxWalkingSpeed;
-            if (Mathf.Abs(relativeVelocity.x) < maxSpeed)
-            {
-                //Accellerate
-                float deltaVelocity = walkingAccel * controllerInput.magnitude * Mathf.Sign(controllerInput.x);
-                relativeVelocity.x += deltaVelocity * Time.deltaTime;
 
-                deltaVelocityDebug = deltaVelocity;     //DEBUG
+            float deltaVelocity = walkingAccel * controllerInput.magnitude * Mathf.Sign(controllerInput.x);
+            relativeVelocity.x += deltaVelocity * Time.deltaTime;
 
-                //If the player is now going faster than the limit, cap it.
-                if (Mathf.Abs(relativeVelocity.x) > maxSpeed)
-                {
-                    relativeVelocity.x = maxSpeed * Mathf.Sign(controllerInput.x);
-                }
-            }
-
+            relativeVelocity.x = Utils.CapValue(relativeVelocity.x, maxWalkingSpeed, maxWalkingSpeed * -1);
+            
             //Apply friction if no direction is being pressed
             if (Mathf.Abs(controllerInput.x) < 0.1f)
             {

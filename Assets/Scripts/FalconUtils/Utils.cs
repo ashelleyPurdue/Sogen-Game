@@ -8,277 +8,6 @@ public static class Utils{
 	
 	public enum Axes {x, y, z};
 
-	[System.Obsolete("Please use the RotationUtils class instead.")]
-	public static class Rotation
-	{
-		
-		//Angle distance
-		
-		public static float AngleDistance(float a, float b, bool alwaysPositive = true)
-		{
-			//Returns the angle distance between two angles
-			//Code stolen and modified from ThirdPersonCamera.js(comes with Unity)
-		
-			a = Mathf.Repeat(a, 360);
-			b = Mathf.Repeat(b, 360);
-			
-			float output = b - a;
-			
-			if (alwaysPositive == true)
-			{
-				output = Mathf.Abs(output);
-			}
-			
-			return output;
-		}
-		
-		//Angle Towards Point
-		public static float AngleTowardsPoint2D(Vector2 pointA, Vector2 pointB)
-		{
-			//Returns the angle towards a point in 2D space in degrees.
-			
-			float yDist = pointB.y - pointA.y;
-			float xDist =  pointB.x - pointA.x;
-			
-			float output = Mathf.Rad2Deg * Mathf.Atan2(xDist * -1, yDist * -1);
-			
-			return output;
-			
-		}
-		
-		public static float AngleTowardsPoint2D(Vector3 pointA, Vector3 pointB)
-		{
-		
-			return AngleTowardsPoint2D(new Vector2(pointA.x, pointA.z), new Vector2(pointB.x, pointB.z));
-			
-		}
-	
-		//LookAtFlat
-		public static Vector3 LookAtFlat(Vector3 startPos, Vector3 endPos)
-		{
-			//Creates a normalized vector that points from startPos to endPos, ignoring the y-components
-			Vector3 output = endPos - startPos;
-			
-			output.y = 0;
-			output.Normalize();
-			
-			return output;
-		}
-			
-			
-		
-		//ChangeEuler
-		public static void ChangeEuler(ref Quaternion rotationToChange, float? x, float? y, float? z)
-		{
-			//Changes the euler angles of a given quaternion.  If you want an angle to stay the same, use null instead of a value.
-			//Example: changes the x and z values, but not the y: ChangeEuler(transform.rotationToChange, 90, null, 180);
-			
-			Quaternion myRot = rotationToChange;
-			Vector3 myEuler = myRot.eulerAngles;
-			
-			if (x != null){
-				myEuler.x = (float)x;
-			}
-			
-			if (y != null){
-				myEuler.y = (float)y;
-			}
-			
-			if (z != null){
-				myEuler.z = (float)z;
-			}
-			
-			myRot.eulerAngles = myEuler;
-			rotationToChange = myRot;
-			
-		}	
-	
-		public static void ChangeEuler(ref Quaternion rotationToChange, Vector3 newEuler){
-			ChangeEuler(rotationToChange, newEuler.x, newEuler.y, newEuler.z);
-		}
-		
-		public static void ChangeEuler(Transform transformToChange, float? x, float? y, float? z, bool useLocalRotation = false){
-		
-			Quaternion myRot;
-			
-			//Store the rotation in a temp variable
-			if (useLocalRotation == true){
-				myRot = transformToChange.localRotation;
-			}
-			else{
-				myRot = transformToChange.rotation;
-			}
-			
-			//Use ChangeEuler on that variable
-			ChangeEuler(ref myRot, x, y, z);
-			
-			//Apply the new rotation to the tranfrom
-			if (useLocalRotation == true){
-				transformToChange.localRotation = myRot;
-			}
-			else{
-				transformToChange.rotation = myRot;
-			}
-			
-		}
-		
-		public static void ChangeEuler(Transform transformToChange, Vector3 newEuler, bool useLocalRotation){
-		
-			ChangeEuler(transformToChange, newEuler.x, newEuler.y, newEuler.z, useLocalRotation);
-		}
-		
-		public static void ChangeEuler(Rigidbody rigidBodyToChange, float? x, float? y, float? z){
-			//Rather than directly changing the transform, this version will instead use a rigidbody's MoveRotation function.
-			
-			Quaternion myRot = rigidBodyToChange.rotation;
-			ChangeEuler(ref myRot, x, y, z);
-			
-			rigidBodyToChange.MoveRotation(myRot);
-			
-		}
-		
-		public static Quaternion ChangeEuler(Quaternion inputQuaternion, float? x, float? y, float? z){
-			
-			Quaternion output = inputQuaternion;
-			ChangeEuler(ref output, x, y, z);
-			
-			return output;
-		}
-		
-		public static Quaternion ChangeEuler(Quaternion inputQuaternion, Vector3 newEuler){
-			
-			Quaternion output = inputQuaternion;
-			ChangeEuler(ref output, newEuler);
-			
-			return output;
-		}
-
-	}
-
-	[System.Obsolete("Please use the CollisionUtils class instead.")]
-	public static class CollisionChecking
-	{
-	
-		//TagSpherecast
-		
-		public static bool TagSpherecast(float radius, Vector3 point, string tagToFind, ref Transform transformFound)
-		{
-			//Spherecasts and checks if an object has been found with a specified tag
-			
-			Collider[] colliderList = Physics.OverlapSphere(point, radius);
-			bool output = false;
-				
-			for (int i = 0; i < colliderList.Length; i++)
-			{
-				
-				Collider col = colliderList[i];
-				
-				TagList tags = col.transform.GetComponent<TagList>();
-				
-				if (tags != null && tags.HasTag(tagToFind))
-				{
-					output = true;
-					
-					//Store a reference to the found object in the specified variable.
-					//Reference-ception!
-					transformFound = col.transform;
-						
-					break;
-				}
-					
-				else
-				{
-					//Make sure transformFound always gets assigned to something
-					transformFound = null;
-				}
-			
-			}	
-			
-			//Return the output
-			return output;
-		}
-		
-		public static bool TagSpherecast(float radius, Vector3 point, string tagToFind)
-		{
-			//Checks to see if a player has been found within a certain radius of a given point.
-			
-			Transform dummyTransform = null;
-			
-			return TagSpherecast(radius, point, tagToFind, ref dummyTransform);
-		}
-		
-		//SpherecastForObject
-		public static bool SpherecastForObject(float radius, Vector3 point, Transform objectToCheck)
-		{
-			//Returns true if the specified object was found in a spherecast
-			
-			bool output = false;
-			
-			Collider[] collidingObjects = Physics.OverlapSphere(point, radius);
-			
-			foreach (Collider collider in collidingObjects)
-			{
-				if (collider.transform == objectToCheck)
-				{
-					output = true;
-					break;
-				}
-			}
-			
-			return output;
-		}
-	
-	}
-
-	[System.Obsolete("Please use the ListUtils class instead.")]
-	public static class Lists{
-		
-		public static bool ListsShareItem<T>(List<T> listOne, List<T> listTwo, T item){
-		//Returns whether or not a given tag can be found in both lists
-			
-			//return HasDamageTag(listOne, item) && HasDamageTag(listTwo, item);	
-			return listOne.Contains(item) && listTwo.Contains(item);
-		}
-
-		public static bool ListsOverlap<T>(List<T> listOne, List<T> listTwo){
-			//Returns whether or not two lists share any tags	
-			
-			bool output = false;
-			
-			//Loop through each tag in listOne and see if it shares that tag with listTwo
-			foreach (T item in listOne){
-			
-				if (ListsShareItem(listOne, listTwo, item)){
-					output = true;
-					break;
-				}
-				
-			}
-			
-			return output;
-		}
-		
-		public static List<T> RemoveDuplicateItems<T>(List<T> inputList){
-			//Removes all duplicate items from a list.
-	
-			List<T> outputList = new List<T>();
-			
-			//Loop through the inputList and add each item to the output list if it hasn't already been added.
-			foreach (T item in inputList)
-			{
-			
-				if (!outputList.Contains(item))
-				{
-					outputList.Add(item);
-				}
-				
-			}
-			
-			return outputList;
-		}
-		
-	}
-	
 	//---Cap value---
 	public static float CapValue(float inputValue, float maxValue, float minValue = 0){
 		//Keeps a number in between two values
@@ -306,16 +35,15 @@ public static class Utils{
 	}
 	
 	public static Vector2 CapValue(Vector2 inputValue, Vector2 maxValue, Vector2 minValue){
-		//Caps the individual components of a vector2.  To cap the magnitude, use CapMagnitude
+        //Caps the individual components of a vector2.  To cap the magnitude, use CapMagnitude
 		
-		Vector2 outputValue = new Vector2(0, 0);
+        Vector2 outputValue = new Vector2(0, 0);
 
-		outputValue.x = CapValue(inputValue.x, maxValue.x, minValue.x);
-		outputValue.y = CapValue(inputValue.y, maxValue.y, minValue.y);
+        outputValue.x = CapValue(inputValue.x, maxValue.x, minValue.x);
+        outputValue.y = CapValue(inputValue.y, maxValue.y, minValue.y);
 			
-		return outputValue;
-	}
-	
+        return outputValue;
+    }
 	
 	//---Cap magnitude---
 	public static Vector2 CapMagnitude(Vector2 inputVector, float maxMagnitude, float minMagnitude = 0){
@@ -353,20 +81,6 @@ public static class Utils{
 		}
 		
 		//keep adding or subtracting maxValue to the number until it's within the range.
-		/*while (!( output <= maxValue && output >= minValue)){
-			
-			float start = output;
-			
-			if (output > maxValue){
-				output -= maxValue - minValue;
-			}
-			
-			if (output < minValue){
-				output += maxValue - minValue;
-			}
-			
-		}*/
-		
 		while (output > maxValue){
 			output -= maxValue - minValue;
 		}
@@ -377,7 +91,6 @@ public static class Utils{
 		return output;
 		
 	}
-	
 	
 	//---Tween Value---
 	public static float TweenValue(float inputValue, float targetValue, float speed){
@@ -421,7 +134,6 @@ public static class Utils{
 		return output;
 		
 	}
-
 	
 	//PingPongPlus
 	
