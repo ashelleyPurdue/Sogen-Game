@@ -25,6 +25,8 @@ public class PlatformCharacterMotor : MonoBehaviour
 
     //Inspector fields
 
+    public float gravityScale = 1.8f;   //The gravity scale.  This overrides the rigidbody2D's gravity scale.
+
     public float maxJumpHeight;         //How high it jumps
     public float timeToMaxJumpHeight;   //How long the jump button must be held to reach that height.
 
@@ -54,6 +56,7 @@ public class PlatformCharacterMotor : MonoBehaviour
     private bool attackButton = false;
 
     private bool canJump = true;
+    private bool isJumping = false;
     private float jumpingTime = 0f;     //How long the player has been jumping
 
     private bool grounded = false;
@@ -86,11 +89,11 @@ public class PlatformCharacterMotor : MonoBehaviour
             //Get the velocity relative to the ground's velocity.
             Vector2 relativeVelocity = rigidbody2D.velocity - lastGroundTouchedVelocity;
 
-            //Accellerate if the player hasn't exceeded the maximum speed
-
+            //Accellerate
             float deltaVelocity = walkingAccel * controllerInput.magnitude * Mathf.Sign(controllerInput.x);
             relativeVelocity.x += deltaVelocity * Time.deltaTime;
 
+            //Make sure the relative velocity stays in range.
             relativeVelocity.x = Utils.CapValue(relativeVelocity.x, maxWalkingSpeed, maxWalkingSpeed * -1);
             
             //Apply friction if no direction is being pressed
@@ -124,12 +127,7 @@ public class PlatformCharacterMotor : MonoBehaviour
             float min = lastGroundTouchedVelocity.x - maxWalkingSpeed;
             float max = lastGroundTouchedVelocity.x + maxWalkingSpeed;
 
-            if (newVel.x < min){
-                newVel.x = min;
-            }
-            else if (newVel.x > max){
-                newVel.x = max;
-            }
+            newVel.x = Utils.CapValue(newVel.x, max, min);
 
             //Update the velocity
             rigidbody2D.velocity = newVel;
@@ -149,7 +147,13 @@ public class PlatformCharacterMotor : MonoBehaviour
             rigidbody2D.gravityScale = 0f;
         } else
         {
-            rigidbody2D.gravityScale = 1.8f;
+            rigidbody2D.gravityScale = gravityScale;
+
+            //Only let the player start jumping if they're on the ground
+            if (!isJumping)
+            {
+                canJump = false;
+            }
         }
 
         //If the player can jump, jump.
@@ -162,7 +166,10 @@ public class PlatformCharacterMotor : MonoBehaviour
                 Vector2 newVelocity = rigidbody2D.velocity;
                 newVelocity.y = lastGroundedVelocity.y;
                 rigidbody2D.velocity = newVelocity;
-                
+
+                //Stop jumping
+                isJumping = false;
+
                 //Disable jumping
                 canJump = false;
                 jumpingTime = 0;
@@ -176,9 +183,18 @@ public class PlatformCharacterMotor : MonoBehaviour
                 newVelocity.y = lastGroundedVelocity.y + velocity;
                 rigidbody2D.velocity = newVelocity;
 
+                //Note that we are jumping
+                isJumping = true;
+
                 //Increment the jump timer
                 jumpingTime += Time.deltaTime;
             }
+        }
+
+        //Disable gravity while jumping.
+        if (isJumping)
+        {
+            rigidbody2D.gravityScale = 0f;
         }
 
         //Take remember whether the jump button was pressed this frame or not.

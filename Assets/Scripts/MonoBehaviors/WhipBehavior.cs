@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class WhipBehavior : MonoBehaviour
 {
     //Inspector variables
+    public float whipScale = 1.5f;          //The whip's x-scale when fully extended.
     public float swingTime;
     public float hangTime;
     public float damageStartDelay = 0.1f;   //How long after the swinging state starts to enable damaging
@@ -124,13 +125,16 @@ public class WhipBehavior : MonoBehaviour
         myDamageSource.isHot = (timer >= damageStartDelay);
 
         //Make the "further out" part of the whip be oriented with the direction it's swinging.
-        float scale = 1;
+        Vector3 newScale = Vector3.one;
+
+        newScale.y = 1;
         if (endAngle > startAngle)
         {
-            scale = -1;
+            newScale.y = -1;
         }
 
-        transform.localScale = new Vector3(1, scale, 1);
+        //Make the whip stretch outwards, starting short and ending long.
+        newScale.x = Mathf.Pow(Mathf.Lerp(0, Mathf.Sqrt(1.5f), timer / swingTime), 2);
 
         //Tween the angles
         float angle = Mathf.Lerp(startAngle, endAngle, timer / swingTime);
@@ -143,6 +147,9 @@ public class WhipBehavior : MonoBehaviour
 
             angle = endAngle;
         }
+
+        //Update the scale.
+        transform.localScale = newScale;
 
         //Update the rotation
         transform.rotation = Quaternion.Euler(0, 0, angle);
