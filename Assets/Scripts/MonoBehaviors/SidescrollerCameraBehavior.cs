@@ -5,7 +5,7 @@ using System.Collections;
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
 
-    public float deadzoneWidth = 0.25f;
+    private float deadzoneWidth = 0.1f;
 
     public Transform target;
 
@@ -45,23 +45,53 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     void Start()
     {
         transform.parent = null;
+
+        //Move to the target if he is off screen
+        if (!TargetInDeadzone())
+        {
+            Vector3 newPos = transform.position;
+            newPos.x = target.position.x;
+            transform.position = newPos;
+        }
     }
-	
+
 	void FixedUpdate ()
     {
         //If the player is outside the deadzone, scroll horizontally until he's instead the deadzone.
 
+        bool oldWay = false;
+
         //TODO: Use a less-costly algorithm
         float pixelSize = (camera.aspect * camera.orthographicSize * 2f) / camera.pixelWidth;
-        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+        float baseIncrement = 0.5f * pixelSize * Mathf.Sign(target.position.x - transform.position.x);
 
-        while (TargetInArea(relativeTopLeft + pos2D, relativeBottomRight + pos2D) && !TargetInDeadzone())
+        if (oldWay)
         {
-            Vector3 pos = transform.position;
-            pos.x += 0.5f * pixelSize * Mathf.Sign(target.position.x - transform.position.x);
-            transform.position = pos;
+            Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
 
-            pos2D.x = pos.x;
+            if (TargetInArea(relativeTopLeft + pos2D, relativeBottomRight + pos2D) && !TargetInDeadzone())
+            {
+                Vector3 pos = transform.position;
+                pos.x += baseIncrement;
+                transform.position = pos;
+
+                pos2D.x = pos.x;
+            }
+
+        } else
+        {
+            Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+
+            if (TargetInArea(relativeTopLeft + pos2D, relativeBottomRight + pos2D))
+            {
+                float[] increments = {4 * baseIncrement, baseIncrement};
+
+                float xPos = Utils.GuessValue(transform.position.x, TargetInDeadzone, increments, true);
+
+                Vector3 pos = transform.position;
+                pos.x = xPos;
+                transform.position = pos;
+            }
         }
 	}
 
@@ -82,6 +112,12 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //Returns if the target is completely within the deadzone
 
         Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
+        return TargetInArea(relativeDeadzoneTL + position2D, relativeDeadzoneBR + position2D);
+    }
+
+    private bool TargetInDeadzone(float xPos)
+    {
+        Vector2 position2D = new Vector2(xPos, transform.position.y);
         return TargetInArea(relativeDeadzoneTL + position2D, relativeDeadzoneBR + position2D);
     }
 

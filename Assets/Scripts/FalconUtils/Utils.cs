@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 //Contains lots of miscellaneous/reusable funcitons
 
-public static class Utils{
-	
+public static class Utils
+{
 	public enum Axes {x, y, z};
 
 	//---Cap value---
@@ -46,7 +46,8 @@ public static class Utils{
     }
 	
 	//---Cap magnitude---
-	public static Vector2 CapMagnitude(Vector2 inputVector, float maxMagnitude, float minMagnitude = 0){
+	public static Vector2 CapMagnitude(Vector2 inputVector, float maxMagnitude, float minMagnitude = 0)
+    {
 		//Keeps the magnitude of a vector within the specified min and max range.
 		
 		Vector2 outputVector = inputVector;
@@ -93,6 +94,7 @@ public static class Utils{
 	}
 	
 	//---Tween Value---
+    //DO NOT USE ANYMORE.  USE Math.Lerp INSTEAD
 	public static float TweenValue(float inputValue, float targetValue, float speed){
 		//Tweens a variable towards a value, given a current value, a target value, and a speed.
 		//USAGE: variableToTween = Utils.TweenValue(variableToTween, targetValue, speed); 
@@ -206,7 +208,7 @@ public static class Utils{
 	
 	
 	//---SetVector---
-	public static Vector3 SetVector(Vector3 inputVector, float? x, float? y, float? z){
+	public static Vector3 SetVector(Vector3 inputVector, float? x = null, float? y = null, float? z = null){
 		//Sets the coordinates of a vector.  Use "null" to indicate that a coordinate should not be changed.	
 		
 		Vector3 outputVector = inputVector;
@@ -226,17 +228,72 @@ public static class Utils{
 		return outputVector;
 	}
 	
-	public static void SetVector(ref Vector3 inputVector, float? x, float? y, float? z){
+	public static void SetVector(ref Vector3 inputVector, float? x = null, float? y = null, float? z = null){
 		//Sets the coordinates of a vector.  Use "null" to indicate that a coordinate should not be changed.	
 		
 		inputVector = SetVector(inputVector, x, y, z);
 	}
 
+    //---Guess Value---
+    public delegate bool ConditionMethod(float number);     //this method returns true if the given number satisfies the condition
+    public static float GuessValue(float startingValue, ConditionMethod SatisfiesCondition, float[] increments, bool undershoot = true, int maxIterations = 1000)
+    {
+        //Returns the lowest value that satisfies the given condition method
+        /*
+         * startingValue: the value that the algorithm will start on 
+         * Compare: a delegate pointing to a method that returns if a given value is too high, too low, or just right.
+         * increments: An array of increments.  These should get progressively smaller
+         */
+        float output = startingValue;
 
-	//---Weighted Choice---
+        //Use every increment in the list to get increasingly more precise
+        for (int i = 0; i < increments.Length; i++)
+        {
+            //Get closer using the new increment
+            output = GuessValue(output, SatisfiesCondition, increments[i], true, maxIterations);
+        }
 
+        //If undershoot is false, then make sure the output "goes over"
+        if (!undershoot)
+        {
+            output += increments [increments.Length - 1];
+        }
+
+        return output;
+    }
+
+    public static float GuessValue(float startingValue, ConditionMethod SatisfiesCondition, float increment, bool undershoot, int maxIterations = 1000)
+    {
+        //Returns a value that is very close to making SatisfiesCondition true.
+        //If undershoot is true, then the answer will be slightly "too small" and SatsifiesCondition will return false if this value is used.
+        //If undershoot is false, then answer will be slightly "too big" and SatisfiesCondition will return true if this value is used.
+        float output = startingValue;
+
+        int iterations = 0;
+
+        while (iterations < maxIterations)
+        {
+            iterations++;
+
+            output += increment;
+
+            if (SatisfiesCondition(output))
+            {
+                if (undershoot)
+                {
+                    output -= increment;
+                }
+                return output;
+            }
+        }
+
+        //If too many iterations have happened, return the output.
+        Debug.LogError("GuessValue exceeded max iterations");
+        return output;
+    }
 }
 
+//Exceptions
 public class AxisNotInVectorException : System.Exception{
 	
 	public Vector2 vectorRetrieved;

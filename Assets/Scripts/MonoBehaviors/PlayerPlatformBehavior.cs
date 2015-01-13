@@ -29,8 +29,6 @@ public class PlayerPlatformBehavior : MonoBehaviour
         //Relay the controls to the motor
         Vector2 controllerInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        Debug.Log(controllerInput);
-
         if (controllerInput.sqrMagnitude >= movementDeadzone * movementDeadzone)
         {
             motor.ControllerInput = controllerInput;
