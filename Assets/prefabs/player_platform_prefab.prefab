@@ -15,6 +15,7 @@ GameObject:
   - 114: {fileID: 11400002}
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400014}
+  - 114: {fileID: 11479536}
   m_Layer: 0
   m_Name: player_platform_prefab
   m_TagString: Untagged
@@ -50,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.1789608, y: 4.1434226, z: 0}
+  m_LocalPosition: {x: -2.46000004, y: 1.60000002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -187,8 +188,8 @@ MonoBehaviour:
   useDefaultHitDetection: 1
   useDefaultDeathBehavior: 1
   hasInfiniteHealth: 0
-  maxHealth: 1
-  startingHealth: 1
+  maxHealth: 5
+  startingHealth: 5
   vulnerableTo: 
   invulnerableTo: 
   invulnerableToObjects: []
@@ -238,6 +239,20 @@ MonoBehaviour:
   debugMode: 0
   tags:
   - Player
+--- !u!114 &11479536
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b574b616097432b4d9870bb0379cf300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rendererList:
+  - {fileID: 21200000}
+  healthpointsToWatch: {fileID: 11400006}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

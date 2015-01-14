@@ -62,6 +62,12 @@ public class PlayerPlatformBehavior : MonoBehaviour
         FlipOnWhip();
     }
 
+    void OnDead()
+    {
+        Debug.Log("Leaving!");
+        CourseManager.ReturnToActiveCheckpoint();
+    }
+
     //Misc methods
 
     private void FlipOnWhip()
