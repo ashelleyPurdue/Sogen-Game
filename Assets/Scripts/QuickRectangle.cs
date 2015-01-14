@@ -12,11 +12,19 @@ public class QuickRectangle : MonoBehaviour
 
     private BoxCollider2D boxCol;
 
+    private bool fixedShader = false;
+
     private MeshFilter filter;
 
 	// Use this for initialization
-	void Awake()
+	void Start()
     {
+        //Automatically fix rectangles that have been placed using the Diffuse shader.
+        if (!fixedShader)
+        {
+            renderer.sharedMaterial.shader = Shader.Find("Unlit/Texture");
+            fixedShader = true;
+        }
 	}
 	
 	// Update is called once per frame
@@ -42,7 +50,6 @@ public class QuickRectangle : MonoBehaviour
         filter.sharedMesh.vertices = vertices;
         
         filter.sharedMesh.triangles = new int[] {0, 1, 3, 2, 3, 1};
-
         filter.sharedMesh.RecalculateNormals();
     }
 
@@ -91,7 +98,8 @@ public class QuickRectangle : MonoBehaviour
 
             if (renderer.sharedMaterial == null)
             {
-                renderer.sharedMaterial = new Material(Shader.Find("Diffuse"));
+                renderer.sharedMaterial = new Material(Shader.Find("Unlit/Texture"));
+                fixedShader = true;
             }
         }
         
