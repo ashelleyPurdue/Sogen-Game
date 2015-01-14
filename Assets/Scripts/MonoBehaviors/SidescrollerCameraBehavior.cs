@@ -24,6 +24,14 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         {
             target = TagList.FindOnlyObjectWithTag("Player");
         }
+
+        //Move to the player
+        if (!TargetInDeadzone(transform.position.x))
+        {
+            Vector3 newPos = transform.position;
+            newPos.x = target.position.x;
+            transform.position = newPos;
+        }
 	}
 
     void Start()
