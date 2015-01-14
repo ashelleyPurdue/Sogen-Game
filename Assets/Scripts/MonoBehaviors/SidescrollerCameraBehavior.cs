@@ -39,7 +39,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         float xPos = transform.position.x;
         if (!TargetInDeadzone(transform.position.x))
         {
-            float increment = 0.05f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
+            float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
 
             xPos = Utils.GuessValue(transform.position.x, TargetInDeadzone, increment, false);
 

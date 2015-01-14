@@ -55,6 +55,11 @@ public class WhipBehavior : MonoBehaviour
         FiniteStateMachine();
     }
 
+    void OnDealDamage()
+    {
+        EffectManager.Instance.TempPause(0.25f);
+    }
+
     //Interface
 
     public void StartWhipping(float endAngle)
