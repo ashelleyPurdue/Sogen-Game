@@ -5,12 +5,12 @@ using System.Collections;
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
 
-    private float deadzoneWidth = 0.1f;
+    public float deadzoneLeftBound = - 10;
+    public float deadzoneRightBound = -5;
+
+    public bool inDeadzone = false;
 
     public Transform target;
-
-    private Vector2 relativeDeadzoneTL;
-    private Vector2 relativeDeadzoneBR;
 
     private Vector2 relativeTopLeft;
     private Vector2 relativeBottomRight;
@@ -24,115 +24,75 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         {
             target = TagList.FindOnlyObjectWithTag("Player");
         }
-
-        //Calculate the size of the deadzone
-        float height = camera.orthographicSize * 2f;
-        float width = camera.aspect * height;
-
-        relativeTopLeft = new Vector2(-width / 2, height / 2);
-        relativeBottomRight = new Vector2(width / 2, -height / 2);
-
-        relativeDeadzoneTL = relativeTopLeft;
-        relativeDeadzoneTL.x *= deadzoneWidth;
-
-        relativeDeadzoneBR = relativeBottomRight;
-        relativeDeadzoneBR.x *= deadzoneWidth;
-
-        //Record the last position of the target
-        lastTargetX = target.position.x;
 	}
 
     void Start()
     {
         transform.parent = null;
-
-        //Move to the target if he is off screen
-        if (!TargetInDeadzone())
-        {
-            Vector3 newPos = transform.position;
-            newPos.x = target.position.x;
-            transform.position = newPos;
-        }
     }
 
 	void FixedUpdate ()
     {
         //If the player is outside the deadzone, scroll horizontally until he's instead the deadzone.
 
-        bool oldWay = false;
-
-        //TODO: Use a less-costly algorithm
-        float pixelSize = (camera.aspect * camera.orthographicSize * 2f) / camera.pixelWidth;
-        float baseIncrement = 0.5f * pixelSize * Mathf.Sign(target.position.x - transform.position.x);
-
-        if (oldWay)
+        //Move the target back in to the deadzone
+        float xPos = transform.position.x;
+        if (!TargetInDeadzone(transform.position.x))
         {
-            Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+            float increment = 0.05f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
 
-            if (TargetInArea(relativeTopLeft + pos2D, relativeBottomRight + pos2D) && !TargetInDeadzone())
-            {
-                Vector3 pos = transform.position;
-                pos.x += baseIncrement;
-                transform.position = pos;
+            xPos = Utils.GuessValue(transform.position.x, TargetInDeadzone, increment, false);
 
-                pos2D.x = pos.x;
-            }
-
-        } else
-        {
-            Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
-
-            if (TargetInArea(relativeTopLeft + pos2D, relativeBottomRight + pos2D))
-            {
-                float[] increments = {4 * baseIncrement, baseIncrement};
-
-                float xPos = Utils.GuessValue(transform.position.x, TargetInDeadzone, increments, true);
-
-                Vector3 pos = transform.position;
-                pos.x = xPos;
-                transform.position = pos;
-            }
+            Vector3 newPos = transform.position;
+            newPos.x = xPos;
+            transform.position = newPos;
         }
+
+        inDeadzone = TargetInDeadzone(transform.position.x);    //DEBUG
 	}
-
-    void OnDrawGizmos()
-    {
-        //Draw the deadzone
-        Vector3 deadTL3D = new Vector3(relativeDeadzoneTL.x, relativeDeadzoneTL.y, 0);
-        Vector3 deadBR3D = new Vector3(relativeDeadzoneBR.x, relativeDeadzoneBR.y, 0);
-
-        Gizmos.DrawSphere(deadTL3D + transform.position, 1f);
-        Gizmos.DrawSphere(deadBR3D + transform.position, 1f);
-
-        Gizmos.DrawLine(deadTL3D + transform.position, deadBR3D + transform.position);
-    }
-
-    private bool TargetInDeadzone()
-    {
-        //Returns if the target is completely within the deadzone
-
-        Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
-        return TargetInArea(relativeDeadzoneTL + position2D, relativeDeadzoneBR + position2D);
-    }
 
     private bool TargetInDeadzone(float xPos)
     {
-        Vector2 position2D = new Vector2(xPos, transform.position.y);
-        return TargetInArea(relativeDeadzoneTL + position2D, relativeDeadzoneBR + position2D);
-    }
+        //Returns if the target would be in the deadzone if the camera's xposition were xPos
 
-    private bool TargetInArea(Vector2 topLeft, Vector2 bottomRight)
-    {
-        Collider2D[] hits = Physics2D.OverlapAreaAll(topLeft, bottomRight);
+        //Calculate the area of the deadzone
+        float height = 10;
 
-        foreach (Collider2D col in hits)
+        Vector2 pos = new Vector2(xPos, transform.position.y);
+
+        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
+        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
+
+        pointA += pos;
+        pointB += pos;
+
+        //Check to see if the target is within that area
+        Collider2D[] colliders = Physics2D.OverlapAreaAll(pointA, pointB);
+
+        foreach (Collider2D c in colliders)
         {
-            if (col.transform == target)
+            if (c.transform == target)
             {
                 return true;
             }
         }
 
+        //Return false if the target was not found in the area
         return false;
+    }
+
+    void OnDrawGizmos()
+    {
+        float height = 10;
+        
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        
+        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
+        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
+
+        pointA += pos;
+        pointB += pos;
+         
+        Debug.DrawLine(new Vector3(pointA.x, pointA.y, 0), new Vector3(pointB.x, pointB.y));
     }
 }
