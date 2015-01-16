@@ -4,33 +4,29 @@ using UnityEditor;
 
 public class QuickRectangle : MonoBehaviour
 {
+    public const string SHADER = "Unlit/Transparent";
+
     public Texture texture;
     public bool autoStretchTexture = false;
 
     public Vector3 pointA = new Vector3(0, 1, 0);
     public Vector3 pointB = new Vector3(1, 0, 0);
 
-    private BoxCollider2D boxCol;
+    private string shaderString = "";
 
-    private bool fixedShader = false;
+    private BoxCollider2D boxCol;
 
     private MeshFilter filter;
 
 	// Use this for initialization
 	void Start()
     {
-        //Automatically fix rectangles that have been placed using the Diffuse shader.
-        if (!fixedShader)
+        //Automatically fix rectangles that have been placed using the wrong shader
+        if (!shaderString.Equals(SHADER))
         {
-            renderer.sharedMaterial.shader = Shader.Find("Unlit/Texture");
-            fixedShader = true;
+            renderer.sharedMaterial.shader = Shader.Find(SHADER);
+            shaderString = SHADER;
         }
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	    
 	}
 
     //Misc methods
@@ -95,12 +91,13 @@ public class QuickRectangle : MonoBehaviour
             filter = GetComponent<MeshFilter>();
             filter.sharedMesh = new Mesh();
             filter.sharedMesh.vertices = new Vector3[4];
+        }
 
-            if (renderer.sharedMaterial == null)
-            {
-                renderer.sharedMaterial = new Material(Shader.Find("Unlit/Texture"));
-                fixedShader = true;
-            }
+        //Create the mesh's material if it doesn't exist.
+        if (renderer.sharedMaterial == null)
+        {
+            renderer.sharedMaterial = new Material(Shader.Find(SHADER));
+            shaderString = SHADER;
         }
         
         CreateMesh();

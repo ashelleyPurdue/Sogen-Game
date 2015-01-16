@@ -162,10 +162,6 @@ public class PlayerPlatformBehavior : MonoBehaviour
                 motor.enabled = false;
 
                 currentState = State.climbing;
-
-                Vector3 newPos = transform.position;
-                newPos.x = LadderTouching().transform.position.x;
-                transform.position = newPos;
             }
         }
     }
