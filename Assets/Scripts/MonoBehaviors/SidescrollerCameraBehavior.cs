@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Camera))]
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
+    private const float MAX_CAMERA_SPEED = 30f;
 
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
@@ -19,6 +20,8 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     private Transform leftBoundpost = null;
     private Transform rightBoundpost = null;
+
+    private Vector3 targetPosition;
 
     //Events
 
@@ -44,12 +47,15 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         }
 
         //Move to the player
-        if (!TargetInDeadzone(transform.position.x))
+        if (!TargetInDeadzone(targetPosition.x))
         {
             Vector3 newPos = transform.position;
             newPos.x = target.position.x;
             transform.position = newPos;
         }
+
+        //Set the target position to here.
+        targetPosition = transform.position;
 	}
 
     void Start()
@@ -62,28 +68,30 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //If the player is outside the deadzone, scroll horizontally until he's instead the deadzone.
 
         //Move the target back in to the deadzone
-        float xPos = transform.position.x;
-        if (!TargetInDeadzone(transform.position.x))
+        float xPos = targetPosition.x;
+        if (!TargetInDeadzone(targetPosition.x))
         {
             float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
 
-            xPos = Utils.GuessValue(transform.position.x, TargetInDeadzone, increment, false);
+            xPos = Utils.GuessValue(targetPosition.x, TargetInDeadzone, increment, false);
 
-            Vector3 newPos = transform.position;
+            Vector3 newPos = targetPosition;
             newPos.x = xPos;
-            transform.position = newPos;
+            targetPosition = newPos;
         }
 
         //Move the camera back inside the boundposts
         KeepInBoundposts();
 
+        //Move toward the target position
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
 	}
 
     void OnDrawGizmos()
     {
         float height = 10;
         
-        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        Vector2 pos = new Vector2(targetPosition.x, targetPosition.y);
         
         Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
         Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
@@ -111,7 +119,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //Calculate the area of the deadzone
         float height = 10;
 
-        Vector2 pos = new Vector2(xPos, transform.position.y);
+        Vector2 pos = new Vector2(xPos, targetPosition.y);
 
         Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
         Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
@@ -139,36 +147,36 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //Keeps the border of the camera inside the boundposts
         float halfWidth = Width / 2;
 
-        float newX = transform.position.x;
+        float newX = targetPosition.x;
 
         //Left boundpost
         if (leftBoundpost != null)
         {
-            float borderX = transform.position.x - halfWidth;
+            float borderX = targetPosition.x - halfWidth;
 
             //If the border is too far to the left, move it back.
             if (borderX < leftBoundpost.position.x)
             {
                 float difference = leftBoundpost.position.x - borderX;
-                newX = transform.position.x + difference;
+                newX = targetPosition.x + difference;
             }
         }
 
         //Right boundpost
         if (rightBoundpost != null)
         {
-            float borderX = transform.position.x + halfWidth;
+            float borderX = targetPosition.x + halfWidth;
 
             //If the border is too far to the right, move it back
             if (borderX > rightBoundpost.position.x)
             {
                 float difference = rightBoundpost.position.x - borderX;
-                newX = transform.position.x + difference;
+                newX = targetPosition.x + difference;
             }
         }
 
         //Update the position
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+        targetPosition = new Vector3(newX, targetPosition.y, targetPosition.z);
     }
 
    
