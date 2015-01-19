@@ -24,6 +24,19 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
 	void Awake ()
     {
+        //Add a taglist with the tag "camera" if there is not one already
+        if (!TagList.ObjectHasTag(this, "camera"))
+        {
+            TagList myTagList = GetComponent<TagList>();
+
+            if (myTagList == null)
+            {
+                myTagList = gameObject.AddComponent<TagList>();
+            }
+
+            myTagList.AddTag("camera");
+        }
+
         //If there is no assigned target, search for the player and set him as the target.
         if (target == null)
         {
