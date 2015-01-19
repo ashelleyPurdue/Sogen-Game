@@ -8,14 +8,19 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
 
-    public bool inDeadzone = false;
-
     public Transform target;
 
-    private Vector2 relativeTopLeft;
-    private Vector2 relativeBottomRight;
+    public float Width
+    {
+        get { return 2f * camera.orthographicSize * camera.aspect;}
+    }
 
     private float lastTargetX;
+
+    private Transform leftBoundpost = null;
+    private Transform rightBoundpost = null;
+
+    //Events
 
 	void Awake ()
     {
@@ -56,8 +61,35 @@ public class SidescrollerCameraBehavior : MonoBehaviour
             transform.position = newPos;
         }
 
-        inDeadzone = TargetInDeadzone(transform.position.x);    //DEBUG
+        //Move the camera back inside the boundposts
+        KeepInBoundposts();
+
 	}
+
+    void OnDrawGizmos()
+    {
+        float height = 10;
+        
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        
+        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
+        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
+        
+        pointA += pos;
+        pointB += pos;
+        
+        Debug.DrawLine(new Vector3(pointA.x, pointA.y, 0), new Vector3(pointB.x, pointB.y));
+    }
+
+    //Misc methods
+
+    public void SetBoundposts(Transform left, Transform right)
+    {
+        //Sets the boundposts
+
+        leftBoundpost = left;
+        rightBoundpost = right;
+    }
 
     private bool TargetInDeadzone(float xPos)
     {
@@ -89,18 +121,42 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         return false;
     }
 
-    void OnDrawGizmos()
+    private void KeepInBoundposts()
     {
-        float height = 10;
-        
-        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
-        
-        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
-        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
+        //Keeps the border of the camera inside the boundposts
+        float halfWidth = Width / 2;
 
-        pointA += pos;
-        pointB += pos;
-         
-        Debug.DrawLine(new Vector3(pointA.x, pointA.y, 0), new Vector3(pointB.x, pointB.y));
+        float newX = transform.position.x;
+
+        //Left boundpost
+        if (leftBoundpost != null)
+        {
+            float borderX = transform.position.x - halfWidth;
+
+            //If the border is too far to the left, move it back.
+            if (borderX < leftBoundpost.position.x)
+            {
+                float difference = leftBoundpost.position.x - borderX;
+                newX = transform.position.x + difference;
+            }
+        }
+
+        //Right boundpost
+        if (rightBoundpost != null)
+        {
+            float borderX = transform.position.x + halfWidth;
+
+            //If the border is too far to the right, move it back
+            if (borderX > rightBoundpost.position.x)
+            {
+                float difference = rightBoundpost.position.x - borderX;
+                newX = transform.position.x + difference;
+            }
+        }
+
+        //Update the position
+        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
     }
+
+   
 }
