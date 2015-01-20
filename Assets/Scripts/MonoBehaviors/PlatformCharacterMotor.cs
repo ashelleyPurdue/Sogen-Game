@@ -45,6 +45,7 @@ public class PlatformCharacterMotor : MonoBehaviour
 
     private Vector2 lastGroundedVelocity = Vector2.zero;        //The motor's velocity when it was grounded last.
     private Vector2 lastGroundTouchedVelocity = Vector2.zero;   //The velocity of the last ground that was touched
+    private Collider2D[] lastGroundTouched;                     //An array storing the ground objects that the character touched when it was grounded last.
 
     private float groundedCheckDistance = 0.1f;     //How high above the ground it can be while still being considered "grounded".
 
@@ -75,9 +76,54 @@ public class PlatformCharacterMotor : MonoBehaviour
         WalkingControls();
         JumpControls();
         UpdateGrounded();
+
+        //If grounded and not jumping, move the character down until it's touching the ground
+        if (IsGrounded() && !isJumping)
+        {
+            MoveToGround();
+        }
     }
 
     //Misc methods
+
+    private void MoveToGround()
+    {
+        //Move downwards until the collider is actually touching the ground.
+
+        float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, -0.1f, true);
+
+        Vector3 newPos = transform.position;
+        newPos.y = yValue;
+        transform.position = newPos;
+    }
+
+    private bool ColliderTouchesGround(float yValue)
+    {
+        //Returns if the collider would be touching the last ground touched at a given y-value.
+
+        bool output = false;
+
+        //Temporarily move the character down to the new y value
+        Vector3 oldPos = transform.position;
+
+        Vector3 newPos = oldPos;
+        newPos.y = yValue;
+        transform.position = newPos;
+
+        //For every collider, check to see if we're touching it.
+        foreach (Collider2D c in lastGroundTouched)
+        {
+            if (collider2D.bounds.Intersects(c.bounds))
+            {
+                output = true;
+                break;
+            }
+        }
+
+        //Return the character to its original position and return the output.
+        transform.position = oldPos;
+        return output;
+    }
 
     private void WalkingControls()
     {
@@ -208,8 +254,15 @@ public class PlatformCharacterMotor : MonoBehaviour
 
         Collider2D[] groundHits = GetGroundCollisions();
 
-        //If the player touched any ground, set grounded to true.  Else, set it to false.
-        grounded = groundHits.Length != 0;
+        //If the player touched any ground, set grounded to true and remember the ground objects we're touching.  Else, set it to false.
+        if (groundHits.Length != 0)
+        {
+            grounded = true;
+            lastGroundTouched = groundHits;
+        } else
+        {
+            grounded = false;
+        }
 
         //If we are currently touching ground, update the lastGroundedVelocity
         if (IsGrounded())

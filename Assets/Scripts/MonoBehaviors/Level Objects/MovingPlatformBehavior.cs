@@ -30,16 +30,16 @@ public class MovingPlatformBehavior : MonoBehaviour
         startPos = transform.position;
         endPos = transform.position + relEndPos;
 
-        //Calculate the speed
-        speed = Vector3.Distance(startPos, endPos) / movementTime;
+        //Calculate what speed the platform should start moving at so that it reaches the target, accounting for its deceleration
+        speed = 2 * Vector3.Distance(startPos, endPos) / movementTime;
 
         //Start with the target pos being the endPos
         targetPos = endPos;
 
         //Set the rigidbody's settings
         rigidbody2D.mass = float.MaxValue;
-        rigidbody2D.gravityScale = 0f;
         rigidbody2D.isKinematic = true;
+        rigidbody2D.gravityScale = 0f;
     }
 
     void OnDrawGizmos()
@@ -58,13 +58,16 @@ public class MovingPlatformBehavior : MonoBehaviour
             Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
             Vector2 target2D = new Vector2(targetPos.x, targetPos.y);
 
-            rigidbody2D.velocity = speed * (target2D - pos2D).normalized;
+            //Decelerate so the player doesn't fly off.
+            float currentSpeed = Mathf.Lerp(speed, 0, timer / movementTime);
+
+            rigidbody2D.velocity = currentSpeed * (target2D - pos2D).normalized;
 
             //Pause and change targets when we reach the target
             timer += Time.deltaTime;
             if (timer >= movementTime)
             {
-                rigidbody2D.position = target2D;
+                //rigidbody2D.position = target2D;
                 rigidbody2D.velocity = Vector2.zero;
 
                 timer = 0f;
