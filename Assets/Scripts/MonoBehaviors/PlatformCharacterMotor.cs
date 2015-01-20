@@ -336,11 +336,9 @@ public class PlatformCharacterMotor : MonoBehaviour
         Vector2 boxPos = rigidbody2D.position - new Vector2(boxCollider.size.x * margin / 2, boxCollider.size.y / 2);
         Vector2 boxSize = new Vector2(boxCollider.size.x * margin, groundedCheckDistance * -1);
 
-        /*
         Vector3 boxPos3D = new Vector3(boxPos.x, boxPos.y, 0);
         Vector3 boxSize3D = new Vector3(boxSize.x, boxSize.y, 0);
         Debug.DrawLine(boxPos3D, boxPos3D + boxSize3D);
-        */
 
         //Get all colliders hit by the check
         Collider2D[] hits = Physics2D.OverlapAreaAll(boxPos, boxPos + boxSize);
