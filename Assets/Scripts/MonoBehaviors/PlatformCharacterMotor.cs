@@ -76,7 +76,10 @@ public class PlatformCharacterMotor : MonoBehaviour
         WalkingControls();
         JumpControls();
         UpdateGrounded();
+    }
 
+    void LateUpdate()
+    {
         //If grounded and not jumping, move the character down until it's touching the ground
         if (IsGrounded() && !isJumping)
         {
@@ -90,11 +93,20 @@ public class PlatformCharacterMotor : MonoBehaviour
     {
         //Move downwards until the collider is actually touching the ground.
 
-        float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, -0.025f, true);
+        try
+        {
+            float increment = 0.01f;
+            int maxIterations = (int)(groundedCheckDistance / increment);
+            float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, increment * -1, true, maxIterations);
 
-        Vector3 newPos = transform.position;
-        newPos.y = yValue;
-        transform.position = newPos;
+            Vector3 newPos = transform.position;
+            newPos.y = yValue;
+            transform.position = newPos;
+        }
+        catch(GuessValueMaxIterationException e)
+        {
+            //If there's a max iteration exception, ignore it.
+        }
     }
 
     private bool ColliderTouchesGround(float yValue)

@@ -288,7 +288,7 @@ public static class Utils
         }
 
         //If too many iterations have happened, return the output.
-        Debug.LogError("GuessValue exceeded max iterations");
+        throw new GuessValueMaxIterationException();
         return output;
     }
 }
@@ -305,4 +305,11 @@ public class AxisNotInVectorException : System.Exception{
 		axisNotFound = ax;
 	}
 	
+}
+
+public class GuessValueMaxIterationException : System.Exception
+{
+    public GuessValueMaxIterationException() : base("GuessValue has exceeded max iterations.")
+    {
+    }
 }

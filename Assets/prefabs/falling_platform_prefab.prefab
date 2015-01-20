@@ -1,44 +1,44 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &123212
+--- !u!1 &163484
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 423212}
-  - 23: {fileID: 2323212}
-  - 33: {fileID: 3323212}
-  - 114: {fileID: 11423208}
-  - 61: {fileID: 6123212}
-  - 114: {fileID: 11423210}
-  - 114: {fileID: 11423212}
+  - 4: {fileID: 463484}
+  - 23: {fileID: 2363484}
+  - 33: {fileID: 3363484}
+  - 114: {fileID: 11463484}
+  - 61: {fileID: 6163484}
+  - 50: {fileID: 5063484}
+  - 114: {fileID: 11463486}
   m_Layer: 0
-  m_Name: lava_prefab
+  m_Name: falling_platform_prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &423212
+--- !u!4 &463484
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 33, y: -4, z: 0}
+  m_LocalPosition: {x: 34, y: .439999998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2323212
+--- !u!23 &2363484
 Renderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -53,70 +53,66 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3323212
+--- !u!33 &3363484
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_Mesh: {fileID: 0}
---- !u!61 &6123212
+--- !u!50 &5063484
+Rigidbody2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 163484}
+  m_Mass: 1000
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 0
+  m_FixedAngle: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+--- !u!61 &6163484
 BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Size: {x: 5, y: 4}
-  m_Center: {x: 2.5, y: 2}
---- !u!114 &11423208
+  m_IsTrigger: 0
+  m_Size: {x: 2, y: 1}
+  m_Center: {x: 1, y: .5}
+--- !u!114 &11463484
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e911245718704454d8ebbf2b0e453a0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  texture: {fileID: 2800000, guid: 4d520010ee44e5843b56d07d4acb58de, type: 3}
-  autoStretchTexture: 0
-  pointA: {x: 0, y: 4, z: 0}
-  pointB: {x: 5, y: 0, z: 0}
---- !u!114 &11423210
+  texture: {fileID: 2800000, guid: 5828158e8e4655b4da45ffe1c3fcbd0b, type: 3}
+  autoStretchTexture: 1
+  pointA: {x: 0, y: 1, z: 0}
+  pointB: {x: 2, y: 0, z: 0}
+--- !u!114 &11463486
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
+  m_GameObject: {fileID: 163484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2b90874dab0e0e41908297850895128, type: 3}
+  m_Script: {fileID: 11500000, guid: 29a4ba0e7a896be49b18f59b16c3b95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 0
-  tags:
-  - Lava
---- !u!114 &11423212
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 123212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a9629a049824c34fab8652cc2483b12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useDefaultHitDetection: 1
-  isHot: 1
-  damageTags: 
-  objectsToIgnore: []
-  objectsToHurt: []
-  damageAmount: 3
+  fallSpeed: .5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -126,6 +122,6 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 123212}
+  m_RootGameObject: {fileID: 163484}
   m_IsPrefabParent: 1
   m_IsExploded: 1

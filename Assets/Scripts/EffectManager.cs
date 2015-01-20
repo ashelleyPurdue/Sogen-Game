@@ -52,7 +52,10 @@ public class EffectManager : MonoBehaviour
         timer = time;
         currentState = State.tempPausing;
 
-        oldTimescale = Time.timeScale;
+        if (Time.timeScale > 0)
+        {
+            oldTimescale = Time.timeScale;
+        }
         Time.timeScale = 0f;
     }
 
