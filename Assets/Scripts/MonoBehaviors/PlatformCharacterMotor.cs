@@ -90,7 +90,7 @@ public class PlatformCharacterMotor : MonoBehaviour
     {
         //Move downwards until the collider is actually touching the ground.
 
-        float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, -0.1f, true);
+        float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, -0.025f, true);
 
         Vector3 newPos = transform.position;
         newPos.y = yValue;

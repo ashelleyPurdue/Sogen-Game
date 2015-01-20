@@ -22,6 +22,7 @@ public class MovingPlatformBehavior : MonoBehaviour
     private float timer = 0f;
     private State currentState = State.pausing;
 
+    private float speedDebug = 0f;
     //Events
 
     void Awake()
@@ -31,7 +32,7 @@ public class MovingPlatformBehavior : MonoBehaviour
         endPos = transform.position + relEndPos;
 
         //Calculate what speed the platform should start moving at so that it reaches the target, accounting for its deceleration
-        speed = 2 * Vector3.Distance(startPos, endPos) / movementTime;
+        speed = Mathf.PI * Vector3.Distance(startPos, endPos) / movementTime;
 
         //Start with the target pos being the endPos
         targetPos = endPos;
@@ -54,20 +55,22 @@ public class MovingPlatformBehavior : MonoBehaviour
         {
             //While moving
 
+            timer += Time.deltaTime;
+
             //Aim at the target.
             Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
             Vector2 target2D = new Vector2(targetPos.x, targetPos.y);
 
-            //Decelerate so the player doesn't fly off.
-            float currentSpeed = Mathf.Lerp(speed, 0, timer / movementTime);
+            //Smoothly accelerate and decelerate so the player doesn't fly off.
+            float currentSpeed = speed * Mathf.Sin((timer / movementTime) * Mathf.PI) / 2;
+            speedDebug = currentSpeed;
 
             rigidbody2D.velocity = currentSpeed * (target2D - pos2D).normalized;
 
             //Pause and change targets when we reach the target
-            timer += Time.deltaTime;
             if (timer >= movementTime)
             {
-                //rigidbody2D.position = target2D;
+                rigidbody2D.position = target2D;
                 rigidbody2D.velocity = Vector2.zero;
 
                 timer = 0f;
