@@ -75,7 +75,7 @@ public class QuickRectangle : MonoBehaviour
         filter.sharedMesh.uv = uvs;
         
         //Update the texture tiling.
-        if (false)
+        if (autoStretchTexture)
         {
             Vector2 inverseSize = new Vector2(1 / boxCol.size.x, 1 / boxCol.size.y);
             renderer.sharedMaterial.SetTextureScale("_MainTex", inverseSize);
