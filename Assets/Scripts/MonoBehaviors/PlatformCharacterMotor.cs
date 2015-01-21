@@ -358,9 +358,12 @@ public class PlatformCharacterMotor : MonoBehaviour
         BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
 
         //Get the dimensions of the box to use for collision.
-        Vector2 boxPos = rigidbody2D.position - new Vector2(boxCollider.size.x * margin / 2, boxCollider.size.y / 2);
+        Vector2 boxPos = boxCollider.bounds.min;
+        boxPos.x += boxCollider.size.x * (1 - margin) / 2;
+
         Vector2 boxSize = new Vector2(boxCollider.size.x * margin, groundedCheckDistance * -1);
 
+        //DEBUG: Draw the square
         Vector3 boxPos3D = new Vector3(boxPos.x, boxPos.y, 0);
         Vector3 boxSize3D = new Vector3(boxSize.x, boxSize.y, 0);
         Debug.DrawLine(boxPos3D, boxPos3D + boxSize3D);
