@@ -64,7 +64,7 @@ public class WhipBehavior : MonoBehaviour
         blockedEndingPos.y = blockedEndingY;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         FiniteStateMachine();
     }
@@ -77,6 +77,7 @@ public class WhipBehavior : MonoBehaviour
     void OnBlocked()
     {
         //Go into the blocked animation
+        transform.localRotation = Quaternion.Euler(0, 0, endAngle);
         blockedStartScale = transform.localScale;
 
         currentState = WhipState.blockedAnimation;
