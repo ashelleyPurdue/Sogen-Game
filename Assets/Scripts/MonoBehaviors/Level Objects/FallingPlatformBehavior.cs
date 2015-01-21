@@ -25,7 +25,10 @@ public class FallingPlatformBehavior : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        falling = true;
+        if (other.GetComponent<Rigidbody2D>() != null)
+        {
+            falling = true;
+        }
     }
 
     void Update()

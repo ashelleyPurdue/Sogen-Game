@@ -14,18 +14,22 @@ public class FogWallBehavior : MonoBehaviour
         player = TagList.FindOnlyObjectWithTag("Player");
     }
 
-    void OnWillRenderObject()
+    void Update()
     {
-        //When the object is rendered, become the boundpost for the camera.
+        //When the object is in view, become the boundpost for the camera.
 
-        if (player.position.x < transform.position.x)
+        if (myCamera.InView(collider2D.bounds))
         {
-            //Become the right boundpost
-            myCamera.SetBoundposts(null, transform);
-        } else
-        {
-            //Become the left boundpost
-            myCamera.SetBoundposts(transform, null);
+
+            if (player.position.x < transform.position.x)
+            {
+                //Become the right boundpost
+                myCamera.SetBoundposts(null, transform);
+            } else
+            {
+                //Become the left boundpost
+                myCamera.SetBoundposts(transform, null);
+            }
         }
     }
 }

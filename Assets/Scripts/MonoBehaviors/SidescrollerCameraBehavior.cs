@@ -11,6 +11,11 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     public Transform target;
 
+    public float Height
+    {
+        get { return 2 * camera.orthographicSize; }
+    }
+
     public float Width
     {
         get { return 2f * camera.orthographicSize * camera.aspect;}
@@ -23,10 +28,24 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     private Vector3 targetPosition;
 
+    private BoxCollider2D myTrigger;
+
     //Events
 
 	void Awake ()
     {
+
+        //Get the box collider, creating it if there is none.
+        myTrigger = GetComponent<BoxCollider2D>();
+        if (myTrigger == null)
+        {
+            myTrigger = gameObject.AddComponent<BoxCollider2D>();
+        }
+
+        //Configure the box collider.
+        myTrigger.isTrigger = true;
+        myTrigger.size = new Vector2(Width, Height);
+
         //Add a taglist with the tag "camera" if there is not one already
         if (!TagList.ObjectHasTag(this, "camera"))
         {
@@ -89,6 +108,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        //Draw the deadzone
         float height = 10;
         
         Vector2 pos = new Vector2(targetPosition.x, targetPosition.y);
@@ -98,11 +118,21 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         
         pointA += pos;
         pointB += pos;
-        
+
         Debug.DrawLine(new Vector3(pointA.x, pointA.y, 0), new Vector3(pointB.x, pointB.y));
     }
 
     //Misc methods
+
+    public bool InView(Bounds bounds)
+    {
+        //Returns if bounds is within the view
+
+        bool xBounds = (bounds.min.x <= collider2D.bounds.max.x) && (bounds.max.x >= collider2D.bounds.min.x);
+        bool yBounds = (bounds.min.y <= collider2D.bounds.max.y) && (bounds.max.y >= collider2D.bounds.min.y);
+
+        return xBounds && yBounds;
+    }
 
     public void SetBoundposts(Transform left, Transform right)
     {
