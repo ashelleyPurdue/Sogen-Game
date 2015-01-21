@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Level 1/LevelOneRoomOne.unity
+    path: Assets/Scenes/Level 1/Level1Room1.unity
   - enabled: 1
     path: Assets/Scenes/LevelSelectScene.unity
   - enabled: 0
@@ -14,8 +14,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LevelSelectScene.unity
   - enabled: 1
-    path: Assets/Scenes/Level 1/LevelOneRoomTwo.unity
+    path: Assets/Scenes/Level 1/Level1Room2.unity
   - enabled: 1
     path: Assets/Scenes/PhysicsTesting.unity
   - enabled: 1
-    path: Assets/Scenes/Level 1/LevelOneRoomThree.unity
+    path: Assets/Scenes/Level 1/Level1Room3.unity
