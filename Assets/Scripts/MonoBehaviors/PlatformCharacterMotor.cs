@@ -41,6 +41,8 @@ public class PlatformCharacterMotor : MonoBehaviour
     private float inputSign = 0;        //DEBUG: Display the sign of the x direction.
     public float deltaVelocityDebug = 0;    //DEBUG: Display how much the player's velocity is changing by        
 
+    private Vector2 debugRigidbodyVelocity;   //DEBUG: Display the rigidbody's velocity.
+
     //Private fields
 
     private Vector2 lastGroundedVelocity = Vector2.zero;        //The motor's velocity when it was grounded last.
@@ -76,15 +78,14 @@ public class PlatformCharacterMotor : MonoBehaviour
         WalkingControls();
         JumpControls();
         UpdateGrounded();
-    }
 
-    void LateUpdate()
-    {
         //If grounded and not jumping, move the character down until it's touching the ground
         if (IsGrounded() && !isJumping)
         {
             MoveToGround();
         }
+
+        debugRigidbodyVelocity = rigidbody2D.velocity;
     }
 
     //Misc methods
@@ -93,15 +94,39 @@ public class PlatformCharacterMotor : MonoBehaviour
     {
         //Move downwards until the collider is actually touching the ground.
 
+        //Only proceed if the character is touching a ground object WITH A RIGIDBODY
+        bool hasRigidbody = false;
+        foreach (Collider2D c in lastGroundTouched)
+        {
+            if (c.GetComponent<Rigidbody2D>() != null)
+            {
+                hasRigidbody = true;
+                break;
+            }
+        }
+        if (!hasRigidbody)
+        {
+            Debug.Log("No rigidbody");
+            return;
+        }
+
         try
         {
-            float increment = 0.01f;
+            Debug.Log("Moving into ground.");
+
+            //Move the character so that he's close to touching the ground.
+            float increment = 0.0001f;
             int maxIterations = (int)(groundedCheckDistance / increment);
             float yValue = Utils.GuessValue(transform.position.y, ColliderTouchesGround, increment * -1, true, maxIterations);
 
             Vector3 newPos = transform.position;
             newPos.y = yValue;
             transform.position = newPos;
+
+            //Set the vertical velocity to that of the platform's.
+            Vector3 newVel = rigidbody2D.velocity;
+            newVel.y = lastGroundTouchedVelocity.y;
+            rigidbody2D.velocity = newVel;
         }
         catch(GuessValueMaxIterationException e)
         {
