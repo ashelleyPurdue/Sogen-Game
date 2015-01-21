@@ -12,7 +12,11 @@ public class WhipBehavior : MonoBehaviour
     public float damageStartDelay = 0.1f;   //How long after the swinging state starts to enable damaging
     public float damageTimeHanging = 0.1f;  //How long after the hanging state starts to disable damaging
 
+    public float blockedAnimationTime = 0.5f;   //How long the whip should be in the "blockedAnimation" state for.
+
     public float animationAngle = 180;  //The number of degrees the whip turns before cracking.
+
+    public float blockedEndingY = -0.5f;    //The y-value of the whip's position at the end of the blocked animation
 
     public Sprite swingingFrame;    //The picture of the whip while it's swinging.
     public Sprite hangingFrame;     //The picture of the whip when it is perfectly straight.
@@ -29,11 +33,17 @@ public class WhipBehavior : MonoBehaviour
 
     //Private fields
 
-    public enum WhipState {idle, swinging, hanging};
+    private Vector3 initialLocalPos;
+
+    public enum WhipState {idle, swinging, hanging, blockedAnimation};
     private WhipState currentState = WhipState.idle;
 
     private float startAngle;
     private float endAngle;
+
+    private float blockedStartAngle;
+    private Vector3 blockedEndingPos;
+    private Vector3 blockedStartScale;
 
     private float timer = 0f;
 
@@ -48,6 +58,10 @@ public class WhipBehavior : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         myDamageSource = GetComponent<DamageSource>();
+
+        initialLocalPos = transform.localPosition;
+        blockedEndingPos = initialLocalPos;
+        blockedEndingPos.y = blockedEndingY;
     }
 
     void Update()
@@ -58,6 +72,15 @@ public class WhipBehavior : MonoBehaviour
     void OnDealDamage()
     {
         EffectManager.Instance.TempPause(0.25f);
+    }
+
+    void OnBlocked()
+    {
+        //Go into the blocked animation
+        blockedStartScale = transform.localScale;
+
+        currentState = WhipState.blockedAnimation;
+        timer = 0f;
     }
 
     //Interface
@@ -104,6 +127,10 @@ public class WhipBehavior : MonoBehaviour
 
             case WhipState.hanging:
                 WhileHanging();
+                break;
+
+            case WhipState.blockedAnimation:
+                WhileBlockedAnimation();
                 break;
         }
     }
@@ -182,5 +209,30 @@ public class WhipBehavior : MonoBehaviour
         }
     }
 
+    private void WhileBlockedAnimation()
+    {
+        //TODO:  Do a short animation of the whip going limp or something.
+
+        //Disable the damage
+        myDamageSource.isHot = false;
+        collider2D.enabled = false;
+
+        //Do the animation
+        timer += Time.deltaTime;
+
+        spriteRenderer.sprite = swingingFrame;
+
+        transform.localPosition = Vector3.Lerp(initialLocalPos, blockedEndingPos, timer / blockedAnimationTime);
+        transform.localScale = Vector3.Lerp(blockedStartScale, Vector3.zero, timer / blockedAnimationTime);
+
+        //Move on when time is up
+        if (timer >= blockedAnimationTime)
+        {
+            transform.localPosition = initialLocalPos;
+            timer = 0f;
+            currentState = WhipState.idle;
+        }
+      
+    }
     //Misc methods
 }
