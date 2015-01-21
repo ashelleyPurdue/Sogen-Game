@@ -27,7 +27,7 @@ public class PlatformCharacterMotor : MonoBehaviour
 
     public float gravityScale = 1.8f;   //The gravity scale.  This overrides the rigidbody2D's gravity scale.
 
-    public float maxJumpHeight;         //How high it jumps
+    public float maxJumpHeight = 2f;     //How high the character jumps
     public float timeToMaxJumpHeight;   //How long the jump button must be held to reach that height.
 
     public float maxWalkingSpeed = 4;   //The maximum horizontal speed(relative to the last ground touched).
@@ -246,9 +246,12 @@ public class PlatformCharacterMotor : MonoBehaviour
             if (jumpingTime >= timeToMaxJumpHeight || JumpButtonReleased())
             {
                 //Set the vertical velocity to what it was before the player started jumping.
+
+                /*
                 Vector2 newVelocity = rigidbody2D.velocity;
                 newVelocity.y = lastGroundedVelocity.y;
                 rigidbody2D.velocity = newVelocity;
+                */
 
                 //Stop jumping
                 isJumping = false;
@@ -287,16 +290,22 @@ public class PlatformCharacterMotor : MonoBehaviour
 
     private void UpdateGrounded()
     {
-        //Updates stuff related to whether the player is grounded or not.
+        //Updates stuff related to whether the character is grounded or not.
 
         Collider2D[] groundHits = GetGroundCollisions();
 
-        //If the player touched any ground, set grounded to true and remember the ground objects we're touching.  Else, set it to false.
+        //If the character touched any ground, set grounded to true and remember the ground objects we're touching.  Else, set it to false.
         if (groundHits.Length != 0)
         {
             grounded = true;
             lastGroundTouched = groundHits;
         } else
+        {
+            grounded = false;
+        }
+
+        //If the character is jumping, then it is not grounded.
+        if (isJumping)
         {
             grounded = false;
         }

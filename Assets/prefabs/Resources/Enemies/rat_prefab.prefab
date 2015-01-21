@@ -30,7 +30,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 125050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 43.1199989, y: 1.73000002, z: 0}
+  m_LocalPosition: {x: 47.5400009, y: 1.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -59,8 +59,8 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Size: {x: 1.27999997, y: 1.15461731}
-  m_Center: {x: 0, y: -.0626912117}
+  m_Size: {x: 1.27999997, y: .788709879}
+  m_Center: {x: 0, y: -.245644927}
 --- !u!114 &11425050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -136,7 +136,7 @@ MonoBehaviour:
   gravityScale: 1.79999995
   maxJumpHeight: 0
   timeToMaxJumpHeight: 0
-  maxWalkingSpeed: 1
+  maxWalkingSpeed: 2
   groundedFriction: 0
   walkingAccel: 50
   aerialHorAccel: 1
