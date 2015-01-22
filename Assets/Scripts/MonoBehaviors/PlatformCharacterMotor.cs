@@ -25,10 +25,10 @@ public class PlatformCharacterMotor : MonoBehaviour
 
     //Inspector fields
 
-    public float gravityScale = 1.8f;   //The gravity scale.  This overrides the rigidbody2D's gravity scale.
+    public float gravityScale = 1.8f;       //The gravity scale.  This overrides the rigidbody2D's gravity scale.
 
-    public float maxJumpHeight = 2f;     //How high the character jumps
-    public float timeToMaxJumpHeight;   //How long the jump button must be held to reach that height.
+    public float maxJumpHeight = 2f;        //How high the character jumps
+    public float timeToMaxJumpHeight;       //How long the jump button must be held to reach that height.
 
     public float maxWalkingSpeed = 4;   //The maximum horizontal speed(relative to the last ground touched).
 
@@ -106,14 +106,11 @@ public class PlatformCharacterMotor : MonoBehaviour
         }
         if (!hasRigidbody)
         {
-            Debug.Log("No rigidbody");
             return;
         }
 
         try
         {
-            Debug.Log("Moving into ground.");
-
             //Move the character so that he's close to touching the ground.
             float increment = 0.0001f;
             int maxIterations = (int)(groundedCheckDistance / increment);
@@ -246,13 +243,13 @@ public class PlatformCharacterMotor : MonoBehaviour
             if (jumpingTime >= timeToMaxJumpHeight || JumpButtonReleased())
             {
                 //Set the vertical velocity to what it was before the player started jumping.
-
+    
                 /*
                 Vector2 newVelocity = rigidbody2D.velocity;
                 newVelocity.y = lastGroundedVelocity.y;
                 rigidbody2D.velocity = newVelocity;
                 */
-
+                
                 //Stop jumping
                 isJumping = false;
 
