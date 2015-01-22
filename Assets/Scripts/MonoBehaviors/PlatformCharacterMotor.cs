@@ -30,21 +30,27 @@ public class PlatformCharacterMotor : MonoBehaviour
     public float maxJumpHeight = 2f;        //How high the character jumps
     public float timeToMaxJumpHeight;       //How long the jump button must be held to reach that height.
 
-    public float maxWalkingSpeed = 4;   //The maximum horizontal speed(relative to the last ground touched).
+    public float maxWalkingSpeed = 4;       //The maximum horizontal speed(relative to the last ground touched).
 
-    public float groundedFriction = 10; //The horizontal deceleration when grounded.
+    public float groundedFriction = 10;     //The horizontal deceleration when grounded.
 
-    public float walkingAccel = 1;      //The accelleration due to walking(when grounded).
-    public float aerialHorAccel = 1;    //How much character can influence its hspeed when in the air.
+    public float walkingAccel = 1;          //The accelleration due to walking(when grounded).
+    public float aerialHorAccel = 1;        //How much character can influence its hspeed when in the air.
 
-    private float magnitude = 0;        //DEBUG: Display the input magnitude
-    private float inputSign = 0;        //DEBUG: Display the sign of the x direction.
-    public float deltaVelocityDebug = 0;    //DEBUG: Display how much the player's velocity is changing by        
+    //Debug fields
+    
+    private float magnitude = 0;            //DEBUG: Display the input magnitude
+    private float inputSign = 0;            //DEBUG: Display the sign of the x direction.
+    private float deltaVelocityDebug = 0;   //DEBUG: Display how much the player's velocity is changing by        
 
-    private Vector2 debugRigidbodyVelocity;   //DEBUG: Display the rigidbody's velocity.
-
+    private Vector2 debugRigidbodyVelocity; //DEBUG: Display the rigidbody's velocity.
+    
+    private float heightAboveGround = 0f;   //DEBUG: Display the hight above the last ground touched.
+    private float maxHeightAboveGround= 0f; //DEBUG: Display the max height above the ground.
+    
     //Private fields
-
+ 
+    private Vector3 lastGroundedPosition = Vector3.zero;        //The character's position when it last touched the ground.
     private Vector2 lastGroundedVelocity = Vector2.zero;        //The motor's velocity when it was grounded last.
     private Vector2 lastGroundTouchedVelocity = Vector2.zero;   //The velocity of the last ground that was touched
     private Collider2D[] lastGroundTouched;                     //An array storing the ground objects that the character touched when it was grounded last.
@@ -63,6 +69,7 @@ public class PlatformCharacterMotor : MonoBehaviour
     private float jumpingTime = 0f;     //How long the player has been jumping
 
     private bool grounded = false;
+    private bool groundedLastFrame = false;
 
     //Events
     void Awake()
@@ -84,10 +91,16 @@ public class PlatformCharacterMotor : MonoBehaviour
         {
             MoveToGround();
         }
-
+  
+        //UPDATE DEBUG FIELDS
         debugRigidbodyVelocity = rigidbody2D.velocity;
+        
+        MeasureJumpStats();
+        
+        //Update groundedLastFrame
+        groundedLastFrame = grounded;
     }
-
+    
     //Misc methods
 
     private void MoveToGround()
@@ -242,13 +255,13 @@ public class PlatformCharacterMotor : MonoBehaviour
             //If jumping time is up, or the player released the jump button, disable jumping and enable gravity
             if (jumpingTime >= timeToMaxJumpHeight || JumpButtonReleased())
             {
-                //Set the vertical velocity to what it was before the player started jumping.
-    
-                /*
+                //Make sure the jumpingTime didn't go over.
+                jumpingTime = Utils.CapValue(jumpingTime, timeToMaxJumpHeight, 0);
+                
+                //Set the vertical velocity to what it was before the player started jumping, plus a little bit to give the feeling of momentum without going too high.
                 Vector2 newVelocity = rigidbody2D.velocity;
-                newVelocity.y = lastGroundedVelocity.y;
+                newVelocity.y = lastGroundedVelocity.y + (rigidbody2D.velocity.y * jumpingTime / timeToMaxJumpHeight);
                 rigidbody2D.velocity = newVelocity;
-                */
                 
                 //Stop jumping
                 isJumping = false;
@@ -284,7 +297,30 @@ public class PlatformCharacterMotor : MonoBehaviour
         jumpButtonLastFrame = jumpButton;
     }
 
-
+    private void MeasureJumpStats()
+    {
+        //Measures things like this jump's height for debug purposes.
+        
+        //Reset the max height
+        if (!IsGrounded() && groundedLastFrame)
+        {
+            maxHeightAboveGround = 0f;
+        }
+        
+        //Measure height above the last ground touched.
+        if (lastGroundTouched != null)
+        {
+            heightAboveGround = collider2D.bounds.min.y - lastGroundTouched[0].bounds.max.y;
+        }
+        
+        //Update the max height
+        if (heightAboveGround > maxHeightAboveGround)
+        {
+            maxHeightAboveGround = heightAboveGround;
+        }
+        
+    }
+    
     private void UpdateGrounded()
     {
         //Updates stuff related to whether the character is grounded or not.
@@ -311,6 +347,7 @@ public class PlatformCharacterMotor : MonoBehaviour
         if (IsGrounded())
         {
             lastGroundedVelocity = rigidbody2D.velocity;
+            lastGroundedPosition = transform.position;
         }
 
         //Update the last ground touched velocity

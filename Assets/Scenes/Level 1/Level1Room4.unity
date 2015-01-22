@@ -2184,7 +2184,7 @@ MonoBehaviour:
   useDefaultActivationBehavior: 0
   targetLevel: 
   targetEntranceNumber: 0
-  entranceNumber: 0
+  entranceNumber: 1
 --- !u!114 &851225668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6522,6 +6522,10 @@ Prefab:
     - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
       propertyPath: checkpointName
       value: Whip Blocking Checkpoint
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
+      propertyPath: entranceNumber
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
