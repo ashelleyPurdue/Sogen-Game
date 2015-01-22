@@ -3,6 +3,7 @@ using System.Collections;
 
 using System.Collections.Generic;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class WhipBehavior : MonoBehaviour
 {
     //Inspector variables
@@ -11,7 +12,9 @@ public class WhipBehavior : MonoBehaviour
     public float hangTime;
     public float damageStartDelay = 0.1f;   //How long after the swinging state starts to enable damaging
     public float damageTimeHanging = 0.1f;  //How long after the hanging state starts to disable damaging
-
+ 
+    public float swingingHitboxScale = 0.75f;   //How much to stretch the hitbox while swinging(but not hanging)
+    
     public float blockedAnimationTime = 0.5f;   //How long the whip should be in the "blockedAnimation" state for.
 
     public float animationAngle = 180;  //The number of degrees the whip turns before cracking.
@@ -34,7 +37,10 @@ public class WhipBehavior : MonoBehaviour
     //Private fields
 
     private Vector3 initialLocalPos;
-
+ 
+    private float fullHitboxSize;
+    private float fullHitboxCenter;
+    
     public enum WhipState {idle, swinging, hanging, blockedAnimation};
     private WhipState currentState = WhipState.idle;
 
@@ -49,7 +55,8 @@ public class WhipBehavior : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private DamageSource myDamageSource;
-
+    private BoxCollider2D myCollider;
+    
     //Events
 
     void Awake()
@@ -58,10 +65,15 @@ public class WhipBehavior : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         myDamageSource = GetComponent<DamageSource>();
-
+  
+        myCollider = GetComponent<BoxCollider2D>();
+        
         initialLocalPos = transform.localPosition;
         blockedEndingPos = initialLocalPos;
         blockedEndingPos.y = blockedEndingY;
+        
+        fullHitboxSize = myCollider.size.x;
+        fullHitboxCenter = myCollider.center.x;
     }
 
     void FixedUpdate()
@@ -76,12 +88,15 @@ public class WhipBehavior : MonoBehaviour
 
     void OnBlocked()
     {
-        //Go into the blocked animation
-        transform.localRotation = Quaternion.Euler(0, 0, endAngle);
-        blockedStartScale = transform.localScale;
-
-        currentState = WhipState.blockedAnimation;
-        timer = 0f;
+        if (timer > 0.1f)
+        {
+            //Go into the blocked animation
+            transform.localRotation = Quaternion.Euler(0, 0, endAngle);
+            blockedStartScale = transform.localScale;
+    
+            currentState = WhipState.blockedAnimation;
+            timer = 0f;
+        }
     }
 
     //Interface
@@ -148,7 +163,11 @@ public class WhipBehavior : MonoBehaviour
     {
         //Increment the timer
         timer += Time.deltaTime;
-
+  
+        //Halve the size of the hitbox
+        myCollider.size = new Vector2(fullHitboxSize * swingingHitboxScale, myCollider.size.y);
+        myCollider.center = new Vector2(fullHitboxCenter - fullHitboxSize * (1 - swingingHitboxScale), myCollider.center.y);
+        
         //Set the sprite
         spriteRenderer.enabled = true;
         spriteRenderer.sprite = swingingFrame;
@@ -194,7 +213,11 @@ public class WhipBehavior : MonoBehaviour
 
         //Increment the timer
         timer += Time.deltaTime;
-
+  
+        //Change the hitbox to full size.
+        myCollider.size = new Vector2(fullHitboxSize, myCollider.size.y);
+        myCollider.center = new Vector2(fullHitboxCenter, myCollider.center.y);
+        
         //Set the sprite
         spriteRenderer.sprite = hangingFrame;
 
