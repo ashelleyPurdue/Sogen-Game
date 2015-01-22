@@ -202,16 +202,20 @@ public class DamageSource : MonoBehaviour
         }
 	}
 
-
-
-	private void CheckIfBlocked(DamageBlocker blocker)
+	public bool CheckIfBlocked(DamageBlocker blocker)
 	{
-		//Raises an event when this damage source is blocked.
+		//Raises an event if this damage source is blocked by blocker
 		
 		if (blocker.Blocks(this))
 		{
 			transform.BroadcastMessage("OnBlocked", SendMessageOptions.DontRequireReceiver);
 			transform.SendMessageUpwards("OnBlocked", SendMessageOptions.DontRequireReceiver);
+            
+            return true;
 		}
+        else
+        {
+            return false;
+        }
 	}
 }

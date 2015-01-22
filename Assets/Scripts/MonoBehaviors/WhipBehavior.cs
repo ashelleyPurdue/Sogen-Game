@@ -57,6 +57,9 @@ public class WhipBehavior : MonoBehaviour
     private DamageSource myDamageSource;
     private BoxCollider2D myCollider;
     
+    private List<HealthPoints> thingsToHurtThisFrame = new List<HealthPoints>();
+    private bool blockedThisFrame = false;
+    
     //Events
 
     void Awake()
@@ -74,10 +77,13 @@ public class WhipBehavior : MonoBehaviour
         
         fullHitboxSize = myCollider.size.x;
         fullHitboxCenter = myCollider.center.x;
+        
+        //Disable default hit detection
+        myDamageSource.useDefaultHitDetection = false;
     }
 
     void FixedUpdate()
-    {
+    { 
         FiniteStateMachine();
     }
 
@@ -85,10 +91,29 @@ public class WhipBehavior : MonoBehaviour
     {
         EffectManager.Instance.TempPause(0.25f);
     }
-
+ 
+    void LateUpdate()
+    {
+        //Damage everything in the queue if we weren't blocked.
+        
+        Debug.Log(blockedThisFrame);
+        
+        if (!blockedThisFrame)
+        {
+            Debug.Log("Damaging.");
+            foreach (HealthPoints hp in thingsToHurtThisFrame)
+            {
+                hp.DealDamage(myDamageSource);
+            }
+        }
+        
+        blockedThisFrame = false;
+        thingsToHurtThisFrame.Clear();
+    }
+    
     void OnBlocked()
     {
-        if (timer > 0.1f)
+        if (timer > 0f)
         {
             //Go into the blocked animation
             transform.localRotation = Quaternion.Euler(0, 0, endAngle);
@@ -96,9 +121,32 @@ public class WhipBehavior : MonoBehaviour
     
             currentState = WhipState.blockedAnimation;
             timer = 0f;
+            
+            //Clear the list of things to hurt this frame
+            thingsToHurtThisFrame.Clear();
         }
     }
-
+ 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        CollisionFunction(other.transform);
+    }
+    
+    void OnTriggerStay2D(Collider2D other)
+    {
+        CollisionFunction(other.transform);
+    }
+    
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        CollisionFunction(collision.transform);
+    }
+    
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        CollisionFunction(collision.transform);
+    }
+    
     //Interface
 
     public void StartWhipping(float endAngle)
@@ -258,5 +306,28 @@ public class WhipBehavior : MonoBehaviour
         }
       
     }
+    
     //Misc methods
+    
+    private void CollisionFunction(Transform other)
+    {
+        //If the other object has a HealthPoints and uses default hit detection, add it to the list of things to hurt this frame.
+        HealthPoints otherHealth = other.GetComponent<HealthPoints>();
+        if (otherHealth != null && otherHealth.useDefaultHitDetection && !thingsToHurtThisFrame.Contains(otherHealth))
+        {
+            thingsToHurtThisFrame.Add(otherHealth);
+        }
+        
+        //Check if the whip is blocked.
+        DamageBlocker otherBlocker = other.GetComponent<DamageBlocker>();
+        if (otherBlocker!= null)
+        {
+            bool thisBlocksMe = myDamageSource.CheckIfBlocked(otherBlocker);
+            
+            if (thisBlocksMe)
+            {
+                blockedThisFrame = true;
+            }
+        }
+    }
 }
