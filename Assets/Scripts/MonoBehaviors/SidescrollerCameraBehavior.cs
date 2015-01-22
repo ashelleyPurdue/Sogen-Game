@@ -5,7 +5,7 @@ using System.Collections;
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
     private const float MAX_CAMERA_SPEED = 30f;
-
+    
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
 
@@ -20,7 +20,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     {
         get { return 2f * camera.orthographicSize * camera.aspect;}
     }
-
+    
     private float lastTargetX;
 
     private Transform leftBoundpost = null;
@@ -29,12 +29,15 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     private Vector3 targetPosition;
 
     private BoxCollider2D myTrigger;
-
+ 
+    private int framesToJumpToPlayer = 1;    //At the start of the level, the camera has this many frames to jump to the player, to account for the player using different entrances.
+    
     //Events
 
 	void Awake ()
     {
-
+        transform.parent = null;
+        
         //Get the box collider, creating it if there is none.
         myTrigger = GetComponent<BoxCollider2D>();
         if (myTrigger == null)
@@ -65,23 +68,33 @@ public class SidescrollerCameraBehavior : MonoBehaviour
             target = TagList.FindOnlyObjectWithTag("Player");
         }
 
-        //Move to the player
-        if (!TargetInDeadzone(targetPosition.x))
-        {
-            Vector3 newPos = transform.position;
-            newPos.x = target.position.x;
-            transform.position = newPos;
-        }
-
         //Set the target position to here.
         targetPosition = transform.position;
 	}
-
-    void Start()
+ 
+    void Update()
     {
-        transform.parent = null;
+        //Move the real position and target position to the player for the first few frames.
+        if (framesToJumpToPlayer > 0)
+        {
+            if (!TargetInDeadzone(targetPosition.x))
+            {
+                Debug.Log("Moving camera to player position.");
+                
+                Vector3 newPos = transform.position;
+                newPos.x = target.position.x;
+                
+                transform.position = newPos;
+                targetPosition = transform.position;
+            }
+            
+            framesToJumpToPlayer--;
+        }
+        
+        //Move toward the target position
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
     }
-
+    
 	void FixedUpdate ()
     {
         //If the player is outside the deadzone, scroll horizontally until he's instead the deadzone.
@@ -91,8 +104,15 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         if (!TargetInDeadzone(targetPosition.x))
         {
             float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
-
-            xPos = Utils.GuessValue(targetPosition.x, TargetInDeadzone, increment, false);
+   
+            try
+            {
+                xPos = Utils.GuessValue(targetPosition.x, TargetInDeadzone, increment, false);
+            }
+            catch(GuessValueMaxIterationException e)
+            {
+                Debug.Log("Camera unable to find player.");
+            }
 
             Vector3 newPos = targetPosition;
             newPos.x = xPos;
@@ -102,8 +122,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //Move the camera back inside the boundposts
         KeepInBoundposts();
 
-        //Move toward the target position
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
+
 	}
 
     void OnDrawGizmos()

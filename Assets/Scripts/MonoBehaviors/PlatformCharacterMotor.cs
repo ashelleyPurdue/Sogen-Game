@@ -89,7 +89,7 @@ public class PlatformCharacterMotor : MonoBehaviour
         //If grounded and not jumping, move the character down until it's touching the ground
         if (IsGrounded() && !isJumping)
         {
-            MoveToGround();
+           MoveToGround();
         }
   
         //UPDATE DEBUG FIELDS
@@ -262,6 +262,7 @@ public class PlatformCharacterMotor : MonoBehaviour
                 Vector2 newVelocity = rigidbody2D.velocity;
                 newVelocity.y = lastGroundedVelocity.y + (rigidbody2D.velocity.y * jumpingTime / timeToMaxJumpHeight);
                 rigidbody2D.velocity = newVelocity;
+                
                 
                 //Stop jumping
                 isJumping = false;
