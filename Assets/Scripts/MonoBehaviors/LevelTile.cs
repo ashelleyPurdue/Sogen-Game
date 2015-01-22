@@ -22,7 +22,7 @@ public class LevelTile : MonoBehaviour
         {
             if (other.GetComponent<LevelSelectorBehavior>() != null)
             {
-                CourseManager.StartCourse(courseName, sceneName, 0);
+                CourseManager.StartCourse(courseName, sceneName, "main_entrance");
             }
         }
     }

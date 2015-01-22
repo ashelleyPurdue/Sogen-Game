@@ -1056,6 +1056,10 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: entranceName
+      value: main_entrace
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
   m_RootGameObject: {fileID: 1179766451}
@@ -2801,7 +2805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useDefaultHitDetection: 1
   isHot: 1
-  damageTags: 
+  damageTags: 01000000
   objectsToIgnore:
   - {fileID: 1780349265}
   objectsToHurt: []
@@ -2876,7 +2880,9 @@ MonoBehaviour:
   hangTime: .25
   damageStartDelay: .100000001
   damageTimeHanging: .100000001
+  blockedAnimationTime: .25
   animationAngle: 180
+  blockedEndingY: -.5
   swingingFrame: {fileID: 21300000, guid: 90d6233904ebabf4e8fb07601aaed4ea, type: 3}
   hangingFrame: {fileID: 21300000, guid: 31df41df43417814a83a87b30eb9f93f, type: 3}
 --- !u!61 &543157741
@@ -3056,8 +3062,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 1187479722}
   useDefaultActivationBehavior: 0
   targetLevel: 
-  targetEntranceNumber: 0
-  entranceNumber: 1
+  targetEntranceName: 
+  entranceName: checkpoint_entrance
 --- !u!114 &607694940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3071,7 +3077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   courseName: Course One
-  checkpointName: Second Checkpoint
+  checkpointName: Lava Pits
 --- !u!212 &607694941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7058,8 +7064,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 1205086203}
   useDefaultActivationBehavior: 0
   targetLevel: Level1Room1
-  targetEntranceNumber: 1
-  entranceNumber: 0
+  targetEntranceName: 
+  entranceName: main_entrace
 --- !u!212 &1179766455
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7152,6 +7158,14 @@ Prefab:
     - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
       propertyPath: targetLevel
       value: Level1Room3
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: entranceName
+      value: main_exit
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: targetEntranceName
+      value: main_entrance
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
@@ -7571,8 +7585,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 936772162}
   useDefaultActivationBehavior: 1
   targetLevel: Level1Room3
-  targetEntranceNumber: 0
-  entranceNumber: 1
+  targetEntranceName: main_entrance
+  entranceName: main_exit
 --- !u!212 &1242351714
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9431,7 +9445,6 @@ MonoBehaviour:
   groundedFriction: 10
   walkingAccel: 50
   aerialHorAccel: 25
-  deltaVelocityDebug: 0
 --- !u!50 &1780349270
 Rigidbody2D:
   m_ObjectHideFlags: 0

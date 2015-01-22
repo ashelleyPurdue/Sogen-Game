@@ -15,7 +15,7 @@ public static class CourseManager
     private static List<Checkpoint> allCheckpoints = new List<Checkpoint>();
 
 
-    public static void StartCourse(string courseName, string scene, int entranceNumber)
+    public static void StartCourse(string courseName, string scene, string entranceName)
     {
         //Starts the given course and moves to the given scene with the given entrance number
 
@@ -32,7 +32,7 @@ public static class CourseManager
         ClearActiveCheckpoint();
 
         //Go to the scene
-        LevelPersistence.ChangeLevel(scene, entranceNumber);
+        LevelPersistence.ChangeLevel(scene, entranceName);
     }
 
     public static void StartCourse(string courseName, Checkpoint checkpoint)

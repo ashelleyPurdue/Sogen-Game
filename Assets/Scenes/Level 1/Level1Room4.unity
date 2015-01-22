@@ -961,7 +961,6 @@ MonoBehaviour:
   groundedFriction: 10
   walkingAccel: 50
   aerialHorAccel: 25
-  deltaVelocityDebug: 0
 --- !u!50 &440441478
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -2183,8 +2182,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 1047029761}
   useDefaultActivationBehavior: 0
   targetLevel: 
-  targetEntranceNumber: 0
-  entranceNumber: 1
+  targetEntranceName: 
+  entranceName: checkpoint_entrance
 --- !u!114 &851225668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4114,8 +4113,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 1153884251}
   useDefaultActivationBehavior: 0
   targetLevel: Level1Room2
-  targetEntranceNumber: 0
-  entranceNumber: 1
+  targetEntranceName: 
+  entranceName: main_entrance
 --- !u!212 &1108198616
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5498,6 +5497,10 @@ Prefab:
     - target: {fileID: 21200000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: entranceName
+      value: main_entrance
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}

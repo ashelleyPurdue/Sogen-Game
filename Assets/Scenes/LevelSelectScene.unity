@@ -230,6 +230,14 @@ Prefab:
       propertyPath: dropOffPoint
       value: 
       objectReference: {fileID: 1379908506}
+    - target: {fileID: 11400000, guid: 807a3876c1712da41ae65e49127817b5, type: 2}
+      propertyPath: targetEntranceName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 807a3876c1712da41ae65e49127817b5, type: 2}
+      propertyPath: entranceName
+      value: level1_entrance
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 807a3876c1712da41ae65e49127817b5, type: 2}
   m_RootGameObject: {fileID: 2143942182}
@@ -935,8 +943,8 @@ MonoBehaviour:
   dropOffPoint: {fileID: 1379908506}
   useDefaultActivationBehavior: 0
   targetLevel: 
-  targetEntranceNumber: 0
-  entranceNumber: 0
+  targetEntranceName: 
+  entranceName: level1_entrance
 --- !u!114 &2143942187
 MonoBehaviour:
   m_ObjectHideFlags: 0

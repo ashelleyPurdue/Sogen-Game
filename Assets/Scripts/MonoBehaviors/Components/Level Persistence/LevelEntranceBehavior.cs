@@ -8,9 +8,9 @@ public class LevelEntranceBehavior : MonoBehaviour
 	public bool useDefaultActivationBehavior = true;	//If checked, this entrance will be used if the player touches it.
 
 	public string targetLevel;
-	public int targetEntranceNumber;
+	public string targetEntranceName;
 
-	public int entranceNumber;
+	public string entranceName;
 
     private bool playerHasLeft = true;
 
@@ -20,7 +20,7 @@ public class LevelEntranceBehavior : MonoBehaviour
 	{
 		//Move the player to the dropoff point, if this was the entrance used.
 
-		if (LevelPersistence.entranceUsed == entranceNumber)
+		if (LevelPersistence.entranceUsed.Equals(entranceName))
 		{
 			Transform player = TagList.FindOnlyObjectWithTag("Player");
 
@@ -108,7 +108,7 @@ public class LevelEntranceBehavior : MonoBehaviour
 	{
 		//Changes to the target level using the target entrance number
 
-		LevelPersistence.entranceUsed = targetEntranceNumber;
+		LevelPersistence.entranceUsed = targetEntranceName;
 		LevelPersistence.ChangeLevel(targetLevel);
 	}
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(LevelEntranceBehavior))]
@@ -27,9 +27,9 @@ public class CheckpointBehavior : MonoBehaviour
             //Create the checkpoint if it does not exist
 
             LevelEntranceBehavior entrance = GetComponent<LevelEntranceBehavior>();
-            int entranceNumber = entrance.entranceNumber;
+            string entranceName = entrance.entranceName;
 
-            CourseManager.AddCheckpoint(new Checkpoint(courseName, checkpointName, LevelPersistence.GetCurrentLevelName(), entranceNumber));
+            CourseManager.AddCheckpoint(new Checkpoint(courseName, checkpointName, LevelPersistence.GetCurrentLevelName(), entranceName));
 
             checkpoint = CourseManager.GetCheckpoint(courseName, checkpointName);
         }

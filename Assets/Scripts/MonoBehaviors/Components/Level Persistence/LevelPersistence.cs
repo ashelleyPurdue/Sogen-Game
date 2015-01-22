@@ -6,7 +6,7 @@ using System.IO;
 
 public static class LevelPersistence
 {
-	public static int? entranceUsed = null; //The entrance that the player used to get to this level.
+	public static string entranceUsed = null; //The entrance that the player used to get to this level.
 	
 	private static Dictionary<string, LevelData> levelList = new Dictionary<string, LevelData>();
 	
@@ -35,11 +35,11 @@ public static class LevelPersistence
 		Debug.Log("Changing to level: " + levelName);
 	}
 
-    public static void ChangeLevel(string levelName, int entranceNumber)
+    public static void ChangeLevel(string levelName, string entranceName)
     {
         //Loads a new level in at a particular entrance
 
-        entranceUsed = entranceNumber;
+        entranceUsed = entranceName;
         ChangeLevel(levelName);
     }
 

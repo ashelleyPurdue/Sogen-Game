@@ -20,9 +20,9 @@ public class Checkpoint
         get { return sceneName;}
     }
 
-    public int EntranceNumber
+    public string EntranceName
     {
-        get {return entranceNumber;}
+        get {return entranceName;}
     }
 
     public bool Activated
@@ -35,17 +35,17 @@ public class Checkpoint
     private string courseName;      //The name of the course that this checkpoint is in.
     private string checkpointName;  //The name of this checkpoint
 
-    private string sceneName;   //The name of the scene that this checkpoint is in.
-    private int entranceNumber;
+    private string sceneName;       //The name of the scene that this checkpoint is in.
+    private string entranceName;
 
     private bool activated = false;
 
-    public Checkpoint(string courseName, string checkpointName, string sceneName, int entranceNumber)
+    public Checkpoint(string courseName, string checkpointName, string sceneName, string entranceName)
     {
         this.courseName = courseName;
         this.checkpointName = checkpointName;
         this.sceneName = sceneName;
-        this.entranceNumber = entranceNumber;
+        this.entranceName = entranceName;
 
         //Add this checkpoint to the system
         CourseManager.AddCheckpoint(this);
@@ -63,7 +63,7 @@ public class Checkpoint
     public void ReturnTo()
     {
         //Starts playing the level from this checkpoint
-        LevelPersistence.ChangeLevel(sceneName, entranceNumber);
+        LevelPersistence.ChangeLevel(sceneName, entranceName);
     }
 
     public string GenerateSaveString()
