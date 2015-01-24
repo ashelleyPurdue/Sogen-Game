@@ -40,8 +40,8 @@ public class ShieldBehavior : MonoBehaviour
         
         Debug.Log(textureEffect.renderer);
         
-        textureEffect.pointA = new Vector3(0, 1.07f, 0);    //More magic numbers
-        textureEffect.pointB = new Vector3(0.3f, 0, 0);
+        textureEffect.pointA = new Vector3(0 * transform.localScale.x, 1.07f * transform.localScale.y, 0);    //More magic numbers
+        textureEffect.pointB = new Vector3(0.3f * transform.localScale.x, 0 * transform.localScale.y, 0);
         
         textureEffect.texture = (Texture)Resources.Load("whipShieldTexture");
         

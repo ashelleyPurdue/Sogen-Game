@@ -51,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: -3, z: 0}
+  m_LocalPosition: {x: 8.61999989, y: -2.95000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -136,10 +136,9 @@ MonoBehaviour:
   maxJumpHeight: 1.5
   timeToMaxJumpHeight: .25
   maxWalkingSpeed: 3
-  groundedFriction: 10
+  groundedFriction: 100
   walkingAccel: 50
   aerialHorAccel: 25
-  deltaVelocityDebug: 0
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -170,11 +169,11 @@ MonoBehaviour:
   whipScale: 1.5
   swingTime: .25
   hangTime: .25
-  damageStartDelay: .100000001
+  damageStartDelay: .200000003
   damageTimeHanging: .100000001
+  swingingHitboxScale: .75
   blockedAnimationTime: .25
   animationAngle: 180
-  blockedAngle: 180
   blockedEndingY: -.5
   swingingFrame: {fileID: 21300000, guid: 90d6233904ebabf4e8fb07601aaed4ea, type: 3}
   hangingFrame: {fileID: 21300000, guid: 31df41df43417814a83a87b30eb9f93f, type: 3}
