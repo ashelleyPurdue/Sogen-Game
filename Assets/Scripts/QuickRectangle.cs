@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEditor;
 
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter))]
 public class QuickRectangle : MonoBehaviour
 {
     public const string SHADER = "Unlit/Transparent";
@@ -21,6 +23,8 @@ public class QuickRectangle : MonoBehaviour
 	// Use this for initialization
 	void Start()
     {
+        Debug.Log(name + " start");
+        
         //Automatically fix rectangles that have been placed using the wrong shader
         if (!shaderString.Equals(SHADER))
         {
