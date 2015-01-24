@@ -89,7 +89,7 @@ public class WhipBehavior : MonoBehaviour
 
     void OnDealDamage()
     {
-        EffectManager.Instance.TempPause(0.25f);
+        EffectManager.Instance.TempPause(0.1f);
     }
  
     void LateUpdate()
@@ -124,6 +124,10 @@ public class WhipBehavior : MonoBehaviour
             
             //Clear the list of things to hurt this frame
             thingsToHurtThisFrame.Clear();
+            
+            //Do a screen effect to show the block
+            EffectManager.Instance.TempPause(0.05f);
+            spriteRenderer.sprite = hangingFrame;
         }
     }
  
@@ -291,12 +295,13 @@ public class WhipBehavior : MonoBehaviour
 
         //Do the animation
         timer += Time.deltaTime;
-
-        spriteRenderer.sprite = swingingFrame;
-
+  
         transform.localPosition = Vector3.Lerp(initialLocalPos, blockedEndingPos, timer / blockedAnimationTime);
         transform.localScale = Vector3.Lerp(blockedStartScale, Vector3.zero, timer / blockedAnimationTime);
-
+  
+        //Change the sprite
+        spriteRenderer.sprite = swingingFrame;
+        
         //Move on when time is up
         if (timer >= blockedAnimationTime)
         {
@@ -322,12 +327,43 @@ public class WhipBehavior : MonoBehaviour
         DamageBlocker otherBlocker = other.GetComponent<DamageBlocker>();
         if (otherBlocker!= null)
         {
-            bool thisBlocksMe = myDamageSource.CheckIfBlocked(otherBlocker);
+            //Verify the block with a raycast.
+            bool blockVerified = VerifyBlock(otherBlocker);
+
+            
+            //If the block was verified, note that we have been blocked this frame.
+            bool thisBlocksMe = blockVerified && myDamageSource.CheckIfBlocked(otherBlocker);
             
             if (thisBlocksMe)
             {
                 blockedThisFrame = true;
             }
         }
+    }
+    
+    private bool VerifyBlock(DamageBlocker otherBlocker)
+    {
+        //Verifies if the whip was actually blocked by doing a proper raycast.
+        float length = myCollider.bounds.extents.x * transform.localScale.x;
+        float theta = transform.localEulerAngles.z * Mathf.Deg2Rad;
+        
+        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+        Vector2 forward2D = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
+
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos2D, forward2D, length);
+        
+        //Debug code
+        Debug.DrawLine(new Vector3(pos2D.x, pos2D.y, 0), new Vector3(pos2D.x, pos2D.y, 0) + new Vector3(forward2D.x, forward2D.y, 0) * length);
+        //End of debug code
+        
+        foreach (RaycastHit2D h in hits)
+        {
+            if (h.transform.GetComponent<DamageBlocker>() != otherBlocker)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
