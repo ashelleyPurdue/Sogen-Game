@@ -311,7 +311,14 @@ public class PlatformCharacterMotor : MonoBehaviour
         //Measure height above the last ground touched.
         if (lastGroundTouched != null)
         {
-            heightAboveGround = collider2D.bounds.min.y - lastGroundTouched[0].bounds.max.y;
+            try
+            {
+                heightAboveGround = collider2D.bounds.min.y - lastGroundTouched[0].bounds.max.y;
+            }
+            catch(MissingReferenceException e)
+            {
+                //DO NOTHING
+            }
         }
         
         //Update the max height

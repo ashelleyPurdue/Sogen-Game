@@ -24,11 +24,21 @@ public class FogWallBehavior : MonoBehaviour
             if (player.position.x < transform.position.x)
             {
                 //Become the right boundpost
-                myCamera.SetBoundposts(null, transform);
+                myCamera.SetRightBoundpost(transform);
+                
+                if (myCamera.GetLeftBoundpost() == transform)
+                {
+                    myCamera.SetLeftBoundpost(null);
+                }
             } else
             {
                 //Become the left boundpost
-                myCamera.SetBoundposts(transform, null);
+                myCamera.SetLeftBoundpost(transform);
+                
+                if (myCamera.GetRightBoundpost() == transform)
+                {
+                    myCamera.SetRightBoundpost(null);
+                }
             }
         }
     }

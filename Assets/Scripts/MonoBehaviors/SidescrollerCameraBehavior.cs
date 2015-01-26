@@ -160,7 +160,27 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         leftBoundpost = left;
         rightBoundpost = right;
     }
-
+    
+    public void SetLeftBoundpost(Transform boundpost)
+    {
+        leftBoundpost = boundpost;
+    }
+    
+    public void SetRightBoundpost(Transform boundpost)
+    {
+        rightBoundpost = boundpost;
+    }
+    
+    public Transform GetLeftBoundpost()
+    {
+        return leftBoundpost;
+    }
+    
+    public Transform GetRightBoundpost()
+    {
+        return rightBoundpost;
+    }
+    
     private bool TargetInDeadzone(float xPos)
     {
         //Returns if the target would be in the deadzone if the camera's xposition were xPos
@@ -197,7 +217,10 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         float halfWidth = Width / 2;
 
         float newX = targetPosition.x;
-
+  
+        bool movedLeft = false;
+        bool movedRight = false;
+        
         //Left boundpost
         if (leftBoundpost != null)
         {
@@ -208,6 +231,8 @@ public class SidescrollerCameraBehavior : MonoBehaviour
             {
                 float difference = leftBoundpost.position.x - borderX;
                 newX = targetPosition.x + difference;
+                
+                movedLeft = true;
             }
         }
 
@@ -221,9 +246,17 @@ public class SidescrollerCameraBehavior : MonoBehaviour
             {
                 float difference = rightBoundpost.position.x - borderX;
                 newX = targetPosition.x + difference;
+                
+                movedRight = true;
             }
         }
-
+  
+        //If the camera was moved both ways, then keep it in the middle
+        if (movedLeft && movedRight)
+        {
+            newX = (rightBoundpost.position.x + leftBoundpost.position.x) / 2;
+        }
+        
         //Update the position
         targetPosition = new Vector3(newX, targetPosition.y, targetPosition.z);
     }
