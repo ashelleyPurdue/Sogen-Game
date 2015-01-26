@@ -344,7 +344,7 @@ public class WhipBehavior : MonoBehaviour
     private bool VerifyBlock(DamageBlocker otherBlocker)
     {
         //Verifies if the whip was actually blocked by doing a proper raycast.
-        float length = myCollider.bounds.extents.x * transform.localScale.x;
+        float length = myCollider.bounds.extents.x * transform.localScale.x * 2;
         float theta = transform.localEulerAngles.z * Mathf.Deg2Rad;
         
         Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
