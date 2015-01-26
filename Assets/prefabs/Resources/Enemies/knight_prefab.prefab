@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802e2ec4300c14b42b12f258be5f5a56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tagsToBlock: 01000000
+  tagsToBlock: 0500000001000000
   isActive: 1
 --- !u!114 &11420128
 MonoBehaviour:
