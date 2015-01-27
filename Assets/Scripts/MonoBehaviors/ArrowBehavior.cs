@@ -17,10 +17,22 @@ public class ArrowBehavior : MonoBehaviour
         }
     }
     
+    void FixedUpdate()
+    {
+    }
+    
+    void OnBlocked()
+    {
+        GetComponent<DamageSource>().isHot = false;
+    }
+    
     void OnCollisionEnter2D(Collision2D other)
     {
         //TODO: Stick into the surface and fade out.
         
-        Destroy(this.gameObject);
+        transform.parent = other.transform;
+        rigidbody2D.velocity = Vector2.zero;
+        
+        Destroy(this.gameObject, 0.05f);
     }
 }

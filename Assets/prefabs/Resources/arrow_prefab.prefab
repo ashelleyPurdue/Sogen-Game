@@ -14,6 +14,7 @@ GameObject:
   - 61: {fileID: 6114346}
   - 50: {fileID: 5014346}
   - 114: {fileID: 11414346}
+  - 61: {fileID: 6191526}
   m_Layer: 0
   m_Name: arrow_prefab
   m_TagString: Untagged
@@ -47,7 +48,7 @@ Rigidbody2D:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!61 &6114346
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -57,8 +58,19 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Size: {x: .181015253, y: .152166724}
+  m_Size: {x: .100000001, y: .100000001}
   m_Center: {x: .896173477, y: 0}
+--- !u!61 &6191526
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114346}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Size: {x: .185705185, y: .159319848}
+  m_Center: {x: .905639648, y: -.000629901886}
 --- !u!114 &11414346
 MonoBehaviour:
   m_ObjectHideFlags: 1
