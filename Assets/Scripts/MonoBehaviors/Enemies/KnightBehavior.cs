@@ -9,6 +9,12 @@ public class KnightBehavior : MonoBehaviour
     
     public Transform shield;
     
+    public bool usesSpear = false;
+    public SpearBehavior spear;
+    public float spearChance = 0.3f;    //How likely the knight is to start a spear attack every time he stops moving
+    public float minSpearHeight = -1f;
+    public float maxSpearHeight = 1f;
+    
     public float shieldMoveSpeed = 10f;
     
     public float visionRadius = 5f;
@@ -21,7 +27,10 @@ public class KnightBehavior : MonoBehaviour
     
     public float maxWanderDistance = 3f;    //How far away from the starting point the knight is allowed to stray.
     
+    
     //Private variables
+    
+    private Transform player;
     
     private State currentState = State.sleeping;
     private delegate void StateMethod();
@@ -38,18 +47,24 @@ public class KnightBehavior : MonoBehaviour
     
     private float timer = 0f;
     
+    
     //Events
     
     void Awake()
     {
         myMotor = GetComponent<PlatformCharacterMotor>();
         
-        startPos = transform.position;
+        player = TagList.FindOnlyObjectWithTag("Player");
         
         //Set up the state methods.
         stateMethods.Add(State.sleeping, WhileSleeping);
         stateMethods.Add(State.pausing, WhilePausing);
         stateMethods.Add(State.moving, WhileMoving);
+    }
+    
+    void Start()
+    {
+        startPos = transform.position;
     }
     
     void OnTakeDamage()
@@ -77,7 +92,37 @@ public class KnightBehavior : MonoBehaviour
         }
         
         shield.localPosition = Vector3.MoveTowards(shield.localPosition, targetPos, shieldMoveSpeed * Time.deltaTime);
+        
+        //Face the player
+        
+        if (player == null)
+        {
+            player = TagList.FindOnlyObjectWithTag("Player");
+        }
+        
+        if (transform.position.x > player.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
+    
+    
+    //Misc methods
+    
+    private void TrySpear()
+    {
+        //Start attacking with the spear with a chance
+        
+        if (Random.value < spearChance && usesSpear && spear != null)
+        {
+            spear.Attack(Random.Range(minSpearHeight, maxSpearHeight));
+        }
+    }
+    
     
     //States
     
@@ -119,7 +164,7 @@ public class KnightBehavior : MonoBehaviour
         
         if (timer <= 0f)
         {
-            //Start moving.
+            //Start moving in a random direction for a random time.
             timer = Random.Range(minMoveTime, maxMoveTime);
             currentState = State.moving;
             
@@ -136,7 +181,7 @@ public class KnightBehavior : MonoBehaviour
     
     private void WhileMoving()
     {
-        //TODO: Move in a direction for a short time, then pause.
+        //Move in a direction for a short time, then pause.
         
         //If we're going too far away from home, change directions.
         float projectedX = transform.position.x + (Mathf.Sign(myMotor.ControllerInput.x) * Mathf.Abs(rigidbody2D.velocity.x)) * Time.deltaTime;
@@ -156,6 +201,9 @@ public class KnightBehavior : MonoBehaviour
         {
             currentState = State.sleeping;
             timer = 0f;
+            
+            //Maybe activate the spear
+            TrySpear();
         }
     }
     
