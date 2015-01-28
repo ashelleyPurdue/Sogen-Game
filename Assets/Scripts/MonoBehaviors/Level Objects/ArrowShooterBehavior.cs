@@ -42,6 +42,7 @@ public class ArrowShooterBehavior : MonoBehaviour
                 //Create the arrow
                 myArrow = ((GameObject)Instantiate(Resources.Load("arrow_prefab"))).GetComponent<ArrowBehavior>();
                 myArrow.transform.position = arrowPoint.position;
+                myArrow.transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z);
             }
         }
         else if (currentState == State.warning)
@@ -52,7 +53,8 @@ public class ArrowShooterBehavior : MonoBehaviour
             if (timer >= warningTime)
             {
                 //Fire
-                myArrow.rigidbody2D.velocity = arrowSpeed * new Vector2(1, 0);
+                float theta = transform.eulerAngles.z * Mathf.Deg2Rad;
+                myArrow.rigidbody2D.velocity = arrowSpeed * new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
                 
                 //Move to the next state
                 timer = 0f;
