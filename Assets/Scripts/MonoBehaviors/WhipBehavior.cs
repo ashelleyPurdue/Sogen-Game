@@ -96,11 +96,8 @@ public class WhipBehavior : MonoBehaviour
     {
         //Damage everything in the queue if we weren't blocked.
         
-        Debug.Log(blockedThisFrame);
-        
         if (!blockedThisFrame)
         {
-            Debug.Log("Damaging.");
             foreach (HealthPoints hp in thingsToHurtThisFrame)
             {
                 hp.DealDamage(myDamageSource);
@@ -328,20 +325,21 @@ public class WhipBehavior : MonoBehaviour
         if (otherBlocker!= null)
         {
             //Verify the block with a raycast.
-            bool blockVerified = VerifyBlock(otherBlocker);
+            bool collisionVerified = VerifyBlockCollision(otherBlocker);
 
             
             //If the block was verified, note that we have been blocked this frame.
-            bool thisBlocksMe = blockVerified && myDamageSource.CheckIfBlocked(otherBlocker);
+            bool thisBlocksMe = collisionVerified && myDamageSource.CheckIfBlocked(otherBlocker);
             
             if (thisBlocksMe)
             {
                 blockedThisFrame = true;
+                otherBlocker.SendBlockEvent();
             }
         }
     }
     
-    private bool VerifyBlock(DamageBlocker otherBlocker)
+    private bool VerifyBlockCollision(DamageBlocker otherBlocker)
     {
         //Verifies if the whip was actually blocked by doing a proper raycast.
         float length = myCollider.bounds.extents.x * transform.localScale.x * 2;

@@ -23,7 +23,7 @@ public class ShieldBehavior : MonoBehaviour
         Debug.Log("About to create game object.");
         GameObject effectObject = new GameObject();
         effectObject.transform.parent = transform;
-        effectObject.transform.localPosition = new Vector3(-0.2f, -0.53f, 0);     //Magic numbers.
+        effectObject.transform.localPosition = new Vector3(-0.2f, -0.53f, -1);     //Magic numbers.
         Debug.Log("Created game object.");
         
         //Create the stuff necessary for the QuickRectangle.
@@ -46,6 +46,10 @@ public class ShieldBehavior : MonoBehaviour
         textureEffect.texture = (Texture)Resources.Load("whipShieldTexture");
         
         textureEffect.UpdateMesh();
+        
+        //Create the texture effect's Block Flasher
+        BlockFlashEffect flashEff = textureEffect.gameObject.AddComponent<BlockFlashEffect>();
+        flashEff.renderers.Add(textureEffect.renderer);
         
         Debug.Log(textureEffect.renderer);
     }
