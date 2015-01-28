@@ -5,6 +5,7 @@ using System.Collections;
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
     private const float MAX_CAMERA_SPEED = 30f;
+    private const float BACK_DISTANCE = -100f;  //The camera's z position
     
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
@@ -70,6 +71,9 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
         //Set the target position to here.
         targetPosition = transform.position;
+        
+        //Set the z position
+        transform.position = Utils.SetVector(transform.position, null, null, BACK_DISTANCE);
 	}
  
     void Update()

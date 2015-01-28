@@ -48,6 +48,9 @@ public class BatBehavior : MonoBehaviour
         //Make sure the rigidbody is kinematic and that the collider is a trigger and all of that.
         rigidbody2D.isKinematic = true;
         collider2D.isTrigger = true;
+        
+        //Move the bat in front of the background
+        transform.position = Utils.SetVector(transform.position, null, null, -1);
     }
 
     void FixedUpdate()
