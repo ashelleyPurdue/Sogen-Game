@@ -211,6 +211,8 @@ public class DamageSource : MonoBehaviour
 			transform.BroadcastMessage("OnBlocked", SendMessageOptions.DontRequireReceiver);
 			transform.SendMessageUpwards("OnBlocked", SendMessageOptions.DontRequireReceiver);
             
+            blocker.SendBlockEvent();
+            
             return true;
 		}
         else

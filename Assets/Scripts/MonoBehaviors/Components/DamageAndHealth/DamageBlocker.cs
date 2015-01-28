@@ -23,6 +23,14 @@ public class DamageBlocker : MonoBehaviour
 	
 	//Methods
 	
+    public void SendBlockEvent()
+    {
+        //Sends the OnDamageBlocked event.
+        
+        transform.BroadcastMessage("OnDamageBlocked", SendMessageOptions.DontRequireReceiver);
+        transform.SendMessageUpwards("OnDamageBlocked", SendMessageOptions.DontRequireReceiver);
+    }
+    
 	public bool Blocks(DamageTags tag)
 	{
 		//Returns whether or not this blocker blocks a given damage tag.
@@ -36,7 +44,7 @@ public class DamageBlocker : MonoBehaviour
 		
 		return output;
 	}
-
+    
 	public bool Blocks(DamageSource source)
 	{
 		//Returns if this blocker blocks a given damage source.
