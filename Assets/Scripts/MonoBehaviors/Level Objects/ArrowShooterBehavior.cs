@@ -43,6 +43,8 @@ public class ArrowShooterBehavior : MonoBehaviour
                 myArrow = ((GameObject)Instantiate(Resources.Load("arrow_prefab"))).GetComponent<ArrowBehavior>();
                 myArrow.transform.position = arrowPoint.position;
                 myArrow.transform.rotation = Quaternion.Euler(0, 0, transform.eulerAngles.z);
+                myArrow.rigidbody2D.isKinematic = true;
+                myArrow.transform.parent = transform;
             }
         }
         else if (currentState == State.warning)
@@ -53,8 +55,17 @@ public class ArrowShooterBehavior : MonoBehaviour
             if (timer >= warningTime)
             {
                 //Fire
-                float theta = transform.eulerAngles.z * Mathf.Deg2Rad;
-                myArrow.rigidbody2D.velocity = arrowSpeed * new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
+                try
+                {
+                    float theta = transform.eulerAngles.z * Mathf.Deg2Rad;
+                    myArrow.rigidbody2D.isKinematic = false;
+                    myArrow.rigidbody2D.velocity = arrowSpeed * new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
+                    myArrow.transform.parent = null;
+                }
+                catch (MissingReferenceException e)
+                {
+                    //Do nothing, since the arrow was destroyed.
+                }
                 
                 //Move to the next state
                 timer = 0f;

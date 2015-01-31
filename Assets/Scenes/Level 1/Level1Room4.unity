@@ -459,7 +459,7 @@ Transform:
   - {fileID: 690226484}
   - {fileID: 1121627539}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
 --- !u!114 &28980907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -999,7 +999,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &138069908
 GameObject:
   m_ObjectHideFlags: 0
@@ -5368,7 +5368,7 @@ Transform:
   m_Children:
   - {fileID: 1047029761}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!61 &851225666
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5895,6 +5895,18 @@ Prefab:
     - target: {fileID: 400002, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: entranceName
+      value: main_exit
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: targetLevel
+      value: Level1Room5
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
+      propertyPath: targetEntranceName
+      value: main_entrance
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
@@ -8090,7 +8102,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
 --- !u!1 &1027699480
 GameObject:
   m_ObjectHideFlags: 0
@@ -15371,7 +15383,7 @@ Transform:
   m_Children:
   - {fileID: 1902932738}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
 --- !u!61 &1709812716
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -15398,9 +15410,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropOffPoint: {fileID: 1902932738}
   useDefaultActivationBehavior: 1
-  targetLevel: Level1Room2
-  targetEntranceName: 
-  entranceName: 
+  targetLevel: Level1Room5
+  targetEntranceName: main_entrance
+  entranceName: main_exit
 --- !u!212 &1709812718
 SpriteRenderer:
   m_ObjectHideFlags: 0
