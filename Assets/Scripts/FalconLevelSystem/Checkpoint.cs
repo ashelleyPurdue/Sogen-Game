@@ -58,6 +58,8 @@ public class Checkpoint
     {
         //Activates the checkpoint.  Note that the checkpoint cannot be "un-activated".
         activated = true;
+        
+        Debug.Log("Activated checkpoint " + courseName + "/" + checkpointName);
     }
 
     public void ReturnTo()

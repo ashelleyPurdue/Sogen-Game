@@ -1144,7 +1144,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -180.460007, y: -141.130005}
+  m_AnchoredPosition: {x: -200.460007, y: -154.130005}
   m_SizeDelta: {x: 251.600006, y: 106}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &339216245
@@ -2878,8 +2878,9 @@ MonoBehaviour:
   whipScale: 1.5
   swingTime: .25
   hangTime: .25
-  damageStartDelay: .100000001
+  damageStartDelay: .200000003
   damageTimeHanging: .100000001
+  swingingHitboxScale: .75
   blockedAnimationTime: .25
   animationAngle: 180
   blockedEndingY: -.5
@@ -3077,7 +3078,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   courseName: Course One
-  checkpointName: Lava Pits
+  checkpointName: Bats and Ladders
 --- !u!212 &607694941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7726,6 +7727,10 @@ Prefab:
       propertyPath: entranceNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
+      propertyPath: checkpointName
+      value: Bats and Ladders
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
   m_RootGameObject: {fileID: 607694936}
@@ -8121,7 +8126,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: .300000012
+  near clip plane: 0
   far clip plane: 1000
   field of view: 60
   orthographic: 1
@@ -8599,7 +8604,7 @@ RectTransform:
   m_RootOrder: 30
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 196.5, y: 147.5}
+  m_AnchoredPosition: {x: 215.5, y: 159.5}
   m_SizeDelta: {x: 393, y: 295}
   m_Pivot: {x: .5, y: .5}
 --- !u!21 &1546960204
@@ -9442,7 +9447,7 @@ MonoBehaviour:
   maxJumpHeight: 1.5
   timeToMaxJumpHeight: .25
   maxWalkingSpeed: 3
-  groundedFriction: 10
+  groundedFriction: 100
   walkingAccel: 50
   aerialHorAccel: 25
 --- !u!50 &1780349270
@@ -9460,7 +9465,7 @@ Rigidbody2D:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!61 &1780349271
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9542,7 +9547,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: -196.080002, y: -142.169998}
+  m_AnchoredPosition: {x: -216.080002, y: -155.169998}
   m_SizeDelta: {x: 238.270004, y: 111.93}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1788639975
