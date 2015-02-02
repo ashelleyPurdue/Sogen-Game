@@ -4,39 +4,25 @@ using UnityEditor;
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
-public class QuickRectangle : MonoBehaviour
+public class QuickRectangle : QuickObject
 {
-    public const string SHADER = "Unlit/Transparent";
-
-    public Texture texture;
-    public bool autoStretchTexture = false;
-
     public Vector3 pointA = new Vector3(0, 1, 0);
     public Vector3 pointB = new Vector3(1, 0, 0);
 
-    private string shaderString = "";
-
     private BoxCollider2D boxCol;
-
-    private MeshFilter filter;
-
-	// Use this for initialization
-	void Start()
-    {
-        Debug.Log(name + " start");
-        
-        //Automatically fix rectangles that have been placed using the wrong shader
-        if (!shaderString.Equals(SHADER))
-        {
-            renderer.sharedMaterial.shader = Shader.Find(SHADER);
-            shaderString = SHADER;
-        }
-	}
 
     //Misc methods
 
-    private void CreateMesh()
+    protected override void CreateMesh()
     {
+        //Create the filter's mesh if it doesn't exist.
+        if (filter == null || filter.sharedMesh == null)
+        {
+            filter = GetComponent<MeshFilter>();
+            filter.sharedMesh = new Mesh();
+            filter.sharedMesh.vertices = new Vector3[4];
+        }
+        
         //Create the vertices
         Vector3[] vertices = new Vector3[4];
         
@@ -53,60 +39,13 @@ public class QuickRectangle : MonoBehaviour
         filter.sharedMesh.RecalculateNormals();
     }
 
-    private void UpdateCollider()
+    protected override void UpdateCollider()
     {
         //Update the collider
         boxCol = GetComponent<BoxCollider2D>();
         
         boxCol.center = (pointA + pointB) / 2;
         boxCol.size = new Vector2(Mathf.Abs(pointA.x - pointB.x), Mathf.Abs(pointA.y - pointB.y));
-    }
-
-    private void UpdateTexture()
-    {
-        if (texture != null)
-        {
-            renderer.sharedMaterial.SetTexture(0, texture);
-        }
-
-        //Create the UVs
-        Vector2[] uvs = new Vector2[4];
-        for (int i = 0; i < filter.sharedMesh.vertices.Length; i++)
-        {
-            uvs[i] = new Vector2(filter.sharedMesh.vertices[i].x, filter.sharedMesh.vertices[i].y);
-        }
-
-        filter.sharedMesh.uv = uvs;
-        
-        //Update the texture tiling.
-        if (autoStretchTexture)
-        {
-            Vector2 inverseSize = new Vector2(1 / boxCol.size.x, 1 / boxCol.size.y);
-            renderer.sharedMaterial.SetTextureScale("_MainTex", inverseSize);
-        }
-
-    }
-
-    public void UpdateMesh()
-    {
-        //Create the filter's mesh if it doesn't exist.
-        if (filter == null || filter.sharedMesh == null)
-        {
-            filter = GetComponent<MeshFilter>();
-            filter.sharedMesh = new Mesh();
-            filter.sharedMesh.vertices = new Vector3[4];
-        }
-
-        //Create the mesh's material if it doesn't exist.
-        if (renderer.sharedMaterial == null)
-        {
-            renderer.sharedMaterial = new Material(Shader.Find(SHADER));
-            shaderString = SHADER;
-        }
-        
-        CreateMesh();
-        UpdateCollider();
-        UpdateTexture();
     }
 }
 
