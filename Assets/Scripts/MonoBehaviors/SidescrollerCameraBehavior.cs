@@ -31,6 +31,8 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     private BoxCollider2D myTrigger;
  
+    private bool lockedInPlace = false;
+    
     private int framesToJumpToPlayer = 1;    //At the start of the level, the camera has this many frames to jump to the player, to account for the player using different entrances.
     
     //Events
@@ -102,30 +104,32 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 	void FixedUpdate ()
     {
         //If the player is outside the deadzone, scroll horizontally until he's instead the deadzone.
-
-        //Move the target back in to the deadzone
-        float xPos = targetPosition.x;
-        if (!TargetInDeadzone(targetPosition.x))
+  
+        if (!lockedInPlace)
         {
-            float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
-   
-            try
+            //Move the target back in to the deadzone
+            float xPos = targetPosition.x;
+            if (!TargetInDeadzone(targetPosition.x))
             {
-                xPos = Utils.GuessValue(targetPosition.x, TargetInDeadzone, increment, false);
+                float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
+       
+                try
+                {
+                    xPos = Utils.GuessValue(targetPosition.x, TargetInDeadzone, increment, false);
+                }
+                catch(GuessValueMaxIterationException e)
+                {
+                    Debug.Log("Camera unable to find player.");
+                }
+    
+                Vector3 newPos = targetPosition;
+                newPos.x = xPos;
+                targetPosition = newPos;
             }
-            catch(GuessValueMaxIterationException e)
-            {
-                Debug.Log("Camera unable to find player.");
-            }
-
-            Vector3 newPos = targetPosition;
-            newPos.x = xPos;
-            targetPosition = newPos;
+    
+            //Move the camera back inside the boundposts
+            KeepInBoundposts();
         }
-
-        //Move the camera back inside the boundposts
-        KeepInBoundposts();
-
 
 	}
 
@@ -146,7 +150,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     }
 
     //Misc methods
-
+    
     public bool InView(Bounds bounds)
     {
         //Returns if bounds is within the view
@@ -156,7 +160,20 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
         return xBounds && yBounds;
     }
-
+ 
+    public void LockInPlace(float xPos)
+    {
+        //Locks the camera's target position in one place
+        lockedInPlace = true;
+        targetPosition.x = xPos;
+    }
+    
+    public void Unlock()
+    {
+        //Lets the camera move freely again.
+        lockedInPlace = false;
+    }
+    
     public void SetBoundposts(Transform left, Transform right)
     {
         //Sets the boundposts
