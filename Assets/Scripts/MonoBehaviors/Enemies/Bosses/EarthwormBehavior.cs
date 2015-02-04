@@ -105,6 +105,19 @@ public class EarthwormBehavior : MonoBehaviour
         timer = 0f;
     }
     
+    void OnGUI()
+    {
+        //Display the health
+        if (currentState != State.prefight)
+        {
+            string text = "Boss health: " + myHealth.GetHealth();
+            int textWidth = text.Length * 7;
+            Rect pos = new Rect(Screen.width - textWidth, 0, textWidth, 25);
+            
+            GUI.Box(pos, text);
+        }
+    }
+    
     //Misc methods
     
     

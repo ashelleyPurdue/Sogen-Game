@@ -15,6 +15,6 @@ public class PlayerHUD : MonoBehaviour
     void OnGUI()
     {
         //Draw the health
-        GUILayout.TextField("Health: " + myHealth.GetHealth(), new GUILayoutOption[] {});
+        GUILayout.Box("Health: " + myHealth.GetHealth(), new GUILayoutOption[] {});
     }
 }
