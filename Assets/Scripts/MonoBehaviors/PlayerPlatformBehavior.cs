@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 public class PlayerPlatformBehavior : MonoBehaviour
 {
+    private static float lastRoomHealth = -1;     //The amount of health the player had when he left the last room.
+    
     public enum State {free, climbing};
     private State currentState = State.free;
     private delegate void StateMethod();
@@ -29,11 +31,21 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
     void Awake()
     {
+        //Get the motor
         motor = GetComponent<PlatformCharacterMotor>();
 
         //Add the state methods
         stateMethods.Add(State.free, WhileFree);
         stateMethods.Add(State.climbing, WhileClimbing);
+    }
+    
+    void Start()
+    {
+        //Load the health
+        if (lastRoomHealth != -1)
+        {
+            GetComponent<HealthPoints>().SetHealth(lastRoomHealth);
+        }
     }
 
     void Update()
@@ -44,7 +56,19 @@ public class PlayerPlatformBehavior : MonoBehaviour
     void OnDead()
     {
         Debug.Log("Leaving!");
+        
+        //Refill the health
+        GetComponent<HealthPoints>().SetHealth(GetComponent<HealthPoints>().maxHealth);
+        
+        //Return to the checkpoint
         CourseManager.ReturnToActiveCheckpoint();
+    }
+    
+    void OnLevelEnd()
+    {
+        //Store how much health we have
+        Debug.Log("Level ending.");
+        lastRoomHealth = GetComponent<HealthPoints>().GetHealth();
     }
 
     //Misc methods

@@ -16,6 +16,7 @@ GameObject:
   - 114: {fileID: 11400006}
   - 114: {fileID: 11400014}
   - 114: {fileID: 11479536}
+  - 114: {fileID: 11469252}
   m_Layer: 0
   m_Name: player_platform_prefab
   m_TagString: Untagged
@@ -51,7 +52,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.17000008, y: -2.95000005, z: 0}
+  m_LocalPosition: {x: .530690074, y: 3.14871168, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400002}
@@ -242,6 +243,17 @@ MonoBehaviour:
   debugMode: 0
   tags:
   - Player
+--- !u!114 &11469252
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b3b5ede2dc698f428a91928c7acd255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11479536
 MonoBehaviour:
   m_ObjectHideFlags: 1
