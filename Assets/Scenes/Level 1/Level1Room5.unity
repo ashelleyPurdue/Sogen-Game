@@ -361,7 +361,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropOffPoint: {fileID: 133237834}
   useDefaultActivationBehavior: 1
-  targetLevel: Level1Boss
+  targetLevel: Level1RoomBoss
   targetEntranceName: main_entrance
   entranceName: main_exit
 --- !u!212 &38982640
@@ -8884,7 +8884,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}
       propertyPath: targetLevel
-      value: Level1Boss
+      value: Level1RoomBoss
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a12dc64685c60e439a2484df4bd4910, type: 2}

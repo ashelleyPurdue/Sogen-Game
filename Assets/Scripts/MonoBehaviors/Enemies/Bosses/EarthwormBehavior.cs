@@ -4,9 +4,22 @@ using System.Collections.Generic;
 
 public class EarthwormBehavior : MonoBehaviour
 {
-    public enum State {prefight, pausing, onSurface, hitstun, diggingDown, findingResurfacePoint, resurfacing};
-    
     public SpearBehavior mySpear;
+    
+    public float eyeballRotSpeed = 180f;
+    public float eyelidRotSpeed = 180f;
+    
+    public Transform eyeball;
+    public EyelidsBehavior eyelids;
+    
+    private float targetEyeballRot = 0f;
+    private float targetEyelidAngle = 0f;
+    
+    private HealthPoints myHealth;
+    
+    //public AI variables
+    
+    public enum State {prefight, pausing, onSurface, hitstun, diggingDown, findingResurfacePoint, resurfacing};
     
     public float maxSurfaceY = 0f;
     public float minSurfaceY = -4f;
@@ -23,6 +36,7 @@ public class EarthwormBehavior : MonoBehaviour
     private float pauseTime = 0f;
     private float timer = 0f;
     
+    //Private AI variables
     private State nextState = State.prefight;
     
     private delegate void ActionMethod();
@@ -52,6 +66,9 @@ public class EarthwormBehavior : MonoBehaviour
         stateMethods.Add(State.findingResurfacePoint, WhileFindingResurfacePoint);
         stateMethods.Add(State.resurfacing, WhileResurfacing);
         
+        //Get healthpoints
+        myHealth = GetComponent<HealthPoints>();
+        
     }
     
     void Start()
@@ -76,6 +93,9 @@ public class EarthwormBehavior : MonoBehaviour
             scale.x = Mathf.Sign(transform.position.x - player.position.x);
             transform.localScale = scale;
         }
+        
+        //Update the eyeball
+        UpdateEyeball();
     }
     
     void OnTakeDamage()
@@ -86,6 +106,16 @@ public class EarthwormBehavior : MonoBehaviour
     }
     
     //Misc methods
+    
+    
+    private void UpdateEyeball()
+    {
+        //Update the eyeball's rotation based on targetEyeballRot
+        eyeball.transform.localRotation = Quaternion.RotateTowards(eyeball.transform.localRotation, Quaternion.Euler(0, 0, targetEyeballRot), eyeballRotSpeed * Time.deltaTime);
+        
+        //Update the eyelids' rotation based on targetEyelidAngle
+        eyelids.Angle = Mathf.MoveTowards(eyelids.Angle, targetEyelidAngle, eyelidRotSpeed * Time.deltaTime);
+    }
     
     private void MoveToTarget(float speed)
     {
@@ -187,10 +217,21 @@ public class EarthwormBehavior : MonoBehaviour
     private void WhilePrefight()
     {
         transform.position = prefightPoint;
+        
+        //Change the eye
+        targetEyeballRot = -90f;
+        targetEyelidAngle = 80f;
     }
     
     private void WhileOnSurface()
     {
+        //Open eye
+        targetEyelidAngle = 80f;
+        targetEyeballRot = 0f;
+        
+        //Become vulnerable
+        myHealth.useDefaultHitDetection = true;
+        
         //Strafe
         MoveToTarget(horizontalDigSpeed);
         
@@ -204,6 +245,14 @@ public class EarthwormBehavior : MonoBehaviour
     {
         //Do a hitstun animation, then dig down.
         
+        //Open eye wide
+        targetEyelidAngle = 80f;
+        targetEyeballRot = -90f;
+        
+        //Be invulnerable
+        myHealth.useDefaultHitDetection = false;
+        
+        //Dig down when over
         timer += Time.deltaTime;
         if (timer >= hitstunTime)
         {
@@ -214,6 +263,9 @@ public class EarthwormBehavior : MonoBehaviour
     
     private void WhileDiggingDown()
     {
+        //Close eyes
+        targetEyelidAngle = 0f;
+        
         //Dig down, then stop when we reach it.
         
         MoveToTarget(verticalDigSpeed);
@@ -226,7 +278,7 @@ public class EarthwormBehavior : MonoBehaviour
     }
 
     private void WhileFindingResurfacePoint()
-    {
+    {   
         //Move to the resurface point
         MoveToTarget(horizontalDigSpeed);
         
@@ -239,6 +291,10 @@ public class EarthwormBehavior : MonoBehaviour
     
     private void WhileResurfacing()
     {
+        //Look up
+        targetEyeballRot = -90f;
+        
+        //Resurface
         MoveToTarget(verticalDigSpeed);
         
         if (transform.position == targetPoint)
