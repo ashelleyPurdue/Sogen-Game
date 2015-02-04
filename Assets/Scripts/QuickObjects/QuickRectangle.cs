@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
@@ -49,6 +52,7 @@ public class QuickRectangle : QuickObject
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(QuickRectangle))]
 public class QuickRectangleEditor : Editor
 {
@@ -69,3 +73,4 @@ public class QuickRectangleEditor : Editor
         }
     }
 }
+#endif

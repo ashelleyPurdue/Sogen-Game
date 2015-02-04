@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [RequireComponent(typeof(CircuitNode))]
 public class BarDoorBehavior : MonoBehaviour
@@ -46,6 +49,7 @@ public class BarDoorBehavior : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(BarDoorBehavior))]
 public class BarDoorBehaviorEditor : Editor
 {
@@ -76,3 +80,4 @@ public class BarDoorBehaviorEditor : Editor
         }
     }
 }
+#endif

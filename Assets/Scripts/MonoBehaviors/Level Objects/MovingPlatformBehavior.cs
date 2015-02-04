@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingPlatformBehavior : MonoBehaviour
@@ -103,6 +105,7 @@ public class MovingPlatformBehavior : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(MovingPlatformBehavior))]
 public class MovingPlatformBehaviorEditor : Editor
 {
@@ -119,3 +122,4 @@ public class MovingPlatformBehaviorEditor : Editor
         }
     }
 }
+#endif
