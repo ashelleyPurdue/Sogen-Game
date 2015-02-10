@@ -73,7 +73,7 @@ public class EarthwormBehavior : MonoBehaviour
     
     void Start()
     {
-        prefightPoint = new Vector3(0.35f, minSurfaceY, 0);
+        prefightPoint = new Vector3(0.35f, minSurfaceY, transform.position.z);
         
         player = TagList.FindOnlyObjectWithTag("Player");
     }

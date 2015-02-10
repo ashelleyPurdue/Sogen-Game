@@ -5223,6 +5223,7 @@ GameObject:
   - 114: {fileID: 1111678617}
   - 114: {fileID: 1111678620}
   - 114: {fileID: 1111678619}
+  - 114: {fileID: 1111678626}
   m_Layer: 0
   m_Name: player_platform_prefab
   m_TagString: Untagged
@@ -5381,6 +5382,18 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8d3b604def318b14599ff12513ce8249, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1111678626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11469252, guid: 078555c02a93d194c9679f39fafbd00c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1200363282}
+  m_GameObject: {fileID: 1111678616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b3b5ede2dc698f428a91928c7acd255, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1113488297
 Prefab:
   m_ObjectHideFlags: 0
@@ -5495,6 +5508,10 @@ Prefab:
     - target: {fileID: 400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
+      propertyPath: checkpointName
+      value: Boss Fight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
@@ -6159,7 +6176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   courseName: Course One
-  checkpointName: Lava Pits
+  checkpointName: Boss Fight
 --- !u!212 &1264456884
 SpriteRenderer:
   m_ObjectHideFlags: 0
