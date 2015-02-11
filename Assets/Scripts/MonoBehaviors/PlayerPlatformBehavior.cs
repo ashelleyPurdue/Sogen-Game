@@ -198,7 +198,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
         WhipControls();
 
         //Climb the ladder.
-        rigidbody2D.velocity = new Vector2(0, climbSpeed * Input.GetAxis("Vertical"));
+        rigidbody2D.velocity = new Vector2(climbSpeed * Input.GetAxis("Horizontal"), climbSpeed * Input.GetAxis("Vertical"));
 
         //Dismount if pressing jump or not touching a ladder
         if (Input.GetButtonDown("Jump") || !TouchingLadder())
