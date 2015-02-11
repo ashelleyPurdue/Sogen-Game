@@ -7,7 +7,12 @@ using System.Collections.Generic;
 public class WhipBehavior : MonoBehaviour
 {
     //Inspector variables
-    public float whipScale = 1.5f;          //The whip's x-scale when fully extended.
+    
+    public float extendedXscale = 1.5f;         //The whip's x-scale when fully extended.
+    public float extendedYscale = 1f;           //The whip's y-scale when fully extended.
+    
+    public float swingingYScale = 1f;           //The whip's y-scale when swinging.      
+    
     public float swingTime;
     public float hangTime;
     public float damageStartDelay = 0.1f;   //How long after the swinging state starts to enable damaging
@@ -81,7 +86,18 @@ public class WhipBehavior : MonoBehaviour
         //Disable default hit detection
         myDamageSource.useDefaultHitDetection = false;
     }
-
+ 
+    void Update()
+    {
+        //Debug: draw the whipstar raycast
+        float myAngle = transform.rotation.eulerAngles.z * Mathf.Deg2Rad;
+        
+        Vector3 myPos = new Vector3(transform.position.x, transform.position.y, 0);
+        Vector3 myDir = new Vector3(Mathf.Cos(myAngle), Mathf.Sin(myAngle), 0);
+        
+        Debug.DrawRay(myPos, myDir);
+    }
+    
     void FixedUpdate()
     { 
         FiniteStateMachine();
@@ -89,6 +105,7 @@ public class WhipBehavior : MonoBehaviour
 
     void OnDealDamage()
     {
+        //Pause the game temporarily
         EffectManager.Instance.TempPause(0.1f);
     }
  
@@ -100,7 +117,11 @@ public class WhipBehavior : MonoBehaviour
         {
             foreach (HealthPoints hp in thingsToHurtThisFrame)
             {
+                //Deal the damage
                 hp.DealDamage(myDamageSource);
+                
+                //Create the whipstar
+                CreateWhipstar(hp);
             }
         }
         
@@ -228,10 +249,10 @@ public class WhipBehavior : MonoBehaviour
         //Make the "further out" part of the whip be oriented with the direction it's swinging.
         Vector3 newScale = Vector3.one;
 
-        newScale.y = 1;
+        newScale.y = swingingYScale;
         if (endAngle > startAngle)
         {
-            newScale.y = -1;
+            newScale.y = swingingYScale * -1;
         }
 
         //Make the whip stretch outwards, starting short and ending long.
@@ -263,6 +284,9 @@ public class WhipBehavior : MonoBehaviour
         //Increment the timer
         timer += Time.deltaTime;
   
+        //Set the scale
+        transform.localScale = new Vector3(extendedXscale, extendedYscale, 1);
+        
         //Change the hitbox to full size.
         myCollider.size = new Vector2(fullHitboxSize, myCollider.size.y);
         myCollider.center = new Vector2(fullHitboxCenter, myCollider.center.y);
@@ -315,7 +339,15 @@ public class WhipBehavior : MonoBehaviour
     {
         //If the other object has a HealthPoints and uses default hit detection, add it to the list of things to hurt this frame.
         HealthPoints otherHealth = other.GetComponent<HealthPoints>();
-        if (otherHealth != null && otherHealth.useDefaultHitDetection && !thingsToHurtThisFrame.Contains(otherHealth))
+        if (
+                otherHealth != null
+            
+                && otherHealth.useDefaultHitDetection
+                && myDamageSource.CanHurt(otherHealth)
+                && otherHealth.IsVulnerableTo(myDamageSource)
+            
+                && !thingsToHurtThisFrame.Contains(otherHealth)
+            )
         {
             thingsToHurtThisFrame.Add(otherHealth);
         }
@@ -342,17 +374,7 @@ public class WhipBehavior : MonoBehaviour
     private bool VerifyBlockCollision(DamageBlocker otherBlocker)
     {
         //Verifies if the whip was actually blocked by doing a proper raycast.
-        float length = myCollider.bounds.extents.x * transform.localScale.x * 2;
-        float theta = transform.localEulerAngles.z * Mathf.Deg2Rad;
-        
-        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
-        Vector2 forward2D = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
-
-        RaycastHit2D[] hits = Physics2D.RaycastAll(pos2D, forward2D, length);
-        
-        //Debug code
-        Debug.DrawLine(new Vector3(pos2D.x, pos2D.y, 0), new Vector3(pos2D.x, pos2D.y, 0) + new Vector3(forward2D.x, forward2D.y, 0) * length);
-        //End of debug code
+        RaycastHit2D[] hits = Raycast(true);
         
         foreach (RaycastHit2D h in hits)
         {
@@ -363,5 +385,70 @@ public class WhipBehavior : MonoBehaviour
         }
         
         return false;
+    }
+ 
+    private RaycastHit2D[] Raycast(bool enableTriggers)
+    {
+        //Performs a raycast from the start of the whip to the tip of the whip
+        float length = myCollider.bounds.extents.x * transform.localScale.x * 2;
+        float theta = transform.localEulerAngles.z * Mathf.Deg2Rad;
+        
+        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+        Vector2 forward2D = new Vector2(Mathf.Cos(theta), Mathf.Sin(theta));
+  
+        //Enable raycasts to hit triggers temporarily
+        bool oldTriggerVal = Physics2D.raycastsHitTriggers;
+        Physics2D.raycastsHitTriggers = enableTriggers;
+        
+        //Do the raycast.
+        RaycastHit2D[] hits = Physics2D.RaycastAll(pos2D, forward2D, length);
+        
+        //Revert to the old physics trigger setting
+        Physics2D.raycastsHitTriggers = oldTriggerVal;
+        
+        return hits;
+        
+    }
+    
+    private Vector3 FindIntersectionPoint(RaycastHit2D[] hits, Transform other)
+    {
+        //Finds the position to put the whipstar given an array of hits.
+        
+        Vector3 output = Vector3.zero;
+        
+        foreach (RaycastHit2D h in hits)
+        {
+            if (h.transform == other)
+            {
+                output = new Vector3(h.point.x, h.point.y, 0);
+                break;
+            }
+        }
+        
+        return output;
+    }
+    
+    private void CreateWhipstar(HealthPoints other)
+    {
+        //Creates a whipstar at the point where the whip touches other.
+
+        //Find the intersection point
+
+        RaycastHit2D[] hits = Raycast(true);
+        Vector3 intersectionPoint = FindIntersectionPoint(hits, other.transform);
+        
+        //If we didn't find the intersection point with the first raycast, try again with an easier raycast
+        if (intersectionPoint == Vector3.zero)
+        {
+            Vector2 myPos2D = new Vector2(transform.position.x, transform.position.y);
+            Vector2 otherPos2D = new Vector2(other.transform.position.x, other.transform.position.y);
+            Vector2 myDir = (otherPos2D - myPos2D).normalized;
+            hits = Physics2D.RaycastAll(myPos2D, myDir);
+            
+            intersectionPoint = FindIntersectionPoint(hits, other.transform);
+        }
+        
+        //Create the whipstar at the intersection point
+        EffectManager.Instance.WhipStar(intersectionPoint);
     }
 }

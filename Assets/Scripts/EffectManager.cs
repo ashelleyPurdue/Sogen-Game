@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class EffectManager : MonoBehaviour
-{
+{    
     private static EffectManager instance = null;
     public static EffectManager Instance
     {
@@ -22,7 +22,7 @@ public class EffectManager : MonoBehaviour
 
     public enum State {none, tempPausing}
     private State currentState = State.none;
-
+ 
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
 
@@ -58,7 +58,16 @@ public class EffectManager : MonoBehaviour
         }
         Time.timeScale = 0f;
     }
-
+ 
+    public void WhipStar(Vector3 pos)
+    {
+        //Creates a whipstar at the specified position
+        
+        GameObject star = new GameObject("whipstar");
+        star.AddComponent<WhipStarBehavior>();
+        star.transform.position = pos;
+    }
+    
     //State Machine methods
 
     private void WhileNone()
