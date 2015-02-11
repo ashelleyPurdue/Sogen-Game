@@ -8,6 +8,8 @@ public class PlayerPlatformBehavior : MonoBehaviour
 {
     private static float lastRoomHealth = -1;     //The amount of health the player had when he left the last room.
     
+    public static int currentSwae = 0;
+    
     public enum State {free, climbing};
     private State currentState = State.free;
     private delegate void StateMethod();
@@ -70,9 +72,16 @@ public class PlayerPlatformBehavior : MonoBehaviour
         Debug.Log("Level ending.");
         lastRoomHealth = GetComponent<HealthPoints>().GetHealth();
     }
-
+ 
+    void OnCollectItem(Item item)
+    {
+        if (item.itemName.Equals("swae"))
+        {
+            currentSwae++;
+        }
+    }
+    
     //Misc methods
-
     private void PlatformControls()
     {
         //Relay the controls to the motor

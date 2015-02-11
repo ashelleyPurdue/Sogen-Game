@@ -16,5 +16,6 @@ public class PlayerHUD : MonoBehaviour
     {
         //Draw the health
         GUILayout.Box("Health: " + myHealth.GetHealth(), new GUILayoutOption[] {});
+        GUILayout.Box("Swae: " + PlayerPlatformBehavior.currentSwae, new GUILayoutOption[] {});
     }
 }
