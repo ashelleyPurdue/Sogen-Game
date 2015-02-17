@@ -120,7 +120,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            float angle = MouseAngle();
+            float angle = MouseWhipAngle();
             
             myWhip.StartWhipping(angle);
         } else if (Input.GetButton("Attack")) //When pressing the whip button, whip in the direction the analog stick is held.
@@ -161,6 +161,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
             Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             
             currentHeldObject.Throw(direction * speed);
+            Debug.DrawLine(transform.position, transform.position + new Vector3(direction.x, direction.y, 0));
             
             currentHeldObject = null;
         }
@@ -214,9 +215,9 @@ public class PlayerPlatformBehavior : MonoBehaviour
         return null;
     }
  
-    private float MouseAngle()
+    private float MouseWhipAngle()
     {
-        //Returns the current angle to the mouse.
+        //Returns the current angle to the mouse, adjusted to make the whip work.
         
         Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             
@@ -226,6 +227,22 @@ public class PlayerPlatformBehavior : MonoBehaviour
         Vector2 difference = (whipPos2D - mousePos2D) * -1;
         
         float angle = (Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg);
+        
+        return angle;
+    }
+    
+    private float MouseAngle()
+    {
+        //Returns the current angle to the mouse, adjusted to make the whip work.
+        
+        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
+        Vector2 mousePos2D = new Vector2(mousePos3D.x, mousePos3D.y);
+        Vector2 myPos2D = new Vector2(transform.position.x, transform.position.y);
+        
+        Vector2 difference = (myPos2D - mousePos2D) * -1;
+        
+        float angle = (Mathf.Atan2(difference.y, difference.x));
         
         return angle;
     }
