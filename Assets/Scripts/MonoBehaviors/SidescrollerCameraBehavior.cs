@@ -85,8 +85,6 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         {
             if (!TargetInDeadzone(targetPosition.x))
             {
-                Debug.Log("Moving camera to player position.");
-                
                 Vector3 newPos = transform.position;
                 newPos.x = target.position.x;
                 

@@ -17,9 +17,7 @@ public abstract class QuickObject : MonoBehaviour
     //Events
     
     void Start()
-    {
-        Debug.Log(name + " start");
-        
+    {  
         //Automatically fix rectangles that have been placed using the wrong shader
         if (!shaderString.Equals(SHADER))
         {

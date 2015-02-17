@@ -8,6 +8,8 @@ public class LevelSelectorBehavior : MonoBehaviour
     //Events
     void Update()
     {
-        rigidbody2D.velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed;
+        Vector2 inputVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        rigidbody2D.velocity = inputVector * speed;
+        Debug.Log(Time.timeScale);
     }
 }

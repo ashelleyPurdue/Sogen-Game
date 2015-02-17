@@ -53,12 +53,17 @@ public class PlayerPlatformBehavior : MonoBehaviour
     void Update()
     {
         stateMethods[currentState]();
+        
+        //Complete course cheat button
+        if (Input.GetKey(KeyCode.Equals))
+        {
+            Debug.Log("Plus");
+            CourseManager.CompleteCourse();
+        }
     }
 
     void OnDead()
     {
-        Debug.Log("Leaving!");
-        
         //Refill the health
         GetComponent<HealthPoints>().SetHealth(GetComponent<HealthPoints>().maxHealth);
         
@@ -69,7 +74,6 @@ public class PlayerPlatformBehavior : MonoBehaviour
     void OnLevelEnd()
     {
         //Store how much health we have
-        Debug.Log("Level ending.");
         lastRoomHealth = GetComponent<HealthPoints>().GetHealth();
     }
  

@@ -14,6 +14,7 @@ public class EffectManager : MonoBehaviour
             {
                 GameObject obj = new GameObject();
                 instance = obj.AddComponent<EffectManager>();
+                Object.DontDestroyOnLoad(instance);
             }
 
             return instance;
@@ -21,14 +22,14 @@ public class EffectManager : MonoBehaviour
     }
 
     public enum State {none, tempPausing}
-    private State currentState = State.none;
+    private static State currentState = State.none;
  
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
 
-    private float timer = 0f;
+    private static float timer = 0f;
 
-    private float oldTimescale = 1f;
+    private static float oldTimescale = 1f;
 
     //Events
 

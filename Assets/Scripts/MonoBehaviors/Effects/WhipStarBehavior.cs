@@ -35,7 +35,6 @@ public class WhipStarBehavior : MonoBehaviour
             //Otherwise, let the angle be in any quadrant.
             if (i < 4)
             {
-                Debug.Log("" + (i + 1) + "th quadrant.");
                 float NINETY_DEGREES = Mathf.PI / 2;
                 angle = Random.Range(0, NINETY_DEGREES) + (NINETY_DEGREES * i);
             }

@@ -105,6 +105,15 @@ public class EarthwormBehavior : MonoBehaviour
         timer = 0f;
     }
     
+    void OnDead()
+    {
+        //When dead, complete the level.
+        if (CourseManager.IsPlayingCourse())
+        {
+            CourseManager.CompleteCourse();
+        }
+    }
+    
     void OnGUI()
     {
         //Display the health

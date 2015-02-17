@@ -31,8 +31,6 @@ public static class LevelPersistence
 		
 		//Create a new entry in the level list if one does not already exist.
 		AddLevel(levelName);
-		
-		Debug.Log("Changing to level: " + levelName);
 	}
 
     public static void ChangeLevel(string levelName, string entranceName)

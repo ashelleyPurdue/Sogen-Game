@@ -34,8 +34,6 @@ public class BlockFlashEffect : MonoBehaviour
         //Start the flash effect
         timer = 0f;
         flashing = true;
-        
-        Debug.Log("Whip blocked.");
     }
     
     void Update()
@@ -48,8 +46,6 @@ public class BlockFlashEffect : MonoBehaviour
             //For every renderer, tween from the flash material to the original material.
             foreach (Renderer r in renderers)
             {   
-                Debug.Log("About to create new color.");
-                
                 if(!originalColors.ContainsKey(r))
                 {
                     originalColors.Add(r, r.material.color);
@@ -62,8 +58,6 @@ public class BlockFlashEffect : MonoBehaviour
                 newMat.color = Color.Lerp(flashColor, Color.white, timer / flashTime);
                 
                 r.material = newMat;
-                    
-                Debug.Log(r.material.color);
             }
             
             //If we're out of time, set the colors to their original and stop flashing

@@ -118,7 +118,9 @@ public static class CourseManager
     public static void CompleteCourse()
     {
         //Marks the given course as completed and returns to the level select screen
-
+  
+        Debug.Log("Current course: " + activeCourse.Name);
+        
         //Throw an error if we're not currently in a course.
         if (!IsPlayingCourse())
         {
