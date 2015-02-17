@@ -54,6 +54,12 @@ public class PlayerPlatformBehavior : MonoBehaviour
     {
         stateMethods[currentState]();
         
+        //Pause button
+        if (Input.GetButtonDown("Pause"))
+        {
+            EffectManager.Instance.PauseUnpause();
+        }
+        
         //Complete course cheat button
         if (Input.GetKey(KeyCode.Equals))
         {
@@ -61,7 +67,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
             CourseManager.CompleteCourse();
         }
     }
-
+ 
     void OnDead()
     {
         //Refill the health

@@ -21,7 +21,7 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    public enum State {none, tempPausing}
+    public enum State {none, tempPausing, paused}
     private static State currentState = State.none;
  
     private delegate void StateMethod();
@@ -39,14 +39,40 @@ public class EffectManager : MonoBehaviour
 
         stateMethods.Add(State.none, WhileNone);
         stateMethods.Add(State.tempPausing, WhileTempPausing);
+        stateMethods.Add(State.paused, WhilePaused);
     }
 
 	void Update ()
     {
         stateMethods[currentState]();
 	}
-
+ 
+    void OnGUI()
+    {
+        if (currentState == State.paused)
+        {
+            GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "Paused.");
+        }
+    }
+    
     //Interface methods
+    
+    public void PauseUnpause()
+    {
+        //Pauses or unpauses the game.
+        
+        if (currentState == State.none)
+        {
+            currentState = State.paused;
+            oldTimescale = Time.timeScale;
+        }
+        else if (currentState == State.paused)
+        {
+            currentState = State.none;
+            Time.timeScale = oldTimescale;
+        }
+    }
+    
     public void TempPause(float time)
     {
         //Pauses the action for a certain amount of time.
@@ -74,7 +100,7 @@ public class EffectManager : MonoBehaviour
     private void WhileNone()
     {
     }
-
+    
     private void WhileTempPausing()
     {
         //Count down
@@ -86,5 +112,10 @@ public class EffectManager : MonoBehaviour
             Time.timeScale = oldTimescale;
             currentState = State.none;
         }
+    }
+
+    private void WhilePaused()
+    {
+        Time.timeScale = 0;
     }
 }
