@@ -18,14 +18,18 @@ public class PlayerPlatformBehavior : MonoBehaviour
     public WhipBehavior myWhip;
 
     public float movementDeadzone = 0.5f;   //The player will not move if the analog stick's magnitude is less than this.
-
+ 
+    public float objectPickupRadius = 1f;
+    
     public float climbSpeed = 1f;
 
     public bool startInCourse = false;  //If checked, the player will start out in the sepcified course
     public string courseToStartIn;
 
     private PlatformCharacterMotor motor;
-
+ 
+    private ThrowableBehavior currentHeldObject = null;
+    
     private float mouseX;
     private float mouseY;
 
@@ -116,14 +120,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
-            Vector2 mousePos2D = new Vector2(mousePos3D.x, mousePos3D.y);
-            Vector2 whipPos2D = new Vector2(myWhip.transform.position.x, myWhip.transform.position.y);
-            
-            Vector2 difference = (whipPos2D - mousePos2D) * -1;
-            
-            float angle = (Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg);
+            float angle = MouseAngle();
             
             myWhip.StartWhipping(angle);
         } else if (Input.GetButton("Attack")) //When pressing the whip button, whip in the direction the analog stick is held.
@@ -132,7 +129,43 @@ public class PlayerPlatformBehavior : MonoBehaviour
             myWhip.StartWhipping(angle);
         }
     }
-
+ 
+    private void PickupAndThrowControls()
+    {
+        //Pick up an object 
+        if (Input.GetButtonDown("Fire2"))
+        {
+            //Look for an object to pick up.
+            
+            Collider2D[] hits = Physics2D.OverlapCircleAll(new Vector2(transform.position.x, transform.position.y), objectPickupRadius);
+            foreach (Collider2D h in hits)
+            {
+                ThrowableBehavior throwable = h.transform.GetComponent<ThrowableBehavior>();
+                
+                if (throwable != null)
+                {
+                    //Pick up the object if we it's a throwable
+                    throwable.PickUp(transform, Vector3.zero);
+                    currentHeldObject = throwable;
+                    break;
+                }
+            }
+        }
+        
+        //Throw an object if one is being held
+        if (Input.GetButton("Fire1") && currentHeldObject != null)
+        {
+            float angle = MouseAngle();
+            float speed = 10f;
+            
+            Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            
+            currentHeldObject.Throw(direction * speed);
+            
+            currentHeldObject = null;
+        }
+    }
+    
     private void FlipOnWhip()
     {
         //Proceed if the player is whipping in the air
@@ -180,7 +213,23 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
         return null;
     }
-
+ 
+    private float MouseAngle()
+    {
+        //Returns the current angle to the mouse.
+        
+        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            
+        Vector2 mousePos2D = new Vector2(mousePos3D.x, mousePos3D.y);
+        Vector2 whipPos2D = new Vector2(myWhip.transform.position.x, myWhip.transform.position.y);
+        
+        Vector2 difference = (whipPos2D - mousePos2D) * -1;
+        
+        float angle = (Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg);
+        
+        return angle;
+    }
+    
     //State methods
 
     private void WhileFree()
@@ -190,7 +239,9 @@ public class PlayerPlatformBehavior : MonoBehaviour
         PlatformControls();
         WhipControls();
         FlipOnWhip();
-
+        
+        PickupAndThrowControls();
+        
         //Start climbing when moving up or down on a ladder.
         const float deadzone = 0.3f;
         const float radius = 0.1f;
