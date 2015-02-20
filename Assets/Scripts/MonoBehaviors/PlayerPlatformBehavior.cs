@@ -22,7 +22,11 @@ public class PlayerPlatformBehavior : MonoBehaviour
     public float objectPickupRadius = 1f;
     
     public float climbSpeed = 1f;
-
+ 
+    public float maxThrowSpeed = 10f;
+    public float maxThrowChargeTime = 1f;
+    private float throwChargeTime = 0f;
+    
     public bool startInCourse = false;  //If checked, the player will start out in the sepcified course
     public string courseToStartIn;
 
@@ -118,7 +122,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
         Vector2 controllerInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             float angle = MouseWhipAngle();
             
@@ -152,11 +156,22 @@ public class PlayerPlatformBehavior : MonoBehaviour
             }
         }
         
-        //Throw an object if one is being held
+        //Charge a throw if the throw button is being held.
         if (Input.GetButton("Fire1") && currentHeldObject != null)
         {
+            throwChargeTime += Time.deltaTime;
+            
+            if (throwChargeTime > maxThrowChargeTime)
+            {
+                throwChargeTime = maxThrowChargeTime;
+            }
+        }
+        
+        //Throw an object if one is being held upon releasing the throw button
+        if (Input.GetButtonUp("Fire1") && currentHeldObject != null)
+        {
             float angle = MouseAngle();
-            float speed = 10f;
+            float speed = maxThrowSpeed * throwChargeTime / maxThrowChargeTime;
             
             Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             
@@ -252,11 +267,17 @@ public class PlayerPlatformBehavior : MonoBehaviour
     private void WhileFree()
     {
         motor.enabled = true;
-
+  
+        //Platform controls
         PlatformControls();
-        WhipControls();
-        FlipOnWhip();
         
+        //Only use whip controls if we aren't holding anything.
+        if (currentHeldObject == null){
+            WhipControls();
+            FlipOnWhip();
+        }
+        
+        //Picking up/throwing controls
         PickupAndThrowControls();
         
         //Start climbing when moving up or down on a ladder.
