@@ -36,7 +36,7 @@ public static class LevelPersistence
     public static void ChangeLevel(string levelName, string entranceName)
     {
         //Loads a new level in at a particular entrance
-
+    
         entranceUsed = entranceName;
         ChangeLevel(levelName);
     }
