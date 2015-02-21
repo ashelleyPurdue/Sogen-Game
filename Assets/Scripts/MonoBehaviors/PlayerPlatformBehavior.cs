@@ -16,7 +16,10 @@ public class PlayerPlatformBehavior : MonoBehaviour
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
 
     public WhipBehavior myWhip;
-
+ 
+    public CircleChartRenderer throwChargeMeter;
+    public CircleChartRenderer throwChargeBackground;
+    
     public float movementDeadzone = 0.5f;   //The player will not move if the analog stick's magnitude is less than this.
  
     public float objectPickupRadius = 1f;
@@ -165,6 +168,17 @@ public class PlayerPlatformBehavior : MonoBehaviour
             {
                 throwChargeTime = maxThrowChargeTime;
             }
+            
+            //Show the throw charge meter
+            throwChargeMeter.portionFilled = throwChargeTime / maxThrowChargeTime;
+            throwChargeMeter.renderer.enabled = true;
+            throwChargeBackground.renderer.enabled = true;
+        }
+        else
+        {
+            //Hide the throw charge meter
+            throwChargeMeter.renderer.enabled = false;
+            throwChargeBackground.renderer.enabled = false;
         }
         
         //Throw an object if one is being held upon releasing the throw button
@@ -179,6 +193,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
             Debug.DrawLine(transform.position, transform.position + new Vector3(direction.x, direction.y, 0));
             
             currentHeldObject = null;
+            throwChargeTime = 0f;
         }
     }
     
