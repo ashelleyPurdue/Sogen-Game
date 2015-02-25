@@ -7,6 +7,8 @@ using System.Collections.Generic;
 public class BaseballBehavior : MonoBehaviour
 {
  
+    public List<ParticleSystem> particleSystems = new List<ParticleSystem>();
+    
     private DamageSource myDamageSource;
     private ThrowableBehavior throwable;
     
@@ -26,7 +28,16 @@ public class BaseballBehavior : MonoBehaviour
         throwable = GetComponent<ThrowableBehavior>();
     }
     
-    void LateUpdate()
+    void Update()
+    {
+        //Activate/deactivate the fire trail
+        foreach (ParticleSystem s in particleSystems)
+        {
+            s.enableEmission = myDamageSource.isHot;
+        }
+    }
+    
+    void FixedUpdate()
     {
         //Do the late collision event
         foreach (Collision2D other in collisionsLastFrame)
@@ -65,6 +76,9 @@ public class BaseballBehavior : MonoBehaviour
     {
         //Enable the damage source
         myDamageSource.isHot = true;
+        
+        //Reset the rotation
+        transform.rotation = Quaternion.identity;
     }
     
     void OnCollisionEnter2D(Collision2D other)
