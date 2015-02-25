@@ -87,7 +87,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 188302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.983967781, y: -.511173069, z: 0}
+  m_LocalPosition: {x: 2.01999998, y: -3.50999999, z: 0}
   m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children:
   - {fileID: 434254}
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupSpeed: 10
-  throwColliderDelay: .00999999978
+  throwColliderDelay: .0250000004
 --- !u!114 &11488298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -177,6 +177,8 @@ MonoBehaviour:
   particleSystems:
   - {fileID: 19834256}
   - {fileID: 19834254}
+  minimumDamageSpeed: 3
+  stationaryDamageDeactivateTime: .100000001
 --- !u!198 &19834254
 ParticleSystem:
   m_ObjectHideFlags: 1

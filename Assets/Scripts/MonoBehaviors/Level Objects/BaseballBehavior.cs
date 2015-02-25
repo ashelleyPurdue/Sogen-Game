@@ -9,14 +9,17 @@ public class BaseballBehavior : MonoBehaviour
  
     public List<ParticleSystem> particleSystems = new List<ParticleSystem>();
     
+    public float minimumDamageSpeed = 3f;
+    
+    public float stationaryDamageDeactivateTime = 0.1f;
+    
     private DamageSource myDamageSource;
     private ThrowableBehavior throwable;
     
+    private float timer = 0f;
+    
     private Transform lastCarrier = null;
     private HealthPoints lastCarrierHP = null;
-    
-    private List<Collision2D> collisionsThisFrame = new List<Collision2D>();
-    private List<Collision2D> collisionsLastFrame = new List<Collision2D>();
     
     //Events
     
@@ -39,15 +42,21 @@ public class BaseballBehavior : MonoBehaviour
     
     void FixedUpdate()
     {
-        //Do the late collision event
-        foreach (Collision2D other in collisionsLastFrame)
+        //Update the damage source
+        if (rigidbody2D.velocity.sqrMagnitude >= minimumDamageSpeed * minimumDamageSpeed)
         {
-            OnLateCollision2D(other);
+            myDamageSource.isHot = true;
+            timer = 0f;
         }
-        
-        collisionsLastFrame.Clear();
-        collisionsLastFrame = collisionsThisFrame;
-        collisionsThisFrame = new List<Collision2D>();
+        else
+        {
+            timer += Time.deltaTime;
+            
+            if (timer >= stationaryDamageDeactivateTime)
+            {
+                myDamageSource.isHot = false;
+            }
+        }
     }
     
     void OnPickedUp()
@@ -79,19 +88,5 @@ public class BaseballBehavior : MonoBehaviour
         
         //Reset the rotation
         transform.rotation = Quaternion.identity;
-    }
-    
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        collisionsThisFrame.Add(other);
-    }
-    
-    void OnLateCollision2D(Collision2D other)
-    {
-        //Deactivate the damage source
-        if (lastCarrier != null && other.collider != lastCarrier.collider2D)
-        {
-            myDamageSource.isHot = false;
-        }
     }
 }
