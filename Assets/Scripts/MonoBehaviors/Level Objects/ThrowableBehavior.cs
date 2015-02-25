@@ -8,6 +8,8 @@ public class ThrowableBehavior : MonoBehaviour
     public float pickupSpeed = 10;
     public float throwColliderDelay = 0.25f;
     
+    public Transform Carrier { get{ return transform.parent; } }
+    
     public enum State {free, pickingUp, carrying, justThrown};
     private State currentState = State.free;
     
@@ -50,6 +52,9 @@ public class ThrowableBehavior : MonoBehaviour
         currentState = State.pickingUp;
         transform.parent = carrier;
         carrierCoordinates = carryCoords;
+        
+        //Send an event
+        transform.BroadcastMessage("OnPickedUp", SendMessageOptions.DontRequireReceiver);
     }
     
     public void Throw(Vector2 velocity)
@@ -66,6 +71,9 @@ public class ThrowableBehavior : MonoBehaviour
             
             //Set the velocity
             rigidbody2D.velocity = new Vector2(calcedVelocity.x, calcedVelocity.y) + velocity;
+            
+            //Send an event
+            transform.BroadcastMessage("OnThrown", SendMessageOptions.DontRequireReceiver);
         }
     }
 
