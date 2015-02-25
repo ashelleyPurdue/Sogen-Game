@@ -65,6 +65,7 @@ public class ThrowableBehavior : MonoBehaviour
         {
             currentState = State.justThrown;
             transform.parent = null;
+            timer = 0f;
             
             //Calculate out current velocity
             Vector3 calcedVelocity = transform.position - lastPos;

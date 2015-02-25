@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(ThrowableBehavior))]
 [RequireComponent(typeof(DamageSource))]
@@ -12,6 +13,9 @@ public class BaseballBehavior : MonoBehaviour
     private Transform lastCarrier = null;
     private HealthPoints lastCarrierHP = null;
     
+    private List<Collision2D> collisionsThisFrame = new List<Collision2D>();
+    private List<Collision2D> collisionsLastFrame = new List<Collision2D>();
+    
     //Events
     
     void Awake()
@@ -20,6 +24,19 @@ public class BaseballBehavior : MonoBehaviour
         myDamageSource.isHot = false;
         
         throwable = GetComponent<ThrowableBehavior>();
+    }
+    
+    void LateUpdate()
+    {
+        //Do the late collision event
+        foreach (Collision2D other in collisionsLastFrame)
+        {
+            OnLateCollision2D(other);
+        }
+        
+        collisionsLastFrame.Clear();
+        collisionsLastFrame = collisionsThisFrame;
+        collisionsThisFrame = new List<Collision2D>();
     }
     
     void OnPickedUp()
@@ -52,12 +69,15 @@ public class BaseballBehavior : MonoBehaviour
     
     void OnCollisionEnter2D(Collision2D other)
     {
+        collisionsThisFrame.Add(other);
+    }
+    
+    void OnLateCollision2D(Collision2D other)
+    {
         //Deactivate the damage source
-        
         if (lastCarrier != null && other.collider != lastCarrier.collider2D)
         {
             myDamageSource.isHot = false;
-            Debug.Log("Collision enter.");
         }
     }
 }
