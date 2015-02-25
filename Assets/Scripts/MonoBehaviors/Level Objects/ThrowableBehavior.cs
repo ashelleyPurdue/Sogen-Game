@@ -18,7 +18,7 @@ public class ThrowableBehavior : MonoBehaviour
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
     
-    private Vector3 carrierCoordinates = Vector3.zero;  //Where in relation to the carrier should this object be held?
+    private Vector2 carrierCoordinates = Vector2.zero;  //Where in relation to the carrier should this object be held?
     
     private Vector3 lastPos = Vector3.zero;
     
@@ -51,7 +51,7 @@ public class ThrowableBehavior : MonoBehaviour
         //Picks this object up.
         currentState = State.pickingUp;
         transform.parent = carrier;
-        carrierCoordinates = carryCoords;
+        carrierCoordinates = new Vector2(carryCoords.x, carryCoords.y);
         
         //Send an event
         transform.BroadcastMessage("OnPickedUp", SendMessageOptions.DontRequireReceiver);
@@ -94,10 +94,13 @@ public class ThrowableBehavior : MonoBehaviour
         collider2D.enabled = false;
         
         //Move to the carry pos.
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition, carrierCoordinates, pickupSpeed * Time.deltaTime);
+        Vector2 pos2D = new Vector2(transform.localPosition.x, transform.localPosition.y);
+        pos2D = Vector2.MoveTowards(pos2D, carrierCoordinates, pickupSpeed * Time.deltaTime);
+        
+        transform.localPosition = new Vector3(pos2D.x, pos2D.y, transform.localPosition.z);
         
         //Go to carrying
-        if (transform.localPosition == carrierCoordinates)
+        if (pos2D == carrierCoordinates)
         {
             currentState = State.carrying;
         }
