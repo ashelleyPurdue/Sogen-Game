@@ -9,7 +9,6 @@ public class LockBehavior : CircuitNodePowerSource
     private const float SCALE_PER_KEY = 0.5f;
     
     private int keysLeft = 0;
-    private int maxKeys = 0;
     
     private float targetScale = 1f;
     
@@ -17,7 +16,6 @@ public class LockBehavior : CircuitNodePowerSource
     
     void Start()
     {
-        maxKeys = keysLeft;
         UpdateStatus();
     }
     

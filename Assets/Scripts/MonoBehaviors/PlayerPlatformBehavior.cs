@@ -28,7 +28,13 @@ public class PlayerPlatformBehavior : MonoBehaviour
  
     public float maxThrowSpeed = 10f;
     public float maxThrowChargeTime = 1f;
+    public float minThrowChargeTime = 0.25f;
+    public float chargeMeterFadeSpeed = 3f;
+    
     private float throwChargeTime = 0f;
+    
+    private float currentChargeMeterAlpha = 0;
+    private float targetChargeMeterAlpha = 0;
     
     public bool startInCourse = false;  //If checked, the player will start out in the sepcified course
     public string courseToStartIn;
@@ -39,7 +45,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
     
     private float mouseX;
     private float mouseY;
-
+    
     //Events
 
     void Awake()
@@ -77,6 +83,19 @@ public class PlayerPlatformBehavior : MonoBehaviour
             Debug.Log("Plus");
             CourseManager.CompleteCourse();
         }
+        
+        //Make charge meter fade
+        if (currentChargeMeterAlpha > targetChargeMeterAlpha)
+        {
+            currentChargeMeterAlpha = Mathf.MoveTowards(currentChargeMeterAlpha, targetChargeMeterAlpha, chargeMeterFadeSpeed * Time.deltaTime);
+        }
+        else
+        {
+            currentChargeMeterAlpha = targetChargeMeterAlpha;
+        }
+        
+        throwChargeMeter.color.a = currentChargeMeterAlpha;
+        throwChargeBackground.color.a = currentChargeMeterAlpha;
     }
  
     void OnDead()
@@ -171,28 +190,32 @@ public class PlayerPlatformBehavior : MonoBehaviour
             
             //Show the throw charge meter
             throwChargeMeter.portionFilled = throwChargeTime / maxThrowChargeTime;
-            throwChargeMeter.renderer.enabled = true;
-            throwChargeBackground.renderer.enabled = true;
+            targetChargeMeterAlpha = 1;
         }
         else
         {
             //Hide the throw charge meter
-            throwChargeMeter.renderer.enabled = false;
-            throwChargeBackground.renderer.enabled = false;
+            targetChargeMeterAlpha = 0;
         }
         
         //Throw an object if one is being held upon releasing the throw button
         if (Input.GetButtonUp("Fire1") && currentHeldObject != null)
         {
-            float angle = MouseAngle();
-            float speed = maxThrowSpeed * throwChargeTime / maxThrowChargeTime;
+            //Throw if we've been holding long enough
+            if (throwChargeTime >= minThrowChargeTime)
+            {
+                float angle = MouseAngle();
+                float speed = maxThrowSpeed * throwChargeTime / maxThrowChargeTime;
+                
+                Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                
+                currentHeldObject.Throw(direction * speed);
+                Debug.DrawLine(transform.position, transform.position + new Vector3(direction.x, direction.y, 0));
+                
+                currentHeldObject = null;
+            }
             
-            Vector2 direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            
-            currentHeldObject.Throw(direction * speed);
-            Debug.DrawLine(transform.position, transform.position + new Vector3(direction.x, direction.y, 0));
-            
-            currentHeldObject = null;
+            //Rest the charge time because we've released the button.
             throwChargeTime = 0f;
         }
     }
