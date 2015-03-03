@@ -19,7 +19,7 @@ public class EarthwormBehavior : MonoBehaviour
     
     //public AI variables
     
-    public enum State {prefight, pausing, onSurface, hitstun, diggingDown, findingResurfacePoint, resurfacing};
+    public enum State {prefight, pausing, onSurface, hitstun, diggingDown, findingResurfacePoint, resurfacing, deathAnimationBegin, deathAnimationEnd};
     
     public float maxSurfaceY = 0f;
     public float minSurfaceY = -4f;
@@ -30,6 +30,10 @@ public class EarthwormBehavior : MonoBehaviour
     
     public float verticalDigSpeed = 10f;
     public float horizontalDigSpeed = 5f;
+    
+    public float deathAnimationTime = 2f;
+    public float deathAnimationUpSpeed = 20f;
+    public float deathAnimationDownSpeed = 5f;
     
     public float hitstunTime = 1f;
     
@@ -65,9 +69,13 @@ public class EarthwormBehavior : MonoBehaviour
         stateMethods.Add(State.diggingDown, WhileDiggingDown);
         stateMethods.Add(State.findingResurfacePoint, WhileFindingResurfacePoint);
         stateMethods.Add(State.resurfacing, WhileResurfacing);
+        stateMethods.Add(State.deathAnimationBegin, WhileDeathAnimationBegin);
+        stateMethods.Add(State.deathAnimationEnd, WhileDeathAnimationEnd);
         
         //Get healthpoints
         myHealth = GetComponent<HealthPoints>();
+        
+        myHealth.useDefaultDeathBehavior = false;
         
     }
     
@@ -107,11 +115,9 @@ public class EarthwormBehavior : MonoBehaviour
     
     void OnDead()
     {
-        //When dead, complete the level.
-        if (CourseManager.IsPlayingCourse())
-        {
-            CourseManager.CompleteCourse();
-        }
+        //When dead, start the animation, then complete the level
+        currentState = State.deathAnimationBegin;
+        timer = 0f;
     }
     
     void OnGUI()
@@ -323,5 +329,54 @@ public class EarthwormBehavior : MonoBehaviour
         {
             Pause(0.5f, StartStrafing);
         }
+    }
+
+    private void WhileDeathAnimationBegin()
+    {
+        targetEyeballRot = -90f;
+        targetEyelidAngle = 80f;
+        
+        //Move to the position
+        targetPoint = transform.position;
+        targetPoint.y = maxSurfaceY;
+        
+        MoveToTarget(deathAnimationUpSpeed);
+        
+        //Increase the timer.
+        timer += Time.deltaTime;
+        
+        //Move to the next state
+        if (timer >= deathAnimationTime)
+        {
+            timer = 0f;
+            currentState = State.deathAnimationEnd;
+        }
+    }
+    
+    private void WhileDeathAnimationEnd()
+    {
+        targetEyelidAngle = 0f;
+        
+        if (!myHealth.IsCoolingDown())
+        {
+            myHealth.StartCoolingDown();
+        }
+        
+        //Sink into the ground
+        targetPoint.y = burriedY;
+        
+        MoveToTarget(deathAnimationDownSpeed);
+        
+        //End the course when we reach the place.
+        if (transform.position == targetPoint)
+        {
+            if (CourseManager.IsPlayingCourse())
+            {
+                CourseManager.CompleteCourse();
+            }
+            
+            GameObject.Destroy(gameObject);
+        }
+        
     }
 }
