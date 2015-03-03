@@ -5606,7 +5606,7 @@ MonoBehaviour:
   useDefaultDeathBehavior: 1
   hasInfiniteHealth: 0
   maxHealth: 7
-  startingHealth: 2
+  startingHealth: 7
   vulnerableTo: 
   invulnerableTo: 
   invulnerableToObjects: []
