@@ -11,8 +11,24 @@ GameObject:
   - 212: {fileID: 21200000}
   - 61: {fileID: 6100000}
   - 114: {fileID: 11400000}
+  - 114: {fileID: 11412044}
   m_Layer: 0
   m_Name: level_tile_prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &112044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 412044}
+  m_Layer: 0
+  m_Name: drop_point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,10 +41,23 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 3, z: 0}
+  m_LocalPosition: {x: -2, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 412044}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &412044
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 112044}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 400000}
   m_RootOrder: 0
 --- !u!61 &6100000
 BoxCollider2D:
@@ -52,11 +81,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e472432a7f68f4a9516f044afcdf8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropOffPoint: {fileID: 0}
+  dropOffPoint: {fileID: 412044}
   useDefaultActivationBehavior: 0
   targetLevel: 
-  targetEntranceNumber: 0
-  entranceNumber: 0
+  targetEntranceName: 
+  entranceName: level1_entrance
+--- !u!114 &11412044
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d6617042e288748983fca972811f8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  courseName: Course One
+  sceneName: level1Room1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
