@@ -149,9 +149,9 @@ public static class Utils
 	
 	//---To Vector2---
 	public static Vector2 ToVector2(Vector3 inputVector){
-		//Takes a Vector3 and turns it into a vector2, where x = x and y = z.
+		//Takes a Vector3 and turns it into a vector2, where x = x and y = y.
 		
-		return new Vector2(inputVector.x, inputVector.z);
+		return new Vector2(inputVector.x, inputVector.y);
 	}
 	
 	

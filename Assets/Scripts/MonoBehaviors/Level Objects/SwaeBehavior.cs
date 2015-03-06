@@ -55,7 +55,7 @@ public class SwaeBehavior : MonoBehaviour
         //Set the target pos
         targetPos = transform.localPosition;
 	}
-	
+    
 	void Update ()
     {
 	    //Rotate
