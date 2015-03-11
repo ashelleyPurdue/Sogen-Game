@@ -140,7 +140,7 @@ public class BarbarianBehavior : MonoBehaviour
         
         try
         {
-            velocity = PhysicsUtils.AimProjectile2D(spearPos, targPos, throwSpeed, gravity * -1);
+            velocity = PhysicsUtils.AimProjectile2D(spearPos, targPos, throwSpeed, gravity * -1, 0.5f);
         }
         catch (ProjectileCantReachException e)
         {
@@ -152,6 +152,20 @@ public class BarbarianBehavior : MonoBehaviour
             
             //Make sure it's thrown in the right direction.
             velocity.x *= Mathf.Sign(targPos.x - spearPos.x);
+        }
+        catch(GuessValueMaxIterationException e)
+        {
+            //If GuessValue falied, default to 45 degrees and print a warning.
+            
+            float angle = Mathf.PI / 4;
+            
+            velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            velocity *= throwSpeed;
+            
+            //Make sure it's thrown in the right direction.
+            velocity.x *= Mathf.Sign(targPos.x - spearPos.x);
+            
+            Debug.Log("WARNING: GuessValue failed when throwing spear.  Defaulting to 45 degrees.");
         }
         
         currentSpear.Throw(velocity);
