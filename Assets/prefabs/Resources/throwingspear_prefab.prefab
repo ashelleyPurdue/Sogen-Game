@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a9629a049824c34fab8652cc2483b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useDefaultHitDetection: 0
+  useDefaultHitDetection: 1
   isHot: 1
   damageTags: 
   objectsToIgnore: []
@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3283d73b1029b294a9e502871a11f6d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifetime: 10
 --- !u!212 &21218372
 SpriteRenderer:
   m_ObjectHideFlags: 1

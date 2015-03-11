@@ -192,6 +192,7 @@ public static class Utils
 
     //---Guess Value---
     public delegate bool ConditionMethod(float number);     //this method returns true if the given number satisfies the condition
+    
     public static float GuessValue(float startingValue, ConditionMethod SatisfiesCondition, float[] increments, bool undershoot = true, int maxIterations = 1000)
     {
         //Returns the lowest value that satisfies the given condition method
@@ -217,7 +218,6 @@ public static class Utils
 
         return output;
     }
-
     public static float GuessValue(float startingValue, ConditionMethod SatisfiesCondition, float increment, bool undershoot, int maxIterations = 1000)
     {
         //Returns a value that is very close to making SatisfiesCondition true.
@@ -247,6 +247,7 @@ public static class Utils
         throw new GuessValueMaxIterationException();
         return output;
     }
+    
 }
 
 //Exceptions

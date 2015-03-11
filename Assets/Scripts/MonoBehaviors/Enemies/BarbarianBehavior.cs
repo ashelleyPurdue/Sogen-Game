@@ -31,6 +31,9 @@ public class BarbarianBehavior : MonoBehaviour
         //Construct the state methods
         stateMethods.Add(State.searching, WhileSearching);
         stateMethods.Add(State.aiming, WhileAiming);
+        
+        //DEBUG AIM PROJECTILE
+        
     }
     
     void Update()
@@ -88,9 +91,6 @@ public class BarbarianBehavior : MonoBehaviour
     private void CreateSpear()
     {
         //Throws a spear at the target
-        //TODO: Replace the ball with a spear
-        //TODO: Use projectile motion equasions to aim.
-        
         GameObject spear = (GameObject)GameObject.Instantiate(Resources.Load("throwingspear_prefab"));
         spear.transform.position = transform.position + new Vector3(1, 1, 0);
         
@@ -101,9 +101,14 @@ public class BarbarianBehavior : MonoBehaviour
     
     private void ThrowSpear()
     {
-        Vector2 velocity = Utils.ToVector2(targetPlayer.transform.position) - Utils.ToVector2(currentSpear.transform.position);
-        velocity.Normalize();
-        velocity *= throwSpeed;
+        //TODO: Use projectile motion equasions to aim.
+        
+        Vector2 spearPos = Utils.ToVector2(currentSpear.transform.position);
+        Vector2 targPos = Utils.ToVector2(targetPlayer.transform.position);
+        
+        float gravity =  Physics2D.gravity.y * currentSpear.rigidbody2D.gravityScale;
+        
+        Vector2 velocity = PhysicsUtils.AimProjectile2D(spearPos, targPos, throwSpeed, gravity * -1);
         
         currentSpear.Throw(velocity);
         currentSpear = null;
