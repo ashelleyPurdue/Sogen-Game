@@ -10,13 +10,16 @@ public class BarbarianBehavior : MonoBehaviour
     public float visionRadius = 3f;
     
     public float throwSpeed = 10f;
-    public float throwDelay = 1f;
+    
+    public float spearGrowTime = 0.1f;
+    public float aimTime = 0.5f;
+    public float waitTime = 0.5f;
     
     private PlayerPlatformBehavior targetPlayer;
     
     private ThrowableBehavior currentSpear;
     
-    public enum State {searching, aiming, throwing};
+    public enum State {searching, growingSpear, aiming, throwing, waiting};
     private State currentState = State.searching;
     
     private float timer = 0f;
@@ -30,10 +33,9 @@ public class BarbarianBehavior : MonoBehaviour
     {
         //Construct the state methods
         stateMethods.Add(State.searching, WhileSearching);
+        stateMethods.Add(State.growingSpear, WhileGrowingSpear);
         stateMethods.Add(State.aiming, WhileAiming);
-        
-        //DEBUG AIM PROJECTILE
-        
+        stateMethods.Add(State.waiting, WhileWaiting);
     }
     
     void Update()
@@ -64,7 +66,23 @@ public class BarbarianBehavior : MonoBehaviour
         //If we found a player, start attacking him.
         if (foundplayer)
         {
+            currentState = State.waiting;
+        }
+    }
+    
+    private void WhileGrowingSpear()
+    {
+        //Grow the spear
+        
+        timer += Time.deltaTime;
+        
+        currentSpear.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, timer / spearGrowTime);
+        
+        if (timer >= spearGrowTime)
+        {
+            currentSpear.transform.localScale = Vector3.one;
             currentState = State.aiming;
+            timer -= spearGrowTime;
         }
     }
     
@@ -72,17 +90,27 @@ public class BarbarianBehavior : MonoBehaviour
     {
         //Aim
         
-        if (currentSpear == null)
+        timer += Time.deltaTime;
+        
+        if (timer >= aimTime)
         {
-            CreateSpear();
+            ThrowSpear();
+            timer -= aimTime;
+            currentState = State.waiting;
         }
+    }
+    
+    private void WhileWaiting()
+    {
+        //Wait, the create another spear to throw.
         
         timer += Time.deltaTime;
         
-        if (timer > throwDelay)
+        if (timer >= waitTime)
         {
-            ThrowSpear();
-            timer -= throwDelay;
+            currentState = State.growingSpear;
+            timer -= waitTime;
+            CreateSpear();
         }
     }
     
@@ -96,7 +124,7 @@ public class BarbarianBehavior : MonoBehaviour
         
         currentSpear = spear.GetComponent<ThrowableBehavior>();
         
-        currentSpear.PickUp(transform, new Vector3(1, 1, 0));
+        currentSpear.PickUp(transform, new Vector3(0.5f, 0.5f, 0));
     }
     
     private void ThrowSpear()
@@ -108,7 +136,23 @@ public class BarbarianBehavior : MonoBehaviour
         
         float gravity =  Physics2D.gravity.y * currentSpear.rigidbody2D.gravityScale;
         
-        Vector2 velocity = PhysicsUtils.AimProjectile2D(spearPos, targPos, throwSpeed, gravity * -1);
+        Vector2 velocity;
+        
+        try
+        {
+            velocity = PhysicsUtils.AimProjectile2D(spearPos, targPos, throwSpeed, gravity * -1);
+        }
+        catch (ProjectileCantReachException e)
+        {
+            //If the projectile can't reach the target, then just throw it as far as you can.
+            float angle = Mathf.PI / 4;
+            
+            velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+            velocity *= throwSpeed;
+            
+            //Make sure it's thrown in the right direction.
+            velocity.x *= Mathf.Sign(targPos.x - spearPos.x);
+        }
         
         currentSpear.Throw(velocity);
         currentSpear = null;

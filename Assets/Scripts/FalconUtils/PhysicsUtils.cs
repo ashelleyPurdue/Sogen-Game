@@ -9,6 +9,7 @@ public static class PhysicsUtils
     {
         //Returns the velocity vector a projectile should be launched at to hit a target in 2D space, given a set travel time.
         
+        //Calculate the output
         Vector2 output = Vector2.zero;
         
         output.x = (end.x - start.x) / time;
@@ -20,6 +21,16 @@ public static class PhysicsUtils
     public static Vector2 AimProjectile2D(Vector2 start, Vector2 end, float velocity, float gravity, float tolerance = 0.1f)
     {
         //Returns the velocity vector a projectile should be launched at to hit a target in 2D space, given a set initial velocity.
+        
+        //Throw an error if it can't reach.
+        float maxRange = FindProjectileRange2D(start.y - end.y,
+            new Vector2(velocity * Mathf.Cos(Mathf.PI / 4), velocity * Mathf.Cos(Mathf.PI / 4)),
+            gravity);
+        
+        if (Mathf.Abs(maxRange) < Mathf.Abs(start.x - end.x))
+        {
+            throw new ProjectileCantReachException();
+        }
         
         //Find the launch angle.
         ProjectileSimulator2D simulator = new ProjectileSimulator2D(start, end, velocity, gravity, tolerance);
@@ -34,7 +45,7 @@ public static class PhysicsUtils
         
         return output;
     }
-    
+   
     public class ProjectileSimulator2D
     {
         public readonly Vector2 start;
@@ -66,12 +77,7 @@ public static class PhysicsUtils
             shiftEnd.y = 0;
             
             //Find the range of the shifted projectile
-            float cosPart = velocity * Mathf.Cos(angle) / gravity;
-            float sinPart = velocity * Mathf.Sin(angle);
-            float insideSqrt = (sinPart * sinPart) + (2 * gravity * shiftStart.y);
-            float sqrtPart = Mathf.Sqrt(insideSqrt);
-            
-            float range = cosPart * (sinPart + sqrtPart);
+            float range = FindProjectileRange2D(shiftStart.y, new Vector2(velocity * Mathf.Cos(angle), velocity * Mathf.Sin(angle)), gravity);
             
             //Find the difference between where we landed and where the end is.
             float landedX = shiftStart.x + range;
@@ -83,4 +89,22 @@ public static class PhysicsUtils
             return (Mathf.Abs(diff) <= tolerance);
         }
     }
+
+    //--Find projectile range--
+    
+    public static float FindProjectileRange2D(float height, Vector2 velocity, float gravity)
+    {
+        //Returns how far a projectile will fly before hitting the ground
+        
+        float cosPart = velocity.x / gravity;
+        float sinPart = velocity.y;
+        float insideSqrt = (sinPart * sinPart) + (2 * gravity * height);
+        float sqrtPart = Mathf.Sqrt(insideSqrt);
+        
+        return cosPart * (sinPart + sqrtPart);
+    }
+}
+
+public class ProjectileCantReachException : System.Exception
+{
 }

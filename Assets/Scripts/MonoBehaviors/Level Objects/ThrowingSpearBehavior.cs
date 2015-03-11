@@ -33,7 +33,7 @@ public class ThrowingSpearBehavior : MonoBehaviour
         lastPos = Utils.ToVector2(transform.position);
        
         //Disappear after a certain time.
-        if (false)
+        if (thrown)
         {
             timer += Time.deltaTime;
             
