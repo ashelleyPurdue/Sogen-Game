@@ -202,7 +202,7 @@ public static class Utils
          * increments: An array of increments.  These should get progressively smaller
          */
         float output = startingValue;
-
+        
         //Use every increment in the list to get increasingly more precise
         for (int i = 0; i < increments.Length; i++)
         {
@@ -226,15 +226,18 @@ public static class Utils
         float output = startingValue;
 
         int iterations = 0;
-
+  
         while (iterations < maxIterations)
         {
             iterations++;
-
+            
+            //Increment the output.
             output += increment;
-
+            
+            //If it satisfies the condition, return output.  Else, keep going.
             if (SatisfiesCondition(output))
             {
+                //If undershoot is checked, move it down one.
                 if (undershoot)
                 {
                     output -= increment;
@@ -248,6 +251,33 @@ public static class Utils
         return output;
     }
     
+    public static float GuessValue(float startingValue, float endingValue, ConditionMethod SatisfiesCondition, bool undershoot, int maxIterations)
+    {
+        //Returns a value that is very close to making SatisfiesCondition true.
+        //Only tries number between startingValue and endingValue.
+        
+        float increment = (endingValue - startingValue) / maxIterations;
+        
+        float output = startingValue;
+        
+        for (int i = 0; i < maxIterations; i++)
+        {
+            output += increment;
+            
+            //If the condition is true, return.
+            if (SatisfiesCondition(output))
+            {
+                if (undershoot)
+                {
+                    output -= increment;
+                }
+                return output;
+            }
+        }
+        
+        //If too many iterations happened, throw exception.
+        throw new GuessValueMaxIterationException();
+    }
 }
 
 //Exceptions
