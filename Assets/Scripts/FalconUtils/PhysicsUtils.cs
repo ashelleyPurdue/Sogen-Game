@@ -35,9 +35,9 @@ public static class PhysicsUtils
         //Find the launch angle.
         ProjectileSimulator2D simulator = new ProjectileSimulator2D(start, end, velocity, gravity, tolerance);
         
-        float increment = 360 * Mathf.Deg2Rad / 1000;
+        float[] increments = {Mathf.PI / 4, Mathf.PI / 8, 1f};
         
-        float angle = Utils.GuessValue(0, simulator.WouldHit, increment, false);
+        float angle = Utils.GuessValue(0, simulator.WouldHit, increments, false);
         
         //Return the velocity vecotr
         Vector2 output = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
