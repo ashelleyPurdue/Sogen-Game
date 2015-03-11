@@ -206,8 +206,26 @@ public static class Utils
         //Use every increment in the list to get increasingly more precise
         for (int i = 0; i < increments.Length; i++)
         {
-            //Get closer using the new increment
-            output = GuessValue(output, SatisfiesCondition, increments[i], true, maxIterations);
+            float oldOutput = output;
+            
+            try
+            {
+                //Get closer using the new increment
+                output = GuessValue(output, SatisfiesCondition, increments[i], true, maxIterations);
+            }
+            catch (GuessValueMaxIterationException e)
+            {
+                //If there were too many iterations, use the next most precise increment, in case we skipped over it.
+                
+                output = oldOutput;     //Go back to output that the last increment gave us.
+                
+                //If there isn't a next increment, throw the exception.
+                if (i == increments.Length - 1)
+                {
+                    throw e;
+                }
+            }
+            
         }
 
         //If undershoot is false, then make sure the output "goes over"
