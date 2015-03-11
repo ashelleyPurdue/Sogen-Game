@@ -33,7 +33,7 @@ public class ThrowingSpearBehavior : MonoBehaviour
         lastPos = Utils.ToVector2(transform.position);
        
         //Disappear after a certain time.
-        if (thrown)
+        if (false)
         {
             timer += Time.deltaTime;
             
@@ -51,6 +51,9 @@ public class ThrowingSpearBehavior : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject.Destroy(this.gameObject);
+        if (!other.isTrigger)
+        {
+            GameObject.Destroy(this.gameObject, 0.1f);
+        }
     }
 }
