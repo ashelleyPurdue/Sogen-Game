@@ -93,50 +93,6 @@ public static class Utils
 		
 	}
 	
-	//---Tween Value---
-    //DO NOT USE ANYMORE.  USE Math.Lerp INSTEAD
-	public static float TweenValue(float inputValue, float targetValue, float speed){
-		//Tweens a variable towards a value, given a current value, a target value, and a speed.
-		//USAGE: variableToTween = Utils.TweenValue(variableToTween, targetValue, speed); 
-		
-		float output = inputValue;
-			
-		//Shift everything so that it's as if the target were zero.
-		output -= targetValue;
-
-		//If it's close enough to zero, then just set it to zero.
-		if (Mathf.Abs(output) - speed < 0){
-    		output = 0;
-    		}
-		else{
-    		output = (Mathf.Abs(output) - speed) * Mathf.Sign(output);
-    		}
-    
-		//Shift val back up to whatever target was before.
-		output += targetValue;
-		
-		return output;
-		
-	}
-	
-	public static float TweenValue(float startValue, float endValue, float timeToTake, float timeAlreadyTaken){
-		//Tweens a variable towards a value, given the starting value, ending value, the time to take, and the time already taken.
-		//USAGE: variableToTween = Utils.TweenValue(startValue, endValue, timeToTake, timeAlreadyTaken);
-		
-		float percentComplete = timeAlreadyTaken / timeToTake;
-		float difference = endValue - startValue;
-		
-		//Make sure the percent complete doesn't go over 1.00
-		if (percentComplete > 1){
-			percentComplete = 1;
-		}
-
-		float output = startValue + (percentComplete * difference);
-		
-		return output;
-		
-	}
-	
 	//PingPongPlus
 	
 	public static float PingPongPlus(float bottomValue, float topValue, float currentTime, float maxTime){
