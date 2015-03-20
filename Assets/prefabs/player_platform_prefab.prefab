@@ -360,6 +360,9 @@ MonoBehaviour:
   movementDeadzone: .100000001
   objectPickupRadius: 1
   climbSpeed: 2
+  deathLaunchSpeed: 10
+  deathRotTime: .5
+  deathFadeTime: .5
   maxThrowSpeed: 15
   maxThrowChargeTime: .5
   minThrowChargeTime: .200000003
@@ -402,7 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useDefaultHitDetection: 1
-  useDefaultDeathBehavior: 1
+  useDefaultDeathBehavior: 0
   hasInfiniteHealth: 0
   maxHealth: 5
   startingHealth: 5

@@ -31,7 +31,9 @@ public class HealthPoints : MonoBehaviour
 
 	private float previousHealth = 0f;
 	private float currentHealth = 0f;
-	
+
+	private bool sentDeathEvent = false;
+
 	//Events
 	
 	void Awake()
@@ -88,9 +90,14 @@ public class HealthPoints : MonoBehaviour
 		//Trigger death events
 		if (currentHealth <= 0 && currentHealth != previousHealth)
 		{
-			
-			transform.BroadcastMessage("OnDead", SendMessageOptions.DontRequireReceiver);
-			transform.SendMessageUpwards("OnDead", SendMessageOptions.DontRequireReceiver);
+			if (!sentDeathEvent)
+			{
+				transform.BroadcastMessage("OnDead", SendMessageOptions.DontRequireReceiver);
+				transform.SendMessageUpwards("OnDead", SendMessageOptions.DontRequireReceiver);
+
+				sentDeathEvent = true;
+			}
+
 			currentHealth = 0;
 		}
 		

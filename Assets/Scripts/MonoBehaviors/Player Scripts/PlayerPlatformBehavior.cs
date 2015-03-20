@@ -10,7 +10,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
     
     public static int currentSwae = 0;
     
-    public enum State {free, climbing};
+    public enum State {free, climbing, deathSpinning, deathFading};
     private State currentState = State.free;
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
@@ -26,6 +26,10 @@ public class PlayerPlatformBehavior : MonoBehaviour
     
     public float climbSpeed = 1f;
  
+	public float deathLaunchSpeed = 10f;
+	public float deathRotTime = 0.5f;
+	public float deathFadeTime = 0.5f;
+
     public float maxThrowSpeed = 10f;
     public float maxThrowChargeTime = 1f;
     public float minThrowChargeTime = 0.25f;
@@ -46,6 +50,8 @@ public class PlayerPlatformBehavior : MonoBehaviour
     private float mouseX;
     private float mouseY;
     
+	private float timer = 0f;
+
     //Events
 
     void Awake()
@@ -56,6 +62,8 @@ public class PlayerPlatformBehavior : MonoBehaviour
         //Add the state methods
         stateMethods.Add(State.free, WhileFree);
         stateMethods.Add(State.climbing, WhileClimbing);
+		stateMethods.Add (State.deathSpinning, WhileDeathSpinning);
+		stateMethods.Add (State.deathFading, WhileDeathFading);
     }
     
     void Start()
@@ -100,11 +108,16 @@ public class PlayerPlatformBehavior : MonoBehaviour
  
     void OnDead()
     {
-        //Refill the health
-        GetComponent<HealthPoints>().SetHealth(GetComponent<HealthPoints>().maxHealth);
-        
-        //Return to the checkpoint
-        CourseManager.ReturnToActiveCheckpoint();
+		//Start launching
+		Vector2 force = Vector2.zero;
+		force.x = Mathf.Cos(Mathf.PI / 2);
+		force.y = Mathf.Sin(Mathf.PI / 2);
+
+		force *= deathLaunchSpeed;
+
+		rigidbody2D.AddForce(force);
+
+		currentState = State.deathSpinning;
     }
     
     void OnLevelEnd()
@@ -352,5 +365,42 @@ public class PlayerPlatformBehavior : MonoBehaviour
             DismountLadder();
         }
     }
+
+	private void WhileDeathSpinning()
+	{
+		timer += Time.deltaTime;
+
+		//Rotate until flat
+		transform.rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0, 0, 90), timer / deathRotTime);
+
+		//When flat and on the ground, start fading.
+		if (timer >= deathRotTime)
+		{
+			transform.rotation = Quaternion.Euler(0, 0, 90);
+
+			if (GetComponent<PlatformCharacterMotor>().IsGrounded())
+			{
+				currentState = State.deathFading;
+				timer = 0f;
+			}
+		}
+	}
+
+	private void WhileDeathFading()
+	{
+		timer += Time.deltaTime;
+
+		//TODO: Fade
+
+		//Respawn
+		if (timer >= deathFadeTime)
+		{
+			//Refill the health
+			GetComponent<HealthPoints>().SetHealth(GetComponent<HealthPoints>().maxHealth);
+			
+			//Return to the checkpoint
+			CourseManager.ReturnToActiveCheckpoint();
+		}
+	}
 
 }
