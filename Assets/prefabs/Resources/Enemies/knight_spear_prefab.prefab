@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 175996}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -.518000007, y: -.250999987, z: 0}
-  m_LocalScale: {x: 1, y: 1.20000005, z: 1}
+  m_LocalScale: {x: 1, y: .75, z: 1}
   m_Children: []
   m_Father: {fileID: 475992}
   m_RootOrder: 0
@@ -283,9 +283,9 @@ MonoBehaviour:
   minSpearHeight: -.5
   maxSpearHeight: .75
   shieldMoveSpeed: 5
-  visionRadius: 10
-  minPauseTime: 2
-  maxPauseTime: 3
+  visionRadius: 7
+  minPauseTime: 4
+  maxPauseTime: 6
   minMoveTime: .25
   maxMoveTime: .5
   maxWanderDistance: .5
