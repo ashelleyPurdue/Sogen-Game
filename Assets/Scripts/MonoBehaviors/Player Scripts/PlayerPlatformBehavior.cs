@@ -17,6 +17,8 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
     public WhipBehavior myWhip;
  
+    public Transform graphics;
+    
     public CircleChartRenderer throwChargeMeter;
     public CircleChartRenderer throwChargeBackground;
     
@@ -104,6 +106,9 @@ public class PlayerPlatformBehavior : MonoBehaviour
         
         throwChargeMeter.color.a = currentChargeMeterAlpha;
         throwChargeBackground.color.a = currentChargeMeterAlpha;
+        
+        //Make the graphics face the right way.
+        FlipGraphics();
     }
  
     void OnDead()
@@ -150,7 +155,37 @@ public class PlayerPlatformBehavior : MonoBehaviour
         
         motor.JumpButton = Input.GetButton("Jump");
     }
-
+ 
+    private void FlipGraphics()
+    {
+        float xScale = 0;
+        
+        //If we're whipping, face the direction the whip is.
+        if (myWhip.CurrentState != WhipBehavior.WhipState.idle)
+        {
+            xScale = Mathf.Sign(Mathf.Cos(myWhip.CurrentEndAngle * Mathf.Deg2Rad));
+        }
+        else
+        {
+            //If we're in on the ground, then the scale depends on our direciton of motion.
+            if (motor.IsGrounded() && motor.ControllerInput.x != 0)
+            {
+                xScale = Mathf.Sign(motor.ControllerInput.x);
+            }
+            else
+            {
+                //If we're not on the ground, keep the same scale
+                xScale = graphics.localScale.x;
+            }
+        }
+        
+        //Update the scale
+        Vector3 scale = graphics.localScale;
+        scale.x = xScale;
+        graphics.localScale = scale;
+        
+    }
+    
     private void WhipControls()
     {
         //When left clicking, whip in the direction the mouse is pointing
@@ -314,7 +349,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
     }
     
     //State methods
-
+    
     private void WhileFree()
     {
         motor.enabled = true;

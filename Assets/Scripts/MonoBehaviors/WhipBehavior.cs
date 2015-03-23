@@ -38,7 +38,7 @@ public class WhipBehavior : MonoBehaviour
     {
         get { return endAngle; }
     }
-
+    
     //Private fields
 
     private Vector3 initialLocalPos;
