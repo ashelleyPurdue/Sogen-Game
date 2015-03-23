@@ -117,12 +117,19 @@ public class KnightBehavior : MonoBehaviour
     {
         //Start attacking with the spear with a chance
         
-        if (Random.value < spearChance && usesSpear && spear != null)
+        if (Random.value < spearChance)
+        {
+            Attack();
+        }
+    }
+    
+    private void Attack()
+    {
+        if (usesSpear && spear != null)
         {
             spear.Attack(Random.Range(minSpearHeight, maxSpearHeight));
         }
     }
-    
     
     //States
     
@@ -148,9 +155,13 @@ public class KnightBehavior : MonoBehaviour
         
         if (foundPlayer)
         {
-            //Pause for a random amount of time.
+            //Attack immediately
+            Attack();
+            
+            //Pause for a random amount of time before moving.
             currentState = State.pausing;
             timer = Random.Range(minPauseTime, maxPauseTime);   //Timer counts down in this state.
+            
         }
     }
     
@@ -199,8 +210,9 @@ public class KnightBehavior : MonoBehaviour
         
         if (timer <= 0)
         {
-            currentState = State.sleeping;
-            timer = 0f;
+            //Pause for a random amount of time.
+            currentState = State.pausing;
+            timer = Random.Range(minPauseTime, maxPauseTime);   //Timer counts down in this state.
             
             //Maybe activate the spear
             TrySpear();
