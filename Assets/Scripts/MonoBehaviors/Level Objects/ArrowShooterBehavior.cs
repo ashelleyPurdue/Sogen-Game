@@ -41,6 +41,18 @@ public class ArrowShooterBehavior : MonoBehaviour
         eyeShine.enabled = myNode.IsPowered();
     }
     
+    void OnPoweredChanged()
+    {
+        //When the power is turned on, immediately fire one shot.
+        
+        if (myNode.IsPowered())
+        {
+            CreateArrow();
+            currentState = State.warning;
+            timer = 0f;
+        }
+    }
+    
     //Misc methods
     
 	private void WhilePowered()
