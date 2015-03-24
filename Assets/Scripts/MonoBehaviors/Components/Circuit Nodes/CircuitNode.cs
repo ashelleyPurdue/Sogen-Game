@@ -10,7 +10,7 @@ public class CircuitNode : MonoBehaviour
 	public bool isInverted = false;
 	
 	protected bool isPowered = false;
-	
+    
 	//Events
 	protected virtual void Awake ()
 	{
@@ -106,8 +106,10 @@ public class CircuitNode : MonoBehaviour
 	{
 		//Updates the power state of this node and tells all output nodes to do the same.
 		
+        bool prevPowered = isPowered;
+        
 		//Update this node's power state
-		UpdatePowerState();
+        UpdatePowerState();
 		
 		//Tell all output nodes to update *their* circuitry.
 		foreach (CircuitNode outputNode in outputList)
@@ -120,6 +122,12 @@ public class CircuitNode : MonoBehaviour
 		{
 			transform.BroadcastMessage("LoadPowerState", IsPowered(), SendMessageOptions.DontRequireReceiver);
 		}
+        
+        //If the powered state ended up changing, send an event.
+        if (prevPowered != isPowered)
+        {
+            transform.BroadcastMessage("OnPoweredChanged", SendMessageOptions.DontRequireReceiver);
+        }
 
 	}
 	
