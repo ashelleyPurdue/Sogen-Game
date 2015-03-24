@@ -7,6 +7,8 @@ public class ArrowShooterBehavior : MonoBehaviour
     
     public Transform arrowPoint;
  
+    public SpriteRenderer eyeShine;
+    
     public float waitTime = 3f;
     public float warningTime = 0.5f;
     
@@ -34,6 +36,9 @@ public class ArrowShooterBehavior : MonoBehaviour
         {
             WhilePowered();
         }
+        
+        //Show/hide the eyeshine
+        eyeShine.enabled = myNode.IsPowered();
     }
     
     //Misc methods
