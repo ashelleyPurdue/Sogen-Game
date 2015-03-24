@@ -10,6 +10,50 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
 
+    public float deadzoneWidth = 5;
+    
+    public float deadzoneRightCenter = -7.5f;   //The deadzone's center when the player is moving right.
+    public float deadzoneLeftCenter = 7.5f;     //The deadzone's center when the player is moving left.
+    
+    public float goingRightThreshold = 1;       //When the target passes this while the camera is going left, the camera will start going right.
+    public float goingLeftThreshold = 1;        //When the target passes this while the camera is going right, the camera will start going left.
+    
+    private bool goingRight = true;
+    
+    public float DeadzoneLeftBound
+    {
+        get
+        {
+            float halfWidth = deadzoneWidth / 2;
+            
+            if (goingRight)
+            {
+                return deadzoneRightCenter - halfWidth;
+            }
+            else
+            {
+                return deadzoneLeftCenter - halfWidth;
+            }
+        }
+    }
+    
+    public float DeadzoneRightBound
+    {
+        get
+        {
+            float halfWidth = deadzoneWidth / 2;
+            
+            if (goingRight)
+            {
+                return deadzoneRightCenter + halfWidth;
+            }
+            else
+            {
+                return deadzoneLeftCenter + halfWidth;
+            }
+        }
+    }
+    
     public Transform target;
 
     public float Height
@@ -105,11 +149,14 @@ public class SidescrollerCameraBehavior : MonoBehaviour
   
         if (!lockedInPlace)
         {
-            //Move the target back in to the deadzone
-            float xPos = targetPosition.x;
+            ChangeDirection();    
+                    
             if (!TargetInDeadzone(targetPosition.x))
             {
-                float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
+                //Move the target back in to the deadzone
+                float xPos = targetPosition.x;
+                
+                float increment = 0.01f * Mathf.Sign(target.position.x - (DeadzoneLeftBound + xPos));
        
                 try
                 {
@@ -133,18 +180,29 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        //Draw the deadzone
         float height = 10;
+        Vector3 pos = new Vector3(targetPosition.x, targetPosition.y, 0);
         
-        Vector2 pos = new Vector2(targetPosition.x, targetPosition.y);
-        
-        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
-        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
+        //Draw the deadzone        
+        Vector3 pointA = new Vector3(DeadzoneLeftBound, height / 2, 0);
+        Vector3 pointB = new Vector3(DeadzoneRightBound, -height / 2, 0);
         
         pointA += pos;
         pointB += pos;
 
-        Debug.DrawLine(new Vector3(pointA.x, pointA.y, 0), new Vector3(pointB.x, pointB.y));
+        Debug.DrawLine(pointA, pointB);
+        
+        //Draw the thresholds
+        
+        Vector3 rightThreshold = new Vector3(goingRightThreshold, 0, 0);
+        Vector3 leftThreshold = new Vector3(goingLeftThreshold, 0, 0);
+        Vector3 heightVector = new Vector3(0, height / 2, 0);
+        
+        rightThreshold += pos;
+        leftThreshold += pos;
+        
+        Debug.DrawLine(rightThreshold - heightVector, rightThreshold + heightVector);
+        Debug.DrawLine(leftThreshold - heightVector, leftThreshold + heightVector);
     }
 
     //Misc methods
@@ -199,6 +257,9 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     {
         return rightBoundpost;
     }
+    
+    
+    //Private misc methods
     
     private bool TargetInDeadzone(float xPos)
     {
@@ -279,6 +340,27 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         //Update the position
         targetPosition = new Vector3(newX, targetPosition.y, targetPosition.z);
     }
-
+ 
+    private void ChangeDirection()
+    {
+        //Changes goingRight depending on which way the target is going.
+        
+        Bounds targBounds = target.collider2D.bounds;
+        
+        if (goingRight)
+        {
+            if (targBounds.min.x < goingLeftThreshold + targetPosition.x)
+            {
+                goingRight = false;
+            }
+        }
+        else
+        {
+            if (targBounds.max.x > goingRightThreshold + targetPosition.x)
+            {
+                goingRight = true;
+            }
+        }
+    }
    
 }
