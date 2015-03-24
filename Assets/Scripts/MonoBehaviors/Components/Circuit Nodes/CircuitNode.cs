@@ -126,7 +126,14 @@ public class CircuitNode : MonoBehaviour
         //If the powered state ended up changing, send an event.
         if (prevPowered != isPowered)
         {
-            transform.BroadcastMessage("OnPoweredChanged", SendMessageOptions.DontRequireReceiver);
+            try
+            {
+                transform.BroadcastMessage("OnPoweredChanged", SendMessageOptions.DontRequireReceiver);
+            }
+            catch (MissingReferenceException e)
+            {
+                //Do nothing, because this object has been destroyed.
+            }
         }
 
 	}
