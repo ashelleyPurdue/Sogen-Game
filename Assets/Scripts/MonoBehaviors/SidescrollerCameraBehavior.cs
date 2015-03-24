@@ -7,19 +7,9 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     private const float MAX_CAMERA_SPEED = 30f;
     private const float BACK_DISTANCE = -100f;  //The camera's z position
     
-    public float deadzoneWidth = 5;
-    public float deadzoneCenter = -7.5f;
- 
-    public float DeadzoneLeftBound
-    {
-        get { return deadzoneCenter - (deadzoneWidth / 2);}
-    }
-    
-    public float DeadzoneRightBound
-    {
-        get { return deadzoneCenter + (deadzoneWidth / 2);}
-    }
-    
+    public float deadzoneLeftBound = - 10;
+    public float deadzoneRightBound = -5;
+
     public Transform target;
 
     public float Height
@@ -42,8 +32,6 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     private BoxCollider2D myTrigger;
  
     private bool lockedInPlace = false;
-    
-    private bool goingRight = true;
     
     private int framesToJumpToPlayer = 1;    //At the start of the level, the camera has this many frames to jump to the player, to account for the player using different entrances.
     
@@ -121,7 +109,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
             float xPos = targetPosition.x;
             if (!TargetInDeadzone(targetPosition.x))
             {
-                float increment = 0.01f * Mathf.Sign(target.position.x - (DeadzoneLeftBound + xPos));
+                float increment = 0.01f * Mathf.Sign(target.position.x - (deadzoneLeftBound + xPos));
        
                 try
                 {
@@ -150,8 +138,8 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         
         Vector2 pos = new Vector2(targetPosition.x, targetPosition.y);
         
-        Vector2 pointA = new Vector2(DeadzoneLeftBound, height / 2);
-        Vector2 pointB = new Vector2(DeadzoneRightBound, -height / 2);
+        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
+        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
         
         pointA += pos;
         pointB += pos;
@@ -221,8 +209,8 @@ public class SidescrollerCameraBehavior : MonoBehaviour
 
         Vector2 pos = new Vector2(xPos, targetPosition.y);
 
-        Vector2 pointA = new Vector2(DeadzoneLeftBound, height / 2);
-        Vector2 pointB = new Vector2(DeadzoneRightBound, -height / 2);
+        Vector2 pointA = new Vector2(deadzoneLeftBound, height / 2);
+        Vector2 pointB = new Vector2(deadzoneRightBound, -height / 2);
 
         pointA += pos;
         pointB += pos;
