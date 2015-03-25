@@ -88,7 +88,7 @@ MonoBehaviour:
   vulnerableTo: 
   invulnerableTo: 
   invulnerableToObjects: []
-  cooldownTime: .25
+  cooldownTime: .5
 --- !u!212 &21263198
 SpriteRenderer:
   m_ObjectHideFlags: 1
