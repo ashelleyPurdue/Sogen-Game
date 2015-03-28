@@ -124,6 +124,9 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
 		currentState = State.deathSpinning;
         
+        //Lose all swae
+        currentSwae = 0;
+        
         //Create the "Try Again" text.
         EffectManager.Instance.TextFade("tryAgain_text", transform.position, 0.5f, 2, 0.25f, 0.25f, 4);
     }
