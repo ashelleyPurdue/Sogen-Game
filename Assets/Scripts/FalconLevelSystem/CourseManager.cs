@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public static class CourseManager
 {
-    //CURRENT TASK: Encapsulating
-
     private static Course activeCourse = null;          //The course that is currently being played.
     private static Checkpoint activeCheckpoint = null;  //The checkpoint that the player last reached.
 
