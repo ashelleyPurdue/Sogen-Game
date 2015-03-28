@@ -123,6 +123,9 @@ public class PlayerPlatformBehavior : MonoBehaviour
 		rigidbody2D.AddForce(force);
 
 		currentState = State.deathSpinning;
+        
+        //Create the "Try Again" text.
+        EffectManager.Instance.TextFade("tryAgain_text", transform.position, 5, 2);
     }
     
     void OnLevelEnd()
