@@ -9,7 +9,9 @@ public class CheckpointBehavior : MonoBehaviour
 
     public string courseName;
     public string checkpointName;
-
+ 
+    public CheckpointFlameAnimation flame;
+    
     private Checkpoint checkpoint;
 
     //Events
@@ -34,7 +36,13 @@ public class CheckpointBehavior : MonoBehaviour
             checkpoint = CourseManager.GetCheckpoint(courseName, checkpointName);
         }
     }
-
+    
+    void Update()
+    {
+        //Show/hide the falme
+        flame.visible = checkpoint.Activated;
+    }
+    
     public void OnTriggerStay2D(Collider2D other)
     {
         //Activate the checkpoint when the player touches it.
