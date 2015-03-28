@@ -95,6 +95,30 @@ public class EffectManager : MonoBehaviour
         star.transform.position = pos;
     }
     
+    public void TextFade(string imagePath, Vector3 pos, float stayTime, float scale, float growTime = 0.25f, float fadeTime = 0.25f, float fadeOutScale = 2f)
+    {
+        //Creates a text fade at the specified position.
+        
+        //Create the object
+        GameObject text = new GameObject("Text fader");
+        
+        SpriteRenderer sprRend = text.AddComponent<SpriteRenderer>();
+        TextFaderAnimation fader = text.AddComponent<TextFaderAnimation>();
+        
+        //Configure the object.
+        sprRend.sprite = (Sprite)(Resources.Load(imagePath, typeof(Sprite)));
+        
+        fader.stayScale = scale;
+        
+        fader.stayTime = stayTime;
+        fader.growTime = growTime;
+        fader.fadeOutTime = fadeTime;
+        fader.fadeOutScale = fadeOutScale;
+        
+        //Move the object to the position
+        text.transform.position = pos;
+    }
+    
     //State Machine methods
 
     private void WhileNone()
