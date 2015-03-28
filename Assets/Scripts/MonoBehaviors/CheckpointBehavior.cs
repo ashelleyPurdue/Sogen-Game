@@ -40,7 +40,10 @@ public class CheckpointBehavior : MonoBehaviour
     void Update()
     {
         //Show/hide the falme
-        flame.visible = checkpoint.Activated;
+        if (flame != null)
+        {
+            flame.visible = checkpoint.Activated;
+        }
     }
     
     public void OnTriggerStay2D(Collider2D other)
