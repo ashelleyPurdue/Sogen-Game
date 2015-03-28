@@ -42,13 +42,25 @@ public class CheckpointBehavior : MonoBehaviour
         {
             if (!checkpoint.Activated)
             {
-                checkpoint.Activate();
-                CourseManager.SetActiveCheckpoint(checkpoint);
-                
-                //Create the text
-                Vector3 pos = GetComponent<LevelEntranceBehavior>().dropOffPoint.position;
-                EffectManager.Instance.TextFade("checkpoint_text", pos, 0.5f, 2, 0.25f, 0.25f, 4);
+                Activate();
             }
         }
+    }
+    
+    //Misc methods
+    
+    private void Activate()
+    {
+        //Activate the checkpoint
+        checkpoint.Activate();
+        CourseManager.SetActiveCheckpoint(checkpoint);
+        
+        //Refill the player's health
+        HealthPoints playerHP = TagList.FindOnlyObjectWithTag("Player").GetComponent<HealthPoints>();
+        playerHP.SetHealth(playerHP.maxHealth);
+        
+        //Create the text
+        Vector3 pos = GetComponent<LevelEntranceBehavior>().dropOffPoint.position;
+        EffectManager.Instance.TextFade("checkpoint_text", pos, 0.5f, 2, 0.25f, 0.25f, 4);
     }
 }
