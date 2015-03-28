@@ -47,7 +47,7 @@ public class CheckpointBehavior : MonoBehaviour
                 
                 //Create the text
                 Vector3 pos = GetComponent<LevelEntranceBehavior>().dropOffPoint.position;
-                EffectManager.Instance.TextFade("checkpoint_text", pos, 3, 2, 0.25f, 0.25f, 4);
+                EffectManager.Instance.TextFade("checkpoint_text", pos, 0.5f, 2, 0.25f, 0.25f, 4);
             }
         }
     }
