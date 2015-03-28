@@ -89,12 +89,6 @@ public static class CourseManager
     {
         //Returns to the currently active checkpoint.  You must currently be playing a course.
 
-        //Throw an error if not in a course
-        if (!IsPlayingCourse())
-        {
-            throw new NoActiveCourseException();
-        }
-
         //Throw an error if there is no active checkpoint.
         if (activeCheckpoint == null)
         {
