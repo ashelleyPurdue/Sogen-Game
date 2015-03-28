@@ -363,7 +363,7 @@ MonoBehaviour:
   climbSpeed: 2
   deathLaunchSpeed: 10
   deathRotTime: .5
-  deathFadeTime: .5
+  deathFadeTime: 1
   maxThrowSpeed: 15
   maxThrowChargeTime: .5
   minThrowChargeTime: .200000003

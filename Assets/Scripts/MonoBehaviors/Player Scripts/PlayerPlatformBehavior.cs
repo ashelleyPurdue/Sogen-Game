@@ -30,7 +30,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
  
 	public float deathLaunchSpeed = 10f;
 	public float deathRotTime = 0.5f;
-	public float deathFadeTime = 0.5f;
+	public float deathFadeTime = 1f;
 
     public float maxThrowSpeed = 10f;
     public float maxThrowChargeTime = 1f;
@@ -125,7 +125,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
 		currentState = State.deathSpinning;
         
         //Create the "Try Again" text.
-        EffectManager.Instance.TextFade("tryAgain_text", transform.position, 5, 2);
+        EffectManager.Instance.TextFade("tryAgain_text", transform.position, 0.5f, 2, 0.25f, 0.25f, 4);
     }
     
     void OnLevelEnd()
