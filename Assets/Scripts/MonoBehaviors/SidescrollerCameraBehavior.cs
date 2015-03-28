@@ -5,7 +5,7 @@ using System.Collections;
 public class SidescrollerCameraBehavior : MonoBehaviour
 {
     private const float MAX_CAMERA_SPEED = 30f;
-    private const float BACK_DISTANCE = -100f;  //The camera's z position
+    private const float BACK_DISTANCE = -20f;  //The camera's z position
     
     public float deadzoneLeftBound = - 10;
     public float deadzoneRightBound = -5;
@@ -27,7 +27,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
     private Transform leftBoundpost = null;
     private Transform rightBoundpost = null;
 
-    private Vector3 targetPosition;
+    private Vector2 targetPosition;
 
     private BoxCollider2D myTrigger;
  
@@ -72,7 +72,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         }
 
         //Set the target position to here.
-        targetPosition = transform.position;
+        targetPosition = new Vector2(transform.position.x, transform.position.y);
         
         //Set the z position
         transform.position = Utils.SetVector(transform.position, null, null, BACK_DISTANCE);
@@ -96,11 +96,14 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         }
         
         //Move toward the target position
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
+        Vector2 pos2D = new Vector2(transform.position.x, transform.position.y);
+        pos2D = Vector2.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
+        
+        transform.position = pos2D;
         
         //Set the z-pos
         Vector3 pos = transform.position;
-        pos.z = -20;
+        pos.z = BACK_DISTANCE;
         transform.position = pos;
     }
     
@@ -282,7 +285,7 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         }
         
         //Update the position
-        targetPosition = new Vector3(newX, targetPosition.y, targetPosition.z);
+        targetPosition = new Vector2(newX, targetPosition.y);
     }
 
    
