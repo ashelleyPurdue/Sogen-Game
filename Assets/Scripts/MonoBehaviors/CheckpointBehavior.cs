@@ -40,8 +40,15 @@ public class CheckpointBehavior : MonoBehaviour
         //Activate the checkpoint when the player touches it.
         if (TagList.ObjectHasTag(other, "Player"))
         {
-            checkpoint.Activate();
-            CourseManager.SetActiveCheckpoint(checkpoint);
+            if (!checkpoint.Activated)
+            {
+                checkpoint.Activate();
+                CourseManager.SetActiveCheckpoint(checkpoint);
+                
+                //Create the text
+                Vector3 pos = GetComponent<LevelEntranceBehavior>().dropOffPoint.position;
+                EffectManager.Instance.TextFade("checkpoint_text", pos, 3, 2, 0.25f, 0.25f, 4);
+            }
         }
     }
 }
