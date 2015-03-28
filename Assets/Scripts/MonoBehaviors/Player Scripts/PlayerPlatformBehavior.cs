@@ -79,6 +79,12 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
     void Update()
     {
+        //Change the z-position
+        Vector3 pos = transform.position;
+        pos.z = -1;
+        transform.position = pos;
+        
+        //Finite state machine
         stateMethods[currentState]();
         
         //Pause button

@@ -90,6 +90,8 @@ public class EffectManager : MonoBehaviour
     {
         //Creates a whipstar at the specified position
         
+        pos.z = -10;
+        
         GameObject star = new GameObject("whipstar");
         star.AddComponent<WhipStarBehavior>();
         star.transform.position = pos;
@@ -116,6 +118,7 @@ public class EffectManager : MonoBehaviour
         fader.fadeOutScale = fadeOutScale;
         
         //Move the object to the position
+        pos.z = -15;
         text.transform.position = pos;
     }
     

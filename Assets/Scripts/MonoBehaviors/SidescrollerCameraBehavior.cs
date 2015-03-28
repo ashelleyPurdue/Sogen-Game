@@ -97,6 +97,11 @@ public class SidescrollerCameraBehavior : MonoBehaviour
         
         //Move toward the target position
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, MAX_CAMERA_SPEED * Time.deltaTime);
+        
+        //Set the z-pos
+        Vector3 pos = transform.position;
+        pos.z = -20;
+        transform.position = pos;
     }
     
 	void FixedUpdate ()
