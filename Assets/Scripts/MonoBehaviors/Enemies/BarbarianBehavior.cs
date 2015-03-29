@@ -125,6 +125,8 @@ public class BarbarianBehavior : MonoBehaviour
         currentSpear = spear.GetComponent<ThrowableBehavior>();
         
         currentSpear.PickUp(transform, new Vector3(0.5f, 0.5f, 0));
+        
+        ToggleSpearCollider(false);
     }
     
     private void ThrowSpear()
@@ -168,7 +170,19 @@ public class BarbarianBehavior : MonoBehaviour
             Debug.Log("WARNING: GuessValue failed when throwing spear.  Defaulting to 45 degrees.");
         }
         
+        ToggleSpearCollider(true);
+        
         currentSpear.Throw(velocity);
         currentSpear = null;
+    }
+    
+    private void ToggleSpearCollider(bool enabled)
+    {
+        //disable the colliders for the spear
+        Collider2D[] cols = currentSpear.GetComponents<Collider2D>();
+        foreach (Collider2D c in cols)
+        {
+            c.enabled = enabled;
+        }
     }
 }
