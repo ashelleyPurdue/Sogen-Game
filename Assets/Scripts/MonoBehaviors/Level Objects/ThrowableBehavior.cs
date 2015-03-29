@@ -46,6 +46,14 @@ public class ThrowableBehavior : MonoBehaviour
     
     //Interface
     
+    public void EnablePhysics(bool enablePhys)
+    {
+        //Enables/disables physics for this object.
+        
+        rigidbody2D.isKinematic = !enablePhys;
+        collider2D.enabled = enablePhys;
+    }
+    
     public void PickUp(Transform carrier, Vector3 carryCoords)
     {
         //Picks this object up.
@@ -83,15 +91,13 @@ public class ThrowableBehavior : MonoBehaviour
     private void WhileFree()
     {
         //Enable physics
-        rigidbody2D.isKinematic = false;
-        collider2D.enabled = true;
+        EnablePhysics(true);
     }
     
     private void WhilePickingUp()
     {
         //Disable physics
-        rigidbody2D.isKinematic = true;
-        collider2D.enabled = false;
+        EnablePhysics(false);
         
         //Move to the carry pos.
         Vector2 pos2D = new Vector2(transform.localPosition.x, transform.localPosition.y);
@@ -108,15 +114,13 @@ public class ThrowableBehavior : MonoBehaviour
     
     private void WhileCarrying()
     {
-        //Disable physics
-        rigidbody2D.isKinematic = true;
-        collider2D.enabled = false;
+        EnablePhysics(false);
     }
     
     private void WhileJustThrown()
     {
         //Enable physics, but not the collider
-        rigidbody2D.isKinematic = false;
+        EnablePhysics(true);
         collider2D.enabled = false;
         
         timer += Time.deltaTime;
