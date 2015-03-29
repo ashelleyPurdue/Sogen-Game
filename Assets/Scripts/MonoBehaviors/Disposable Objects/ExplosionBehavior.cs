@@ -47,6 +47,8 @@ public class ExplosionBehavior : MonoBehaviour
         
         col.radius = radius;
         col.isTrigger = true;
+        
+        GetComponent<DamageSource>().AddDamageTag(DamageTags.Explosion);
     }
     
     void FixedUpdate()
