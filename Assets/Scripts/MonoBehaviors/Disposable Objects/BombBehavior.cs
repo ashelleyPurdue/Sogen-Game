@@ -30,7 +30,12 @@ public class BombBehavior : MonoBehaviour
     }
     
     void Update()
-    {     
+    {   
+        //Move to the correct z pos
+        Vector3 pos = transform.position;
+        pos.z = -2;
+        transform.position = pos;
+        
         //Count down while fuse is lit.
         if (fuseLit)
         {
