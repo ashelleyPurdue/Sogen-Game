@@ -1673,11 +1673,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 482170, guid: effa2a9727b958e4dbfd7789c3cc2f1d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -4.36000013
       objectReference: {fileID: 0}
     - target: {fileID: 482170, guid: effa2a9727b958e4dbfd7789c3cc2f1d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3.1400001
       objectReference: {fileID: 0}
     - target: {fileID: 482170, guid: effa2a9727b958e4dbfd7789c3cc2f1d, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupSpeed: 10
-  throwColliderDelay: .25
+  throwColliderDelay: .100000001
 --- !u!50 &724964570
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -2040,7 +2040,7 @@ Transform:
   m_PrefabInternal: {fileID: 281724965}
   m_GameObject: {fileID: 724964568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.36000013, y: -3.1400001, z: 0}
   m_LocalScale: {x: .5, y: .5, z: 1}
   m_Children:
   - {fileID: 230552494}
