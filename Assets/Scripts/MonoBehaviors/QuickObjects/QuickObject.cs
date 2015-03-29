@@ -51,8 +51,7 @@ public abstract class QuickObject : MonoBehaviour
         //Update the texture tiling.
         if (autoStretchTexture)
         {
-            //Vector2 inverseSize = new Vector2(1 / boxCol.size.x, 1 / boxCol.size.y);
-            //renderer.sharedMaterial.SetTextureScale("_MainTex", inverseSize);
+            UpdateTextureScale();
         }
 
     }
@@ -71,5 +70,10 @@ public abstract class QuickObject : MonoBehaviour
         CreateMesh();
         UpdateCollider();
         UpdateTexture();
+    }
+            
+    //Overridden methods
+    protected virtual void UpdateTextureScale()
+    {
     }
 }

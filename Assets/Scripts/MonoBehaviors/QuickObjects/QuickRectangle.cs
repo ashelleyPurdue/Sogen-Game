@@ -15,7 +15,7 @@ public class QuickRectangle : QuickObject
     private BoxCollider2D boxCol;
 
     //Misc methods
-
+    
     protected override void CreateMesh()
     {
         //Create the filter's mesh if it doesn't exist.
@@ -49,6 +49,15 @@ public class QuickRectangle : QuickObject
         
         boxCol.center = (pointA + pointB) / 2;
         boxCol.size = new Vector2(Mathf.Abs(pointA.x - pointB.x), Mathf.Abs(pointA.y - pointB.y));
+    }
+    
+    protected override void UpdateTextureScale()
+    {
+        Vector2 scale = pointB - pointA;
+        scale.x = 1f / scale.x;
+        scale.y = 1f / scale.y;
+        
+        renderer.material.SetTextureScale("_MainTex", scale);
     }
 }
 
