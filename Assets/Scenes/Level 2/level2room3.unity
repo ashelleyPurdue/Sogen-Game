@@ -4027,7 +4027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5778a84a5765544b11c9fd127e5c7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outputList: []
+  outputList:
+  - {fileID: 1902205850}
   isInverted: 0
   isPersistent: 0
   isEnabled: 0
@@ -7367,6 +7368,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11463198, guid: ea1470a96a77d634aaee4862c87b4213, type: 2}
+      propertyPath: outputList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 463198, guid: ea1470a96a77d634aaee4862c87b4213, type: 2}
       propertyPath: m_LocalPosition.x
       value: 17
@@ -7403,6 +7408,10 @@ Prefab:
       propertyPath: m_Name
       value: bomb_switch
       objectReference: {fileID: 0}
+    - target: {fileID: 11463198, guid: ea1470a96a77d634aaee4862c87b4213, type: 2}
+      propertyPath: outputList.Array.data[0]
+      value: 
+      objectReference: {fileID: 1902205850}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ea1470a96a77d634aaee4862c87b4213, type: 2}
   m_RootGameObject: {fileID: 550822766}

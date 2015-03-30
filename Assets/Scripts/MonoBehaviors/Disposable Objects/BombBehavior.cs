@@ -11,6 +11,8 @@ public class BombBehavior : MonoBehaviour
     
     public float timeLeft = 1f;
     
+    public float blastRadius = 2f;
+    
     public ParticleSystem myParticles;
     
     public bool fuseLit = false;
@@ -66,6 +68,6 @@ public class BombBehavior : MonoBehaviour
         //TODO: Create explosion
         GameObject.Destroy(gameObject);
         
-        ExplosionBehavior.CreateExplosion(transform.position, 1, 0.5f);
+        ExplosionBehavior.CreateExplosion(transform.position, blastRadius, 0.5f);
     }
 }
