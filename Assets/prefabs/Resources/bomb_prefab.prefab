@@ -30,6 +30,7 @@ GameObject:
   - 50: {fileID: 5082168}
   - 114: {fileID: 11482168}
   - 114: {fileID: 11477172}
+  - 114: {fileID: 11483160}
   m_Layer: 0
   m_Name: bomb_prefab
   m_TagString: Untagged
@@ -100,6 +101,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeLeft: 5
+  blastRadius: 2
   myParticles: {fileID: 19882168}
   fuseLit: 0
 --- !u!114 &11482168
@@ -115,6 +117,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickupSpeed: 10
   throwColliderDelay: .0299999993
+--- !u!114 &11483160
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 182170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06337a56b6c68ba4b9abf2af0aa90373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useDefaultHitDetection: 1
+  useDefaultDeathBehavior: 1
+  hasInfiniteHealth: 0
+  maxHealth: 1
+  startingHealth: 1
+  vulnerableTo: 
+  invulnerableTo: 
+  invulnerableToObjects: []
+  cooldownTime: 1
 --- !u!198 &19882168
 ParticleSystem:
   m_ObjectHideFlags: 1

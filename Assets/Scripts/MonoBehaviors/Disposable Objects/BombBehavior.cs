@@ -31,6 +31,11 @@ public class BombBehavior : MonoBehaviour
         fuseLit = true;
     }
     
+    void OnDead()
+    {
+        Explode();
+    }
+    
     void Update()
     {   
         //Move to the correct z pos

@@ -5,6 +5,10 @@ public class BombSpawnerBehavior : MonoBehaviour
 {
     public Transform spawnPoint;
     
+    public float respawnTime = 1f;  //How long after the bomb is destroyed should it respawn.
+    
+    private float timer = 0f;
+    
     private BombBehavior bomb;
     
     //Events
@@ -16,7 +20,17 @@ public class BombSpawnerBehavior : MonoBehaviour
     
     void Update()
     {
-        CreateBomb();
+        //Create a bomb when the timer is up
+        if (!BombExists())
+        {
+            timer += Time.deltaTime;
+            
+            if (timer >= respawnTime)
+            {
+                CreateBomb();
+                timer = 0f;
+            }
+        }
     }
     
     //Misc methods
