@@ -6,16 +6,25 @@ using System.Collections;
 
 public class ExplosionBehavior : MonoBehaviour
 {
-    public float duration = 0.5f;
+    public const float GROW_TIME = 0.25f;
+    public const float DEFAULT_DAMAGE_DURATION = 0.25f;
+    public const float DEFAULT_FADE_TIME = 0.5f;
+    
+    public float damageDuration = DEFAULT_DAMAGE_DURATION;  //How long after growing is finished to deal damage.
+    public float fadeTime = DEFAULT_FADE_TIME;              //How long after growing to fade out for.
     
     public float radius = 1f;
     
+    public enum State {growing, fading};
+    private State currentState = State.growing;
+    
     private float timer = 0f;
     
+    private SpriteRenderer sprRenderer = null;
     
     //Static methods
     
-    public static ExplosionBehavior CreateExplosion(Vector3 position, float radius, float duration)
+    public static ExplosionBehavior CreateExplosion(Vector3 position, float radius, float damageDuration = DEFAULT_DAMAGE_DURATION, float fadeTime = DEFAULT_FADE_TIME)
     {
         //Creates an explosion at the given point.
         
@@ -31,7 +40,7 @@ public class ExplosionBehavior : MonoBehaviour
         //Configure the object
         explObj.transform.position = position;
         explosion.radius = radius;
-        explosion.duration = duration;
+        explosion.damageDuration = damageDuration;
         
         sprRend.sprite = (Sprite)(Resources.Load("explosion", typeof(Sprite)));
         
@@ -41,14 +50,19 @@ public class ExplosionBehavior : MonoBehaviour
     
     //Events
     
-    void Awake()
+    void Start()
     {
+        //Configure the collider
         CircleCollider2D col = GetComponent<CircleCollider2D>();
         
-        col.radius = radius;
+        col.radius = 1;
         col.isTrigger = true;
         
+        //Add damage tag
         GetComponent<DamageSource>().AddDamageTag(DamageTags.Explosion);
+        
+        //Get renderer
+        sprRenderer = GetComponent<SpriteRenderer>();
     }
     
     void FixedUpdate()
@@ -56,14 +70,45 @@ public class ExplosionBehavior : MonoBehaviour
         //Increment the timer.
         timer += Time.deltaTime;
         
-        //Update size
-        float scale = Mathf.Lerp(0, radius, timer / duration);
-        transform.localScale = new Vector3(scale, scale, 0);
-        
-        //Destroy when time is up.
-        if (timer >= duration)
+        //Finite state machine
+        if (currentState == State.growing)
         {
-            GameObject.Destroy(gameObject);
+            //While growing
+            
+            //Lerp size
+            float scale = Mathf.Lerp(0, radius, timer / GROW_TIME);
+            
+            //Move on when time is up
+            if (timer >= GROW_TIME)
+            {
+                timer -= GROW_TIME;
+                currentState = State.fading;
+                
+                scale = radius;
+            }
+            
+            //Update scale
+            transform.localScale = new Vector3(scale, scale, 0);
+        }
+        else if (currentState == State.fading)
+        {
+            //While fading
+            
+            //Update alpha
+            Color color = Color.Lerp(Color.white, new Color(1, 1, 1, 0), timer / fadeTime);
+            sprRenderer.material.color = color;
+            
+            //disable damage source after damage time is up
+            if (timer >= damageDuration)
+            {
+                GetComponent<DamageSource>().isHot = false;
+            }
+            
+            //Destroy when completely faded AND damage duration is over.
+            if (timer >= fadeTime && timer >= damageDuration)
+            {
+                GameObject.Destroy(gameObject);
+            }
         }
     }
 }

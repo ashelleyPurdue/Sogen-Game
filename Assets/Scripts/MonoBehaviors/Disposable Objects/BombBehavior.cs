@@ -65,9 +65,8 @@ public class BombBehavior : MonoBehaviour
     
     private void Explode()
     {
-        //TODO: Create explosion
         GameObject.Destroy(gameObject);
         
-        ExplosionBehavior.CreateExplosion(transform.position, blastRadius, 0.5f);
+        ExplosionBehavior.CreateExplosion(transform.position, blastRadius);
     }
 }
