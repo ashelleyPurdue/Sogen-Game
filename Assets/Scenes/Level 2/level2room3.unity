@@ -7635,7 +7635,7 @@ Transform:
   m_PrefabInternal: {fileID: 1043181859}
   m_GameObject: {fileID: 574627870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.39999998, y: -3, z: 0}
+  m_LocalPosition: {x: 27.7999992, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1907833310}
@@ -11239,6 +11239,10 @@ Prefab:
       propertyPath: waitTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11444246, guid: c347e4b739e20414a97d567fb8a72ecf, type: 2}
+      propertyPath: arrowSpeed
+      value: 6.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c347e4b739e20414a97d567fb8a72ecf, type: 2}
   m_RootGameObject: {fileID: 1410520131}
@@ -12820,6 +12824,10 @@ Prefab:
       propertyPath: waitTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11444246, guid: c347e4b739e20414a97d567fb8a72ecf, type: 2}
+      propertyPath: arrowSpeed
+      value: 6.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c347e4b739e20414a97d567fb8a72ecf, type: 2}
   m_RootGameObject: {fileID: 1006477063}
@@ -12887,7 +12895,7 @@ MonoBehaviour:
   eyeShine: {fileID: 1129830729}
   waitTime: 1
   warningTime: 1
-  arrowSpeed: 9
+  arrowSpeed: 6.5
 --- !u!212 &1006477067
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13285,11 +13293,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1.39999998
+      value: 27.7999992
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
       propertyPath: m_LocalPosition.z
@@ -13313,7 +13321,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
       propertyPath: m_RootOrder
-      value: 26
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
@@ -17488,7 +17496,7 @@ MonoBehaviour:
   eyeShine: {fileID: 2144823792}
   waitTime: 1
   warningTime: 1
-  arrowSpeed: 9
+  arrowSpeed: 6.5
 --- !u!212 &1410520134
 SpriteRenderer:
   m_ObjectHideFlags: 0
