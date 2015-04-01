@@ -19,6 +19,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
     //Movement variables
     public float movementDeadzone = 0.5f;   //The player will not move if the analog stick's magnitude is less than this
     public float climbSpeed = 1f;
+    public float ladderDismountSpeed = 3f;  //The velocity the player will "jump" at when dismounting a ladder.
     
     private PlatformCharacterMotor motor;
     
@@ -56,8 +57,6 @@ public class PlayerPlatformBehavior : MonoBehaviour
     private static float lastRoomHealth = -1;     //The amount of health the player had when he left the last room.
     
     public static int currentSwae = 0;
-    
-
     
     public WhipBehavior myWhip;
     public Transform graphics;
@@ -320,6 +319,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
     private void DismountLadder()
     {
+        //Go back to the free state.
         currentState = State.free;
     }
 
@@ -426,11 +426,18 @@ public class PlayerPlatformBehavior : MonoBehaviour
         
         //Climb the ladder.
         rigidbody2D.velocity = new Vector2(climbSpeed * Input.GetAxis("Horizontal"), climbSpeed * Input.GetAxis("Vertical"));
-
-        //Dismount if pressing jump or not touching a ladder
+  
+        //Dismount if not touching a ladder
+        if (!TouchingLadder())
+        {
+            DismountLadder();
+        }
+        
+        //Dismount and jump a little bit when pressing jump.
         if (Input.GetButtonDown("Jump") || !TouchingLadder())
         {
             DismountLadder();
+            rigidbody2D.velocity = Vector3.up * ladderDismountSpeed;
         }
     }
 

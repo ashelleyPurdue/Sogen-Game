@@ -354,22 +354,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6ead1bea0644c94da94f69106d33261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myWhip: {fileID: 11400004}
-  graphics: {fileID: 478536}
-  throwChargeMeter: {fileID: 11459120}
-  throwChargeBackground: {fileID: 11459122}
   movementDeadzone: .100000001
-  objectPickupRadius: 1
   climbSpeed: 2
+  ladderDismountSpeed: 5
   deathLaunchSpeed: 10
   deathRotTime: .5
   deathFadeTime: 1
+  throwChargeMeter: {fileID: 11459120}
+  throwChargeBackground: {fileID: 11459122}
+  objectPickupRadius: 1
   maxThrowSpeed: 15
   maxThrowChargeTime: .5
   minThrowChargeTime: .200000003
   chargeMeterFadeSpeed: 2
   startInCourse: 0
   courseToStartIn: 
+  myWhip: {fileID: 11400004}
+  graphics: {fileID: 478536}
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1

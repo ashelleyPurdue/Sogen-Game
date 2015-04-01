@@ -16842,7 +16842,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
       propertyPath: m_RootOrder
-      value: 32
+      value: 33
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 078555c02a93d194c9679f39fafbd00c, type: 2}
@@ -20254,22 +20254,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6ead1bea0644c94da94f69106d33261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myWhip: {fileID: 306208765}
-  graphics: {fileID: 204570940}
-  throwChargeMeter: {fileID: 1293014822}
-  throwChargeBackground: {fileID: 2040163160}
   movementDeadzone: .100000001
-  objectPickupRadius: 1
   climbSpeed: 2
+  ladderDismountSpeed: 5
   deathLaunchSpeed: 10
   deathRotTime: .5
   deathFadeTime: 1
+  throwChargeMeter: {fileID: 1293014822}
+  throwChargeBackground: {fileID: 2040163160}
+  objectPickupRadius: 1
   maxThrowSpeed: 15
   maxThrowChargeTime: .5
   minThrowChargeTime: .200000003
   chargeMeterFadeSpeed: 2
   startInCourse: 0
   courseToStartIn: 
+  myWhip: {fileID: 306208765}
+  graphics: {fileID: 204570940}
 --- !u!114 &1791180860
 MonoBehaviour:
   m_ObjectHideFlags: 0
