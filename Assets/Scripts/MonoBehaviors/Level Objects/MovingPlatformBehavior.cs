@@ -37,7 +37,7 @@ public class MovingPlatformBehavior : MonoBehaviour
         speed = Mathf.PI * Vector3.Distance(startPos, endPos) / movementTime;
 
         //Start with the target pos being the endPos
-        targetPos = endPos;
+        targetPos = startPos;
 
         //Set the rigidbody's settings
         rigidbody2D.mass = float.MaxValue;
