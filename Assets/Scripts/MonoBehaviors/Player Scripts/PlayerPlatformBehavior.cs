@@ -200,15 +200,20 @@ public class PlayerPlatformBehavior : MonoBehaviour
     
     private void WhipControls()
     {
+        //Don't go on if we're currently holding an object.
+        if (currentHeldObject != null)
+        {
+            return;
+        }
+        
         //When left clicking, whip in the direction the mouse is pointing
-
         Vector2 controllerInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         if (Input.GetMouseButtonDown(0))
         {
             float angle = MouseWhipAngle();
-            
             myWhip.StartWhipping(angle);
+            
         } else if (Input.GetButton("Attack")) //When pressing the whip button, whip in the direction the analog stick is held.
         {
             float angle = Mathf.Atan2(controllerInput.y, controllerInput.x) * Mathf.Rad2Deg;
@@ -370,10 +375,8 @@ public class PlayerPlatformBehavior : MonoBehaviour
         PlatformControls();
         
         //Only use whip controls if we aren't holding anything.
-        if (currentHeldObject == null){
-            WhipControls();
-            FlipOnWhip();
-        }
+        WhipControls();
+        FlipOnWhip();
         
         //Picking up/throwing controls
         PickupAndThrowControls();
@@ -402,7 +405,11 @@ public class PlayerPlatformBehavior : MonoBehaviour
 
         //Allow whipping
         WhipControls();
-
+        FlipOnWhip();
+  
+        //Allow Throwing/picking up.
+        PickupAndThrowControls();
+        
         //Climb the ladder.
         rigidbody2D.velocity = new Vector2(climbSpeed * Input.GetAxis("Horizontal"), climbSpeed * Input.GetAxis("Vertical"));
 
