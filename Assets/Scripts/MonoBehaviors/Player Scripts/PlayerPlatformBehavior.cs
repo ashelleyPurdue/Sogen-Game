@@ -321,6 +321,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
     {
         //Go back to the free state.
         currentState = State.free;
+        rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
     }
 
     private bool TouchingLadder()
@@ -434,7 +435,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
         }
         
         //Dismount and jump a little bit when pressing jump.
-        if (Input.GetButtonDown("Jump") || !TouchingLadder())
+        if (Input.GetButtonDown("Jump"))
         {
             DismountLadder();
             rigidbody2D.velocity = Vector3.up * ladderDismountSpeed;

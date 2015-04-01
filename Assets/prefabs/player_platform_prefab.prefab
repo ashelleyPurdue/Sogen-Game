@@ -356,7 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementDeadzone: .100000001
   climbSpeed: 2
-  ladderDismountSpeed: 5
+  ladderDismountSpeed: 7
   deathLaunchSpeed: 10
   deathRotTime: .5
   deathFadeTime: 1
