@@ -102,7 +102,7 @@ MonoBehaviour:
   maxHealth: 1
   startingHealth: 1
   vulnerableTo: 
-  invulnerableTo: 
+  invulnerableTo: 02000000
   invulnerableToObjects: []
   cooldownTime: .5
 --- !u!212 &21263198

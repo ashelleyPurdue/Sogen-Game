@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useDefaultHitDetection: 1
   isHot: 1
-  damageTags: 04000000
+  damageTags: 0400000002000000
   objectsToIgnore:
   - {fileID: 0}
   objectsToHurt: []

@@ -27,6 +27,8 @@ public class BarbarianBehavior : MonoBehaviour
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
     
+    private static Vector3 spearScale = new Vector3(0.5f, 1, 1);
+    
     //Events
     
     void Awake()
@@ -76,11 +78,11 @@ public class BarbarianBehavior : MonoBehaviour
         
         timer += Time.deltaTime;
         
-        currentSpear.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, timer / spearGrowTime);
+        currentSpear.transform.localScale = Vector3.Lerp(Vector3.zero, spearScale, timer / spearGrowTime);
         
         if (timer >= spearGrowTime)
         {
-            currentSpear.transform.localScale = Vector3.one;
+            currentSpear.transform.localScale = spearScale;
             currentState = State.aiming;
             timer -= spearGrowTime;
         }

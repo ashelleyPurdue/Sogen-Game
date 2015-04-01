@@ -51,9 +51,10 @@ public class ThrowingSpearBehavior : MonoBehaviour
     
     void OnTriggerEnter2D(Collider2D other)
     {
+        /*
         if (!other.isTrigger)
         {
             GameObject.Destroy(this.gameObject, 0.1f);
-        }
+        }*/
     }
 }
