@@ -5,33 +5,35 @@ using System.Collections.Generic;
 [RequireComponent(typeof(PlatformCharacterMotor))]
 
 public class PlayerPlatformBehavior : MonoBehaviour
-{
-    private static float lastRoomHealth = -1;     //The amount of health the player had when he left the last room.
-    
-    public static int currentSwae = 0;
-    
+{      
+    //State machine variables
     public enum State {free, climbing, deathSpinning, deathFading};
+    
     private State currentState = State.free;
     private delegate void StateMethod();
     private Dictionary<State, StateMethod> stateMethods = new Dictionary<State, StateMethod>();
-
-    public WhipBehavior myWhip;
- 
-    public Transform graphics;
     
-    public CircleChartRenderer throwChargeMeter;
-    public CircleChartRenderer throwChargeBackground;
+    private float timer = 0f;
     
-    public float movementDeadzone = 0.5f;   //The player will not move if the analog stick's magnitude is less than this.
- 
-    public float objectPickupRadius = 1f;
     
+    //Movement variables
+    public float movementDeadzone = 0.5f;   //The player will not move if the analog stick's magnitude is less than this
     public float climbSpeed = 1f;
- 
+    
+    private PlatformCharacterMotor motor;
+    
+    
+    //Death animation variables
 	public float deathLaunchSpeed = 10f;
 	public float deathRotTime = 0.5f;
 	public float deathFadeTime = 1f;
-
+    
+    
+    //Pickup/throw variables
+    public CircleChartRenderer throwChargeMeter;
+    public CircleChartRenderer throwChargeBackground;
+    
+    public float objectPickupRadius = 1f;
     public float maxThrowSpeed = 10f;
     public float maxThrowChargeTime = 1f;
     public float minThrowChargeTime = 0.25f;
@@ -42,18 +44,28 @@ public class PlayerPlatformBehavior : MonoBehaviour
     private float currentChargeMeterAlpha = 0;
     private float targetChargeMeterAlpha = 0;
     
+    private ThrowableBehavior currentHeldObject = null;
+    
+    
+    //Course system variables
     public bool startInCourse = false;  //If checked, the player will start out in the sepcified course
     public string courseToStartIn;
-
-    private PlatformCharacterMotor motor;
  
-    private ThrowableBehavior currentHeldObject = null;
+    
+    //Misc variables
+    private static float lastRoomHealth = -1;     //The amount of health the player had when he left the last room.
+    
+    public static int currentSwae = 0;
+    
+
+    
+    public WhipBehavior myWhip;
+    public Transform graphics;
     
     private float mouseX;
     private float mouseY;
+ 
     
-	private float timer = 0f;
-
     //Events
 
     void Awake()
@@ -150,6 +162,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
             currentSwae++;
         }
     }
+    
     
     //Misc methods
     private void PlatformControls()
@@ -364,6 +377,7 @@ public class PlayerPlatformBehavior : MonoBehaviour
         
         return angle;
     }
+    
     
     //State methods
     
