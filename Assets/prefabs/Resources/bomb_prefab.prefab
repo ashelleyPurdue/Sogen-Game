@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a43adfc56de974f95c009736487195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 3
+  timeLeft: 4
   blastRadius: 2
   myParticles: {fileID: 19882168}
   fuseLit: 0
