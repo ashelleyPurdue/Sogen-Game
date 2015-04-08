@@ -10970,7 +10970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd63050b570b33418c2be84c3d17c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  courseName: Course 2
+  courseName: Course Two
   checkpointName: start_checkpoint
   flame: {fileID: 0}
 --- !u!43 &932932810

@@ -9061,7 +9061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd63050b570b33418c2be84c3d17c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  courseName: 
+  courseName: Course Two
   checkpointName: Timing Checkpoint
   flame: {fileID: 1102458206}
 --- !u!212 &725544018
@@ -17492,6 +17492,10 @@ Prefab:
     - target: {fileID: 11400000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
       propertyPath: entranceName
       value: timeing checkpoint entrance
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
+      propertyPath: courseName
+      value: Course Two
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
