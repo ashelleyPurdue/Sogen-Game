@@ -11,11 +11,19 @@ public class LevelEntranceBehavior : MonoBehaviour
 	public string targetEntranceName;
 
 	public string entranceName;
-
+ 
+    public bool CheckedForDuplicates { get { return checkedForDuplicates; } }
+    private bool checkedForDuplicates = false;
+    
     private bool playerHasLeft = true;
 
 	//Events
-
+ 
+    void Start()
+    {
+        CheckDuplicates();
+    }
+    
 	void OnLevelWasLoaded()
 	{
 		//Move the player to the dropoff point, if this was the entrance used.
@@ -101,6 +109,38 @@ public class LevelEntranceBehavior : MonoBehaviour
         {
             playerHasLeft = true;
         }
+    }
+    
+    private void CheckDuplicates()
+    {
+        //Checks to see if there are any entrances with the same name in this scene, and throws an error if so.
+        
+        LevelEntranceBehavior[] entrances = GameObject.FindObjectsOfType(typeof(LevelEntranceBehavior)) as LevelEntranceBehavior[];
+        
+        if (entrances == null)
+        {
+            return;
+        }
+        
+        //Check all other entrances
+        foreach (LevelEntranceBehavior e in entrances)
+        {
+            if ( (!e.CheckedForDuplicates) && (e != this) && entranceName.Equals(e.entranceName) )
+            {
+                Debug.Log(entranceName + " == " + e.entranceName);
+                
+                Debug.LogError("Level entrance name " + entranceName + " is duplicated.\n" +
+                    "This id: " + GetInstanceID() +
+                    ".  This name: " + name +
+                    ".  Original's id: " + e.GetInstanceID() +
+                    ".  Original's name: " + e.name);
+                
+                Application.Quit();
+            }
+        }
+        
+        //Mark as checked.
+        checkedForDuplicates = true;
     }
 
 	//Interface

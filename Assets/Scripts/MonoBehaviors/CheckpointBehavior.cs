@@ -5,11 +5,9 @@ using System.Collections;
 
 public class CheckpointBehavior : MonoBehaviour 
 {
-    //CURRENT TASK: Making the player return to the previous checkpoint when dieing
-
     public string courseName;
     public string checkpointName;
- 
+    
     public CheckpointFlameAnimation flame;
     
     private Checkpoint checkpoint;
@@ -18,8 +16,9 @@ public class CheckpointBehavior : MonoBehaviour
 
     public void Start()
     {
+        CheckNamesFilled();
+        
         //Get the checkpoint
-
         try
         {
             checkpoint = CourseManager.GetCheckpoint(courseName, checkpointName);
@@ -32,9 +31,13 @@ public class CheckpointBehavior : MonoBehaviour
             string entranceName = entrance.entranceName;
 
             CourseManager.AddCheckpoint(new Checkpoint(courseName, checkpointName, LevelPersistence.GetCurrentLevelName(), entranceName));
-
+   
+            //Get the checkpoint that we just created.
             checkpoint = CourseManager.GetCheckpoint(courseName, checkpointName);
         }
+        
+        //Check to make sure everything mathces.
+        CheckNamesMatch();
     }
     
     void Update()
@@ -58,7 +61,55 @@ public class CheckpointBehavior : MonoBehaviour
         }
     }
     
+    
     //Misc methods
+    
+    private void CheckNamesMatch()
+    {
+        //Throws an error if the names in the checkpoint system don't match the names here.
+        
+        string nameStr = "Checkpoint named " + checkpointName + " ";
+        string idStr = "\nInstance id: " + GetInstanceID();
+        
+        //Check scene name
+        if ( !checkpoint.SceneName.Equals( LevelPersistence.GetCurrentLevelName() ) )
+        {
+            Debug.LogError(nameStr + "already exists in another scene.  Please use a different name." + idStr);
+            Application.Quit();
+        }
+        
+        //Check course name
+        if ( !checkpoint.CourseName.Equals(courseName) )
+        {
+            Debug.LogError(nameStr + "is already registered to course \"" + checkpoint.CourseName + "\".\nThere must be a duplicate checkpoint." + idStr);
+            Application.Quit();
+        }
+        
+        //Check for entrance name.
+        string registeredEntranceName = GetComponent<LevelEntranceBehavior>().entranceName;
+        if ( !checkpoint.EntranceName.Equals( registeredEntranceName ) )
+        { 
+            Debug.LogError(nameStr + "is already registered with entrance name \"" + registeredEntranceName + "\"." + idStr);
+            Application.Quit();
+        }
+    }
+    
+    private void CheckNamesFilled()
+    {
+        //Throw an error if the course name doesn't exist
+        if (courseName.Equals(""))
+        {
+            Debug.LogError("Checkpoint has blank course name.");
+            Application.Quit();
+        }
+        
+        //Throw an error if the checkpoint name doesn't exist.
+        if (checkpointName.Equals(""))
+        {
+            Debug.LogError("Checkpoint has blank name.");
+            Application.Quit();
+        }
+    }
     
     private void Activate()
     {
