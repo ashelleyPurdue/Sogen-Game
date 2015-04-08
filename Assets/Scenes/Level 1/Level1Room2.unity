@@ -3893,7 +3893,7 @@ Transform:
   m_PrefabInternal: {fileID: 1024060756}
   m_GameObject: {fileID: 891661232}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1535243401}
@@ -8515,6 +8515,10 @@ Prefab:
     - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
       propertyPath: checkpointName
       value: Bats and Ladders
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400002, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}
+      propertyPath: courseName
+      value: Course One
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f97f04a2fec774245a8d7205d49a35f6, type: 2}

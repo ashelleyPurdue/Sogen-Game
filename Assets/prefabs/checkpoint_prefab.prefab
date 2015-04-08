@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd63050b570b33418c2be84c3d17c79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  courseName: Course One
-  checkpointName: Lava Pits
+  courseName: 
+  checkpointName: 
   flame: {fileID: 11406596}
 --- !u!114 &11406596
 MonoBehaviour:
